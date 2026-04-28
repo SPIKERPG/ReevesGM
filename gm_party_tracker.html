@@ -19,6 +19,7 @@
   --text-hi:    #dfe1cc;
   --green:      #7a9a28;
   --green-dim:  #4a5e18;
+  --green-pale: #181e06;
   --red:        #8a2020;
   --red-bright: #c03030;
   --amber:      #b87820;
@@ -38,9 +39,11 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 body::after {
@@ -51,6 +54,7 @@ body::after {
   z-index: 9000;
 }
 
+/* ─── TOP BAND ─── */
 .top-band {
   background: var(--red);
   padding: 3px 24px;
@@ -60,8 +64,10 @@ body::after {
   font-size: 8.5px;
   letter-spacing: .2em;
   color: #fff;
+  flex-shrink: 0;
 }
 
+/* ─── MAIN HEADER ─── */
 .main-header {
   background: var(--surface);
   border-bottom: 2px solid var(--red);
@@ -69,6 +75,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .mh-left, .mh-right {
@@ -96,56 +103,165 @@ body::after {
   margin-top: 3px;
 }
 
-main {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 24px 80px;
+/* ─── PARTY TABS ─── */
+.party-tabs-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-hi);
+  padding: 0 24px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* ─── PARTY GRID ─── */
-.party-grid {
+.party-tab {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+  padding: 10px 20px;
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.party-tab:hover { color: var(--text); }
+.party-tab.active { color: var(--red-bright); border-bottom-color: var(--red); background: rgba(138,32,32,.04); }
+
+.party-tab-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: .2em;
+}
+
+.party-tab-count {
+  font-size: 7px;
+  opacity: .6;
+}
+
+/* ─── MAIN ─── */
+main {
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 24px 80px;
+  width: 100%;
+}
+
+/* ─── PARTY PANEL ─── */
+.party-panel { display: none; }
+.party-panel.active { display: block; }
+
+/* ─── PARTY HEADER ROW ─── */
+.party-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-hi);
+}
+
+.party-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.party-name-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .2em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.party-name-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-hi);
+  color: var(--text-hi);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: .3em;
+  padding: 2px 4px;
+  outline: none;
+  caret-color: var(--red-bright);
+  width: 260px;
+  transition: border-color .15s;
+}
+
+.party-name-input:focus { border-bottom-color: var(--red); }
+.party-name-input::placeholder { color: var(--text-dim); font-size: 14px; }
+
+.party-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+  display: flex;
+  gap: 16px;
+}
+
+.party-meta span { color: var(--text); }
+
+/* ─── OPERATIVE GRID ─── */
+.operative-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 40px;
+  gap: 14px;
 }
 
 /* ─── SLOT ─── */
 .slot {
   background: var(--surface2);
   border: 1px solid var(--border-hi);
-  min-height: 400px;
-  position: relative;
+  min-height: 360px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  transition: border-color .15s;
 }
 
 .slot-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border-hi);
-  padding: 8px 12px;
+  padding: 7px 11px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .slot-id {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7.5px;
+  font-size: 7px;
   letter-spacing: .2em;
   color: var(--text-dim);
 }
 
 .slot-controls {
   display: flex;
-  gap: 6px;
+  gap: 5px;
 }
 
 .btn-sm {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7.5px;
-  letter-spacing: .12em;
-  padding: 3px 8px;
+  font-size: 7px;
+  letter-spacing: .1em;
+  padding: 3px 7px;
   border: 1px solid var(--border-hi);
   background: transparent;
   color: var(--text-dim);
@@ -154,9 +270,10 @@ main {
 }
 
 .btn-sm:hover { border-color: var(--red); color: var(--red-bright); }
-.btn-sm.load { border-color: var(--green-dim); color: var(--green); }
+.btn-sm.load  { border-color: var(--green-dim); color: var(--green); }
 .btn-sm.load:hover { background: rgba(122,154,40,.08); border-color: var(--green); }
-.btn-sm.clear { border-color: var(--border-hi); }
+.btn-sm.notes-btn { border-color: var(--amber-dim); color: var(--amber); }
+.btn-sm.notes-btn:hover { background: rgba(184,120,32,.08); }
 
 /* ─── EMPTY STATE ─── */
 .slot-empty {
@@ -165,8 +282,8 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 32px 20px;
+  gap: 10px;
+  padding: 28px 16px;
   cursor: pointer;
   transition: background .15s;
 }
@@ -175,23 +292,23 @@ main {
 
 .slot-empty-icon {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 28px;
+  font-size: 24px;
   color: var(--border-hi);
 }
 
 .slot-empty-label {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 8px;
+  font-size: 7.5px;
   letter-spacing: .2em;
   color: var(--text-dim);
   text-align: center;
 }
 
 .slot-empty-hint {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-dim);
   text-align: center;
-  opacity: .7;
+  opacity: .6;
 }
 
 /* ─── CHARACTER CARD ─── */
@@ -199,45 +316,72 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 14px;
-  gap: 10px;
+  padding: 12px;
+  gap: 9px;
+  overflow: hidden;
 }
+
+.char-identity { flex-shrink: 0; }
 
 .char-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  letter-spacing: .18em;
+  font-size: 24px;
+  letter-spacing: .16em;
   color: var(--text-hi);
   line-height: 1;
 }
 
-.char-role {
+.char-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.char-callsign {
   font-family: 'Share Tech Mono', monospace;
   font-size: 7.5px;
-  letter-spacing: .18em;
+  letter-spacing: .14em;
+  color: var(--green);
+}
+
+.char-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .14em;
   color: var(--text-dim);
-  margin-top: -4px;
+}
+
+.char-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+  border-left: 1px solid var(--border-hi);
+  padding-left: 5px;
 }
 
 /* SPIKE BAR */
 .spike-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  flex-shrink: 0;
 }
 
 .spike-label {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7.5px;
-  letter-spacing: .14em;
+  font-size: 7px;
+  letter-spacing: .12em;
   color: var(--text-dim);
-  width: 36px;
+  width: 32px;
   flex-shrink: 0;
 }
 
 .spike-bar {
   flex: 1;
-  height: 8px;
+  height: 7px;
   background: var(--border);
   position: relative;
   overflow: hidden;
@@ -245,15 +389,24 @@ main {
 
 .spike-fill {
   height: 100%;
-  transition: width .4s, background-color .4s;
+  transition: width .3s, background-color .3s;
 }
 
 .spike-val {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
   font-weight: bold;
-  width: 28px;
+  width: 24px;
   text-align: right;
+  flex-shrink: 0;
+}
+
+.spike-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6.5px;
+  letter-spacing: .14em;
+  margin-top: -5px;
+  padding-left: 39px;
   flex-shrink: 0;
 }
 
@@ -261,54 +414,62 @@ main {
 .vitals-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: 5px;
+  flex-shrink: 0;
 }
 
 .vital-box {
   background: var(--surface3);
   border: 1px solid var(--border);
-  padding: 6px 10px;
+  padding: 5px 9px;
 }
 
 .vital-lbl {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7px;
-  letter-spacing: .14em;
+  font-size: 6.5px;
+  letter-spacing: .12em;
   color: var(--text-dim);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .vital-val {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-hi);
+  line-height: 1.1;
+}
+
+.vital-val span {
+  font-size: 10px;
+  color: var(--text-dim);
 }
 
 /* ATTRS */
 .attrs-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 4px;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
 .attr-box {
   background: var(--surface3);
   border: 1px solid var(--border);
-  padding: 5px 4px;
+  padding: 4px 3px;
   text-align: center;
 }
 
 .attr-lbl {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 6.5px;
-  letter-spacing: .1em;
+  font-size: 6px;
+  letter-spacing: .08em;
   color: var(--text-dim);
   margin-bottom: 2px;
 }
 
 .attr-val {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
+  font-size: 17px;
   color: var(--text-hi);
   line-height: 1;
 }
@@ -317,54 +478,105 @@ main {
 .skills-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 3px;
 }
 
 .skill-tag {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7px;
-  letter-spacing: .1em;
+  font-size: 6.5px;
+  letter-spacing: .08em;
   color: var(--green);
   border: 1px solid var(--green-dim);
-  padding: 2px 6px;
+  padding: 2px 5px;
   background: rgba(122,154,40,.06);
 }
 
-/* TRAITS / FLAWS */
-.mini-section-lbl {
+.skill-tag.specialized {
+  color: var(--amber);
+  border-color: var(--amber-dim);
+  background: rgba(184,120,32,.08);
+}
+
+.mini-lbl {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7px;
+  font-size: 6.5px;
   letter-spacing: .18em;
   color: var(--text-dim);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
+  padding-bottom: 3px;
   margin-bottom: 4px;
 }
 
+/* TRAITS / FLAWS */
 .trait-item {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text);
-  padding: 2px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 1px 0;
+  line-height: 1.3;
+}
+
+.trait-effect {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 3px;
 }
 
 .flaw-item {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--amber);
-  padding: 2px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 1px 0;
+  line-height: 1.3;
 }
 
-.notes-box {
+/* GM NOTES OVERLAY */
+.notes-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--surface2);
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  padding: 0;
+}
+
+.notes-overlay.open { display: flex; }
+
+.notes-overlay-header {
   background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 8px;
-  font-size: 12px;
+  border-bottom: 1px solid var(--border-hi);
+  padding: 7px 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.notes-overlay-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .2em;
+  color: var(--amber);
+}
+
+.notes-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px;
+  outline: none;
+  resize: none;
+  caret-color: var(--amber);
+}
+
+.notes-textarea::placeholder {
   color: var(--text-dim);
-  line-height: 1.45;
-  max-height: 80px;
-  overflow-y: auto;
   font-style: italic;
+  font-size: 12px;
 }
 
 /* ─── INFO BAR ─── */
@@ -372,18 +584,50 @@ main {
   background: var(--surface);
   border: 1px solid var(--border-hi);
   border-left: 3px solid var(--red);
-  padding: 12px 16px;
-  margin-bottom: 24px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 8px;
-  letter-spacing: .14em;
+  font-size: 7.5px;
+  letter-spacing: .12em;
   color: var(--text-dim);
   line-height: 1.8;
 }
 
-/* ─── HIDDEN INPUT ─── */
+.info-bar strong { color: var(--text); }
+
+/* ─── PARTY SUMMARY BAR ─── */
+.party-summary {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.summary-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+}
+
+.summary-item span {
+  color: var(--text-hi);
+  font-size: 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: .1em;
+  margin-left: 5px;
+}
+
+.summary-spike-avg { }
+
+/* ─── HIDDEN FILE INPUT ─── */
 .file-input { display: none; }
 
+/* ─── FOOTER ─── */
 footer {
   background: var(--surface);
   border-top: 1px solid var(--border);
@@ -394,13 +638,25 @@ footer {
   font-size: 7.5px;
   letter-spacing: .12em;
   color: var(--text-dim);
+  flex-shrink: 0;
 }
 
-@media (max-width: 800px) {
-  .party-grid { grid-template-columns: 1fr; }
+/* ─── AWOKEN TAG ─── */
+.awoken-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+  padding: 1px 5px;
+  letter-spacing: .1em;
 }
-@media (max-width: 500px) {
-  .attrs-grid { grid-template-columns: repeat(5, 1fr); }
+
+@media (max-width: 1100px) {
+  .operative-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+  .operative-grid { grid-template-columns: 1fr; }
+  .party-tabs-bar { overflow-x: auto; }
 }
 </style>
 </head>
@@ -419,7 +675,7 @@ footer {
   </div>
   <div class="mh-center">
     <div class="mh-title">PARTY TRACKER</div>
-    <div class="mh-sub">■ OPERATIVE DOSSIER OVERVIEW ■</div>
+    <div class="mh-sub">■ MULTI-PARTY OPERATIVE DOSSIER OVERVIEW ■</div>
   </div>
   <div class="mh-right">
     YEAR 5 POST-RESET<br>
@@ -427,66 +683,77 @@ footer {
   </div>
 </div>
 
+<!-- PARTY TABS -->
+<div class="party-tabs-bar">
+  <div class="party-tab active" id="ptab-0" onclick="switchParty(0)">
+    <span>■</span>
+    <span class="party-tab-name" id="ptab-name-0">PARTY ALPHA</span>
+    <span class="party-tab-count" id="ptab-count-0">0/6</span>
+  </div>
+  <div class="party-tab" id="ptab-1" onclick="switchParty(1)">
+    <span>■</span>
+    <span class="party-tab-name" id="ptab-name-1">PARTY BRAVO</span>
+    <span class="party-tab-count" id="ptab-count-1">0/6</span>
+  </div>
+  <div class="party-tab" id="ptab-2" onclick="switchParty(2)">
+    <span>■</span>
+    <span class="party-tab-name" id="ptab-name-2">PARTY CHARLIE</span>
+    <span class="party-tab-count" id="ptab-count-2">0/6</span>
+  </div>
+</div>
+
 <main>
 
   <div class="info-bar">
-    ■ LOAD OPERATIVE DOSSIERS // Click <strong style="color:var(--text)">[ ↑ LOAD JSON ]</strong> on any slot, or click the empty slot area, to load a character sheet .json exported from the player portal. Up to 3 operatives may be tracked simultaneously. Data is stored in browser session only — nothing is transmitted externally.
+    ■ LOAD OPERATIVE DOSSIERS // Click <strong>[ ↑ LOAD ]</strong> or an empty slot to import a <strong>.json</strong> file exported from the player portal.
+    Up to <strong>3 parties × 6 operatives</strong>. All data is persisted in <strong>localStorage</strong> — nothing is transmitted externally.
+    Use <strong>[ ✎ NOTES ]</strong> to add GM-side field notes to any operative card.
   </div>
 
-  <div class="party-grid">
-    <div class="slot" id="slot-0">
-      <div class="slot-header">
-        <span class="slot-id">OPERATIVE SLOT 01</span>
-        <div class="slot-controls">
-          <button class="btn-sm load" onclick="triggerLoad(0)">↑ LOAD JSON</button>
-          <button class="btn-sm clear" onclick="clearSlot(0)" style="display:none" id="clear-0">✕ CLEAR</button>
-        </div>
+  <!-- PARTY 0 -->
+  <div class="party-panel active" id="panel-0">
+    <div class="party-header-row">
+      <div class="party-name-wrap">
+        <span class="party-name-label">PARTY DESIGNATION //</span>
+        <input class="party-name-input" id="pname-0" type="text" placeholder="PARTY ALPHA" maxlength="30" oninput="onPartyNameChange(0)">
       </div>
-      <div class="slot-empty" id="empty-0" onclick="triggerLoad(0)">
-        <div class="slot-empty-icon">[ ]</div>
-        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
-        <div class="slot-empty-hint">Click to load a .json dossier</div>
+      <div class="party-meta" id="psummary-0">
+        OPERATIVES <span id="pcount-0">0</span> / 6 &nbsp;|&nbsp;
+        AVG SPIKE <span id="pavgspike-0">—</span>
       </div>
-      <div class="char-card" id="card-0" style="display:none"></div>
     </div>
-
-    <div class="slot" id="slot-1">
-      <div class="slot-header">
-        <span class="slot-id">OPERATIVE SLOT 02</span>
-        <div class="slot-controls">
-          <button class="btn-sm load" onclick="triggerLoad(1)">↑ LOAD JSON</button>
-          <button class="btn-sm clear" onclick="clearSlot(1)" style="display:none" id="clear-1">✕ CLEAR</button>
-        </div>
-      </div>
-      <div class="slot-empty" id="empty-1" onclick="triggerLoad(1)">
-        <div class="slot-empty-icon">[ ]</div>
-        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
-        <div class="slot-empty-hint">Click to load a .json dossier</div>
-      </div>
-      <div class="char-card" id="card-1" style="display:none"></div>
-    </div>
-
-    <div class="slot" id="slot-2">
-      <div class="slot-header">
-        <span class="slot-id">OPERATIVE SLOT 03</span>
-        <div class="slot-controls">
-          <button class="btn-sm load" onclick="triggerLoad(2)">↑ LOAD JSON</button>
-          <button class="btn-sm clear" onclick="clearSlot(2)" style="display:none" id="clear-2">✕ CLEAR</button>
-        </div>
-      </div>
-      <div class="slot-empty" id="empty-2" onclick="triggerLoad(2)">
-        <div class="slot-empty-icon">[ ]</div>
-        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
-        <div class="slot-empty-hint">Click to load a .json dossier</div>
-      </div>
-      <div class="char-card" id="card-2" style="display:none"></div>
-    </div>
+    <div class="operative-grid" id="grid-0"></div>
   </div>
 
-  <!-- Hidden file inputs -->
-  <input type="file" class="file-input" id="file-0" accept=".json" onchange="loadFile(event, 0)">
-  <input type="file" class="file-input" id="file-1" accept=".json" onchange="loadFile(event, 1)">
-  <input type="file" class="file-input" id="file-2" accept=".json" onchange="loadFile(event, 2)">
+  <!-- PARTY 1 -->
+  <div class="party-panel" id="panel-1">
+    <div class="party-header-row">
+      <div class="party-name-wrap">
+        <span class="party-name-label">PARTY DESIGNATION //</span>
+        <input class="party-name-input" id="pname-1" type="text" placeholder="PARTY BRAVO" maxlength="30" oninput="onPartyNameChange(1)">
+      </div>
+      <div class="party-meta" id="psummary-1">
+        OPERATIVES <span id="pcount-1">0</span> / 6 &nbsp;|&nbsp;
+        AVG SPIKE <span id="pavgspike-1">—</span>
+      </div>
+    </div>
+    <div class="operative-grid" id="grid-1"></div>
+  </div>
+
+  <!-- PARTY 2 -->
+  <div class="party-panel" id="panel-2">
+    <div class="party-header-row">
+      <div class="party-name-wrap">
+        <span class="party-name-label">PARTY DESIGNATION //</span>
+        <input class="party-name-input" id="pname-2" type="text" placeholder="PARTY CHARLIE" maxlength="30" oninput="onPartyNameChange(2)">
+      </div>
+      <div class="party-meta" id="psummary-2">
+        OPERATIVES <span id="pcount-2">0</span> / 6 &nbsp;|&nbsp;
+        AVG SPIKE <span id="pavgspike-2">—</span>
+      </div>
+    </div>
+    <div class="operative-grid" id="grid-2"></div>
+  </div>
 
 </main>
 
@@ -496,10 +763,55 @@ footer {
 </footer>
 
 <script>
-// ─── SPIKE COLOR ───
-function spikeColor(val) {
-  const n = parseInt(val) || 0;
-  if (n <= 0)  return 'var(--spike-0)';
+// ═══════════════════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════════════════
+
+const NUM_PARTIES  = 3;
+const NUM_SLOTS    = 6;
+const STORAGE_KEY  = 'spike_gm_tracker_v2';
+
+const ATTRS = ['BODY','MIND','TECH','AWARENESS','RESOLVE'];
+const ATTR_ABBR = ['BOD','MND','TEC','AWR','RES'];
+
+const SKILLS = [
+  { name: 'Firearms',      attr: 'BODY' },
+  { name: 'Close Combat',  attr: 'BODY' },
+  { name: 'Mobility',      attr: 'BODY' },
+  { name: 'Stealth',       attr: 'BODY' },
+  { name: 'Medicine',      attr: 'MIND' },
+  { name: 'Investigation', attr: 'MIND' },
+  { name: 'Persuasion',    attr: 'MIND' },
+  { name: 'Computing',     attr: 'TECH' },
+  { name: 'Engineering',   attr: 'TECH' },
+  { name: 'Awareness',     attr: 'AWARENESS' },
+  { name: 'Survival',      attr: 'AWARENESS' },
+  { name: 'Intimidation',  attr: 'RESOLVE' },
+];
+
+// inputs[] field indices (from character sheet order)
+// inputs[0] = name, [1] = callsign, [2] = id, [3] = background/role
+// then trait pairs [4..15] (name/effect × 6), flaw triples [16..21] (name/trigger/effect × 2)
+// textareas[0] = background, [1] = contacts, [2] = npcs, [3] = factions,
+//   [4] = location notes, [5] = intel, [6] = evidence, [7] = spike log, [8] = open questions
+
+const DEFAULT_PARTY_NAMES = ['PARTY ALPHA', 'PARTY BRAVO', 'PARTY CHARLIE'];
+
+// ═══════════════════════════════════════════════════════
+//  STATE  (in-memory mirror of localStorage)
+// ═══════════════════════════════════════════════════════
+
+// state[partyIdx][slotIdx] = { charData: {...}, gmNotes: '' } | null
+let state = [];
+let partyNames = [...DEFAULT_PARTY_NAMES];
+let currentParty = 0;
+
+// ═══════════════════════════════════════════════════════
+//  SPIKE HELPERS
+// ═══════════════════════════════════════════════════════
+
+function spikeColor(n) {
+  n = parseInt(n) || 0;
   if (n <= 2)  return 'var(--spike-0)';
   if (n <= 5)  return 'var(--spike-3)';
   if (n <= 7)  return 'var(--spike-6)';
@@ -508,8 +820,8 @@ function spikeColor(val) {
   return 'var(--spike-11)';
 }
 
-function spikeLabel(val) {
-  const n = parseInt(val) || 0;
+function spikeLabel(n) {
+  n = parseInt(n) || 0;
   if (n === 0) return 'SERENE';
   if (n <= 2)  return 'STABLE';
   if (n <= 5)  return 'SHAKEN';
@@ -519,147 +831,429 @@ function spikeLabel(val) {
   return 'CONSUMED';
 }
 
-// ─── RENDER CHARACTER CARD ───
-function renderCard(data, idx) {
-  const card = document.getElementById('card-' + idx);
-  const spike = parseInt(data.spike) || 0;
-  const spikeColor_ = spikeColor(spike);
-  const spikePct   = Math.min(100, (spike / 11) * 100);
+// ═══════════════════════════════════════════════════════
+//  STORAGE
+// ═══════════════════════════════════════════════════════
 
-  const attrs = data.attributes || {};
-  const attrKeys = ['BODY','MIND','TECH','AWARENESS','RESOLVE'];
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.partyNames) partyNames = saved.partyNames;
+    if (saved.state) state = saved.state;
+  } catch(e) {
+    console.warn('SPIKE Tracker: could not restore state', e);
+  }
+}
 
-  const skills = Array.isArray(data.skills) ? data.skills : [];
-  const traits = Array.isArray(data.traits) ? data.traits : [];
-  const flaws  = Array.isArray(data.flaws)  ? data.flaws  : [];
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ partyNames, state }));
+  } catch(e) {
+    console.warn('SPIKE Tracker: could not save state', e);
+  }
+}
 
-  const hp = data.hp !== undefined ? data.hp : '—';
-  const maxHp = data.maxHp !== undefined ? data.maxHp : '—';
-  const composure = data.composure !== undefined ? data.composure : '—';
-  const maxComposure = data.maxComposure !== undefined ? data.maxComposure : '—';
+// ═══════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════
 
-  let skillsHtml = skills.length
-    ? `<div class="skills-list">${skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>`
-    : `<div style="font-size:12px;color:var(--text-dim);font-style:italic">No skills recorded</div>`;
-
-  let traitsHtml = '';
-  if (traits.length) {
-    traitsHtml = `<div class="mini-section-lbl">TRAITS</div>` +
-      traits.map(t => `<div class="trait-item">${typeof t === 'object' ? (t.name || JSON.stringify(t)) : t}</div>`).join('');
+function renderAll() {
+  // Ensure state arrays are sized
+  for (let p = 0; p < NUM_PARTIES; p++) {
+    if (!state[p]) state[p] = new Array(NUM_SLOTS).fill(null);
+    while (state[p].length < NUM_SLOTS) state[p].push(null);
   }
 
-  let flawsHtml = '';
-  if (flaws.length) {
-    flawsHtml = `<div class="mini-section-lbl" style="margin-top:8px">EMOTIONAL FLAWS</div>` +
-      flaws.map(f => `<div class="flaw-item">⚠ ${typeof f === 'object' ? (f.name || JSON.stringify(f)) : f}</div>`).join('');
+  for (let p = 0; p < NUM_PARTIES; p++) {
+    renderPartyGrid(p);
+    updatePartyTab(p);
+    updatePartyMeta(p);
   }
 
-  const notes = data.fieldNotes || data.notes || '';
-  const notesHtml = notes
-    ? `<div class="mini-section-lbl">FIELD NOTES</div><div class="notes-box">${notes}</div>`
-    : '';
+  // Restore party name inputs
+  for (let p = 0; p < NUM_PARTIES; p++) {
+    const el = document.getElementById('pname-' + p);
+    if (el && partyNames[p] && partyNames[p] !== DEFAULT_PARTY_NAMES[p]) {
+      el.value = partyNames[p];
+    }
+  }
+}
 
-  const awoken = data.awoken ? `<span style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--amber);border:1px solid var(--amber-dim);padding:1px 5px;margin-left:6px;letter-spacing:.1em">AWOKEN</span>` : '';
+function renderPartyGrid(pIdx) {
+  const grid = document.getElementById('grid-' + pIdx);
+  grid.innerHTML = '';
 
-  card.innerHTML = `
-    <div>
-      <div class="char-name">${data.name || 'UNKNOWN OPERATIVE'}${awoken}</div>
-      <div class="char-role">${data.role || data.background || data.concept || 'FIELD OPERATIVE'}</div>
-    </div>
+  for (let s = 0; s < NUM_SLOTS; s++) {
+    const slot = buildSlotEl(pIdx, s);
+    grid.appendChild(slot);
 
-    <div class="spike-row">
-      <div class="spike-label">SPIKE</div>
-      <div class="spike-bar">
-        <div class="spike-fill" style="width:${spikePct}%;background:${spikeColor_}"></div>
+    // Add hidden file input
+    const fi = document.createElement('input');
+    fi.type = 'file';
+    fi.accept = '.json';
+    fi.className = 'file-input';
+    fi.id = `fi-${pIdx}-${s}`;
+    fi.addEventListener('change', (ev) => loadFile(ev, pIdx, s));
+    grid.appendChild(fi);
+  }
+}
+
+function buildSlotEl(pIdx, sIdx) {
+  const slotData = state[pIdx] && state[pIdx][sIdx];
+  const el = document.createElement('div');
+  el.className = 'slot';
+  el.id = `slot-${pIdx}-${sIdx}`;
+
+  const slotNum = String(sIdx + 1).padStart(2, '0');
+
+  if (!slotData) {
+    // Empty
+    el.innerHTML = `
+      <div class="slot-header">
+        <span class="slot-id">OPERATIVE SLOT ${slotNum}</span>
+        <div class="slot-controls">
+          <button class="btn-sm load" onclick="triggerLoad(${pIdx},${sIdx})">↑ LOAD</button>
+        </div>
       </div>
-      <div class="spike-val" style="color:${spikeColor_}">${spike}</div>
+      <div class="slot-empty" onclick="triggerLoad(${pIdx},${sIdx})">
+        <div class="slot-empty-icon">[ ]</div>
+        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
+        <div class="slot-empty-hint">Click to import .json dossier</div>
+      </div>
+    `;
+  } else {
+    const { charData, gmNotes } = slotData;
+    el.innerHTML = `
+      <div class="slot-header">
+        <span class="slot-id">OPERATIVE SLOT ${slotNum}</span>
+        <div class="slot-controls">
+          <button class="btn-sm notes-btn" onclick="toggleNotes(${pIdx},${sIdx})">✎ NOTES</button>
+          <button class="btn-sm load" onclick="triggerLoad(${pIdx},${sIdx})">↑ RELOAD</button>
+          <button class="btn-sm" onclick="clearSlot(${pIdx},${sIdx})">✕ CLEAR</button>
+        </div>
+      </div>
+      <div class="char-card" id="card-${pIdx}-${sIdx}">
+        ${buildCharCardHTML(charData)}
+      </div>
+      <div class="notes-overlay" id="notes-${pIdx}-${sIdx}">
+        <div class="notes-overlay-header">
+          <span class="notes-overlay-title">■ GM FIELD NOTES // ${(charData.inputs && charData.inputs[0]) || 'OPERATIVE'}</span>
+          <button class="btn-sm" onclick="closeNotes(${pIdx},${sIdx})">✕ CLOSE</button>
+        </div>
+        <textarea class="notes-textarea"
+          id="notesta-${pIdx}-${sIdx}"
+          placeholder="GM notes on this operative: status, suspicions, relationship hooks, session observations..."
+          oninput="saveNotes(${pIdx},${sIdx})"
+        >${escHtml(gmNotes || '')}</textarea>
+      </div>
+    `;
+  }
+
+  return el;
+}
+
+function buildCharCardHTML(d) {
+  const inputs     = d.inputs || [];
+  const textareas  = d.textareas || [];
+  const attrVals   = d.attrVals || [0,0,0,0,0];
+  const skillState = d.skillState || [];
+  const spike      = parseInt(d.currentSpike) || 0;
+  const hpCur      = d.hpCurrent ?? '—';
+  const hpMax      = d.hpMax ?? '—';
+  const compCur    = d.compCurrent ?? '—';
+  const compMax    = d.compMax ?? '—';
+
+  const name      = inputs[0] || 'UNKNOWN';
+  const callsign  = inputs[1] || '';
+  const opId      = inputs[2] || '';
+  const role      = inputs[3] || '';
+
+  const spColor   = spikeColor(spike);
+  const spPct     = Math.min(100, (spike / 11) * 100);
+  const spLabel   = spikeLabel(spike);
+  const awoken    = d.awoken ? `<span class="awoken-tag">AWOKEN</span>` : '';
+
+  // Attributes
+  const attrsHtml = ATTRS.map((a, i) => `
+    <div class="attr-box">
+      <div class="attr-lbl">${ATTR_ABBR[i]}</div>
+      <div class="attr-val">${attrVals[i] !== undefined ? attrVals[i] : '—'}</div>
     </div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.16em;color:${spikeColor_};margin-top:-6px;padding-left:44px">${spikeLabel(spike)}</div>
+  `).join('');
+
+  // Skills (trained=1, specialized=2)
+  const activeSkills = SKILLS
+    .map((sk, i) => ({ ...sk, state: skillState[i] || 0 }))
+    .filter(sk => sk.state > 0);
+
+  const skillsHtml = activeSkills.length
+    ? activeSkills.map(sk =>
+        `<span class="skill-tag${sk.state === 2 ? ' specialized' : ''}">${sk.name}${sk.state === 2 ? ' ★' : ''}</span>`
+      ).join('')
+    : `<span style="font-size:11px;color:var(--text-dim);font-style:italic">None trained</span>`;
+
+  // Traits (inputs[4..15]: pairs of name/effect × 6)
+  const traits = [];
+  for (let t = 0; t < 6; t++) {
+    const nm = inputs[4 + t*2] || '';
+    const fx = inputs[5 + t*2] || '';
+    if (nm) traits.push({ nm, fx });
+  }
+
+  // Flaws (inputs[16..21]: triples of name/trigger/effect × 2)
+  const flaws = [];
+  for (let f = 0; f < 2; f++) {
+    const nm = inputs[16 + f*3] || '';
+    const tr = inputs[17 + f*3] || '';
+    if (nm) flaws.push({ nm, tr });
+  }
+
+  const traitsHtml = traits.length ? `
+    <div style="flex-shrink:0">
+      <div class="mini-lbl">TRAITS</div>
+      ${traits.map(t => `
+        <div class="trait-item">${escHtml(t.nm)}</div>
+        ${t.fx ? `<div class="trait-effect">${escHtml(t.fx)}</div>` : ''}
+      `).join('')}
+    </div>
+  ` : '';
+
+  const flawsHtml = flaws.length ? `
+    <div style="flex-shrink:0">
+      <div class="mini-lbl" style="color:var(--amber-dim)">EMOTIONAL FLAWS</div>
+      ${flaws.map(f => `
+        <div class="flaw-item">⚠ ${escHtml(f.nm)}${f.tr ? ` <span style="font-size:10px;color:var(--text-dim)">// ${escHtml(f.tr)}</span>` : ''}</div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  // Background (textarea[0])
+  const bg = textareas[0] ? `
+    <div style="flex-shrink:0">
+      <div class="mini-lbl">BACKGROUND</div>
+      <div style="font-size:11px;color:var(--text-dim);line-height:1.4;max-height:50px;overflow:hidden;font-style:italic">${escHtml(textareas[0])}</div>
+    </div>
+  ` : '';
+
+  return `
+    <div class="char-identity">
+      <div class="char-name">${escHtml(name)} ${awoken}</div>
+      <div class="char-tags">
+        ${callsign ? `<span class="char-callsign">${escHtml(callsign)}</span>` : ''}
+        ${opId ? `<span class="char-id">${escHtml(opId)}</span>` : ''}
+        ${role ? `<span class="char-role">${escHtml(role)}</span>` : ''}
+      </div>
+    </div>
+
+    <div style="flex-shrink:0">
+      <div class="spike-row">
+        <div class="spike-label">SPIKE</div>
+        <div class="spike-bar"><div class="spike-fill" style="width:${spPct}%;background:${spColor}"></div></div>
+        <div class="spike-val" style="color:${spColor}">${spike}</div>
+      </div>
+      <div class="spike-status" style="color:${spColor}">${spLabel}</div>
+    </div>
 
     <div class="vitals-row">
       <div class="vital-box">
         <div class="vital-lbl">HP</div>
-        <div class="vital-val">${hp} <span style="font-size:11px;color:var(--text-dim)">/ ${maxHp}</span></div>
+        <div class="vital-val">${hpCur} <span>/ ${hpMax}</span></div>
       </div>
       <div class="vital-box">
         <div class="vital-lbl">COMPOSURE</div>
-        <div class="vital-val">${composure} <span style="font-size:11px;color:var(--text-dim)">/ ${maxComposure}</span></div>
+        <div class="vital-val">${compCur} <span>/ ${compMax}</span></div>
       </div>
     </div>
 
-    <div>
-      <div class="mini-section-lbl">ATTRIBUTES</div>
-      <div class="attrs-grid">
-        ${attrKeys.map(k => `
-          <div class="attr-box">
-            <div class="attr-lbl">${k.slice(0,3)}</div>
-            <div class="attr-val">${attrs[k] !== undefined ? attrs[k] : '—'}</div>
-          </div>
-        `).join('')}
-      </div>
+    <div style="flex-shrink:0">
+      <div class="mini-lbl">ATTRIBUTES</div>
+      <div class="attrs-grid">${attrsHtml}</div>
     </div>
 
-    <div>
-      <div class="mini-section-lbl">SKILLS</div>
-      ${skillsHtml}
+    <div style="flex-shrink:0">
+      <div class="mini-lbl">SKILLS</div>
+      <div class="skills-list">${skillsHtml}</div>
     </div>
 
-    ${(traitsHtml || flawsHtml) ? `<div>${traitsHtml}${flawsHtml}</div>` : ''}
-
-    ${notesHtml}
+    ${traitsHtml}
+    ${flawsHtml}
+    ${bg}
   `;
 }
 
-// ─── FILE LOAD ───
-function triggerLoad(idx) {
-  document.getElementById('file-' + idx).click();
+// ═══════════════════════════════════════════════════════
+//  TAB / META UPDATES
+// ═══════════════════════════════════════════════════════
+
+function updatePartyTab(pIdx) {
+  const count = state[pIdx] ? state[pIdx].filter(Boolean).length : 0;
+  const nameEl = document.getElementById('ptab-name-' + pIdx);
+  const countEl = document.getElementById('ptab-count-' + pIdx);
+  if (nameEl) nameEl.textContent = partyNames[pIdx] || DEFAULT_PARTY_NAMES[pIdx];
+  if (countEl) countEl.textContent = count + '/6';
 }
 
-function loadFile(evt, idx) {
-  const file = evt.target.files[0];
+function updatePartyMeta(pIdx) {
+  const slots = state[pIdx] || [];
+  const loaded = slots.filter(Boolean);
+  const count = loaded.length;
+
+  let avgSpike = '—';
+  if (count > 0) {
+    const total = loaded.reduce((sum, s) => sum + (parseInt(s.charData.currentSpike) || 0), 0);
+    avgSpike = (total / count).toFixed(1);
+  }
+
+  const countEl = document.getElementById('pcount-' + pIdx);
+  const spikeEl = document.getElementById('pavgspike-' + pIdx);
+  if (countEl) countEl.textContent = count;
+  if (spikeEl) spikeEl.textContent = avgSpike;
+}
+
+// ═══════════════════════════════════════════════════════
+//  PARTY SWITCHING
+// ═══════════════════════════════════════════════════════
+
+function switchParty(pIdx) {
+  currentParty = pIdx;
+  for (let p = 0; p < NUM_PARTIES; p++) {
+    document.getElementById('ptab-' + p).classList.toggle('active', p === pIdx);
+    document.getElementById('panel-' + p).classList.toggle('active', p === pIdx);
+  }
+}
+
+function onPartyNameChange(pIdx) {
+  const val = document.getElementById('pname-' + pIdx).value.trim();
+  partyNames[pIdx] = val || DEFAULT_PARTY_NAMES[pIdx];
+  updatePartyTab(pIdx);
+  saveToStorage();
+}
+
+// ═══════════════════════════════════════════════════════
+//  FILE LOAD / SLOT MANAGEMENT
+// ═══════════════════════════════════════════════════════
+
+function triggerLoad(pIdx, sIdx) {
+  document.getElementById(`fi-${pIdx}-${sIdx}`).click();
+}
+
+function loadFile(ev, pIdx, sIdx) {
+  const file = ev.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
-      const data = JSON.parse(e.target.result);
-      showCard(data, idx);
-      // persist in sessionStorage
-      sessionStorage.setItem('spike_party_' + idx, JSON.stringify(data));
+      const charData = JSON.parse(e.target.result);
+      if (!state[pIdx]) state[pIdx] = new Array(NUM_SLOTS).fill(null);
+      const existing = state[pIdx][sIdx];
+      state[pIdx][sIdx] = {
+        charData,
+        gmNotes: existing ? (existing.gmNotes || '') : ''
+      };
+      saveToStorage();
+      // Re-render just this slot
+      const grid = document.getElementById('grid-' + pIdx);
+      const slots = grid.querySelectorAll('.slot');
+      const oldSlot = slots[sIdx];
+      const oldFi   = oldSlot.nextElementSibling; // hidden file input
+      const newSlot = buildSlotEl(pIdx, sIdx);
+      grid.replaceChild(newSlot, oldSlot);
+      // Replace file input too
+      const newFi = document.createElement('input');
+      newFi.type = 'file';
+      newFi.accept = '.json';
+      newFi.className = 'file-input';
+      newFi.id = `fi-${pIdx}-${sIdx}`;
+      newFi.addEventListener('change', (ev2) => loadFile(ev2, pIdx, sIdx));
+      if (oldFi && oldFi.classList.contains('file-input')) {
+        grid.replaceChild(newFi, oldFi);
+      } else {
+        grid.appendChild(newFi);
+      }
+      updatePartyTab(pIdx);
+      updatePartyMeta(pIdx);
     } catch(err) {
-      alert('Could not parse JSON file. Make sure this is a valid SPIKE Operative Dossier export.');
+      alert('Could not parse file. Make sure this is a valid SPIKE Operative Dossier export (.json).');
     }
   };
   reader.readAsText(file);
-  evt.target.value = '';
+  ev.target.value = '';
 }
 
-function showCard(data, idx) {
-  document.getElementById('empty-' + idx).style.display = 'none';
-  const card = document.getElementById('card-' + idx);
-  card.style.display = 'flex';
-  document.getElementById('clear-' + idx).style.display = '';
-  renderCard(data, idx);
-}
+function clearSlot(pIdx, sIdx) {
+  if (!confirm('Clear this operative from the tracker? Your GM notes for this slot will also be removed.')) return;
+  if (state[pIdx]) state[pIdx][sIdx] = null;
+  saveToStorage();
 
-function clearSlot(idx) {
-  document.getElementById('empty-' + idx).style.display = 'flex';
-  document.getElementById('card-' + idx).style.display = 'none';
-  document.getElementById('clear-' + idx).style.display = 'none';
-  sessionStorage.removeItem('spike_party_' + idx);
-}
-
-// ─── RESTORE FROM SESSION ───
-window.addEventListener('DOMContentLoaded', () => {
-  for (let i = 0; i < 3; i++) {
-    const saved = sessionStorage.getItem('spike_party_' + i);
-    if (saved) {
-      try {
-        showCard(JSON.parse(saved), i);
-      } catch(e) {
-        sessionStorage.removeItem('spike_party_' + i);
-      }
-    }
+  const grid = document.getElementById('grid-' + pIdx);
+  const slots = grid.querySelectorAll('.slot');
+  const oldSlot = slots[sIdx];
+  const oldFi = oldSlot.nextElementSibling;
+  const newSlot = buildSlotEl(pIdx, sIdx);
+  grid.replaceChild(newSlot, oldSlot);
+  const newFi = document.createElement('input');
+  newFi.type = 'file';
+  newFi.accept = '.json';
+  newFi.className = 'file-input';
+  newFi.id = `fi-${pIdx}-${sIdx}`;
+  newFi.addEventListener('change', (ev) => loadFile(ev, pIdx, sIdx));
+  if (oldFi && oldFi.classList.contains('file-input')) {
+    grid.replaceChild(newFi, oldFi);
+  } else {
+    grid.appendChild(newFi);
   }
+  updatePartyTab(pIdx);
+  updatePartyMeta(pIdx);
+}
+
+// ═══════════════════════════════════════════════════════
+//  GM NOTES
+// ═══════════════════════════════════════════════════════
+
+function toggleNotes(pIdx, sIdx) {
+  const overlay = document.getElementById(`notes-${pIdx}-${sIdx}`);
+  if (!overlay) return;
+  overlay.classList.toggle('open');
+  if (overlay.classList.contains('open')) {
+    const ta = document.getElementById(`notesta-${pIdx}-${sIdx}`);
+    if (ta) ta.focus();
+  }
+}
+
+function closeNotes(pIdx, sIdx) {
+  const overlay = document.getElementById(`notes-${pIdx}-${sIdx}`);
+  if (overlay) overlay.classList.remove('open');
+}
+
+function saveNotes(pIdx, sIdx) {
+  const ta = document.getElementById(`notesta-${pIdx}-${sIdx}`);
+  if (!ta || !state[pIdx] || !state[pIdx][sIdx]) return;
+  state[pIdx][sIdx].gmNotes = ta.value;
+  saveToStorage();
+}
+
+// ═══════════════════════════════════════════════════════
+//  UTILITY
+// ═══════════════════════════════════════════════════════
+
+function escHtml(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadFromStorage();
+  renderAll();
 });
 </script>
 </body>
