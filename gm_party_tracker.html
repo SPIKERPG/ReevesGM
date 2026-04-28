@@ -410,6 +410,60 @@ main {
   flex-shrink: 0;
 }
 
+/* ─── SPIKE STEPPER ─── */
+.spike-stepper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: -2px;
+  padding-left: 39px;
+}
+
+.stepper-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  line-height: 1;
+  width: 22px;
+  height: 18px;
+  border: 1px solid var(--border-hi);
+  background: var(--surface3);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .12s;
+  flex-shrink: 0;
+  user-select: none;
+  padding: 0;
+}
+
+.stepper-btn:hover { border-color: var(--red); color: var(--red-bright); background: rgba(138,32,32,.1); }
+.stepper-btn.plus:hover { border-color: var(--red-bright); }
+.stepper-btn.minus:hover { border-color: var(--green-dim); color: var(--green); background: rgba(122,154,40,.08); }
+
+.stepper-pips {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.pip {
+  width: 9px;
+  height: 9px;
+  border-radius: 1px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  cursor: pointer;
+  transition: background .1s, border-color .1s;
+  flex-shrink: 0;
+}
+
+.pip.filled { border-color: transparent; }
+.pip:hover { opacity: .75; }
+
 /* HP / COMPOSURE */
 .vitals-row {
   display: grid;
@@ -421,7 +475,7 @@ main {
 .vital-box {
   background: var(--surface3);
   border: 1px solid var(--border);
-  padding: 5px 9px;
+  padding: 5px 9px 7px;
 }
 
 .vital-lbl {
@@ -442,6 +496,32 @@ main {
 .vital-val span {
   font-size: 10px;
   color: var(--text-dim);
+}
+
+/* vital stepper row */
+.vital-stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.vital-stepper .stepper-btn {
+  width: 20px;
+  height: 16px;
+  font-size: 12px;
+}
+
+.vital-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.vital-bar-fill {
+  height: 100%;
+  transition: width .25s, background .25s;
 }
 
 /* ATTRS */
@@ -935,7 +1015,7 @@ function buildSlotEl(pIdx, sIdx) {
         </div>
       </div>
       <div class="char-card" id="card-${pIdx}-${sIdx}">
-        ${buildCharCardHTML(charData)}
+        ${buildCharCardHTML(charData, pIdx, sIdx)}
       </div>
       <div class="notes-overlay" id="notes-${pIdx}-${sIdx}">
         <div class="notes-overlay-header">
@@ -954,16 +1034,19 @@ function buildSlotEl(pIdx, sIdx) {
   return el;
 }
 
-function buildCharCardHTML(d) {
+function buildCharCardHTML(d, pIdx, sIdx) {
   const inputs     = d.inputs || [];
   const textareas  = d.textareas || [];
   const attrVals   = d.attrVals || [0,0,0,0,0];
   const skillState = d.skillState || [];
-  const spike      = parseInt(d.currentSpike) || 0;
-  const hpCur      = d.hpCurrent ?? '—';
-  const hpMax      = d.hpMax ?? '—';
-  const compCur    = d.compCurrent ?? '—';
-  const compMax    = d.compMax ?? '—';
+
+  // Use session overrides if present, else charData values
+  const slot       = state[pIdx] && state[pIdx][sIdx];
+  const spike      = slot && slot.sessionSpike  !== undefined ? slot.sessionSpike  : (parseInt(d.currentSpike) || 0);
+  const hpCur      = slot && slot.sessionHp     !== undefined ? slot.sessionHp     : (d.hpCurrent ?? 0);
+  const hpMax      = d.hpMax   ?? 0;
+  const compCur    = slot && slot.sessionComp   !== undefined ? slot.sessionComp   : (d.compCurrent ?? 0);
+  const compMax    = d.compMax ?? 0;
 
   const name      = inputs[0] || 'UNKNOWN';
   const callsign  = inputs[1] || '';
@@ -974,6 +1057,24 @@ function buildCharCardHTML(d) {
   const spPct     = Math.min(100, (spike / 11) * 100);
   const spLabel   = spikeLabel(spike);
   const awoken    = d.awoken ? `<span class="awoken-tag">AWOKEN</span>` : '';
+
+  const sid       = `${pIdx}-${sIdx}`; // shorthand for IDs
+
+  // Pip helper — 12 pips for SPIKE
+  function spikePips(val) {
+    return Array.from({length: 11}, (_, i) => {
+      const filled = i < val;
+      const col    = spikeColor(i + 1);
+      return `<div class="pip${filled ? ' filled' : ''}" style="${filled ? `background:${col};border-color:${col};` : ''}"
+        onclick="setSpike(${pIdx},${sIdx},${i+1} === ${val} ? ${i} : ${i+1})" title="Set SPIKE to ${i+1}"></div>`;
+    }).join('');
+  }
+
+  // Bar fill helper
+  function barPct(cur, max) {
+    if (!max) return 0;
+    return Math.min(100, Math.max(0, (cur / max) * 100));
+  }
 
   // Attributes
   const attrsHtml = ATTRS.map((a, i) => `
@@ -1037,6 +1138,11 @@ function buildCharCardHTML(d) {
     </div>
   ` : '';
 
+  const hpPct   = barPct(hpCur, hpMax);
+  const compPct = barPct(compCur, compMax);
+  const hpColor   = hpPct > 50 ? 'var(--green-dim)' : hpPct > 25 ? 'var(--amber)' : 'var(--red-bright)';
+  const compColor = compPct > 50 ? 'var(--amber-dim)' : compPct > 25 ? 'var(--amber)' : 'var(--red-bright)';
+
   return `
     <div class="char-identity">
       <div class="char-name">${escHtml(name)} ${awoken}</div>
@@ -1050,20 +1156,39 @@ function buildCharCardHTML(d) {
     <div style="flex-shrink:0">
       <div class="spike-row">
         <div class="spike-label">SPIKE</div>
-        <div class="spike-bar"><div class="spike-fill" style="width:${spPct}%;background:${spColor}"></div></div>
-        <div class="spike-val" style="color:${spColor}">${spike}</div>
+        <div class="spike-bar"><div class="spike-fill" id="spfill-${sid}" style="width:${spPct}%;background:${spColor}"></div></div>
+        <div class="spike-val" id="spval-${sid}" style="color:${spColor}">${spike}</div>
       </div>
-      <div class="spike-status" style="color:${spColor}">${spLabel}</div>
+      <div class="spike-status" id="splbl-${sid}" style="color:${spColor}">${spLabel}</div>
+      <div class="spike-stepper">
+        <button class="stepper-btn minus" onclick="adjSpike(${pIdx},${sIdx},-1)" title="Decrease SPIKE">−</button>
+        <div class="stepper-pips" id="sppips-${sid}">${spikePips(spike)}</div>
+        <button class="stepper-btn plus"  onclick="adjSpike(${pIdx},${sIdx},+1)" title="Increase SPIKE">+</button>
+      </div>
     </div>
 
     <div class="vitals-row">
       <div class="vital-box">
         <div class="vital-lbl">HP</div>
-        <div class="vital-val">${hpCur} <span>/ ${hpMax}</span></div>
+        <div class="vital-val"><span id="hpval-${sid}">${hpCur}</span> <span>/ ${hpMax}</span></div>
+        <div class="vital-stepper">
+          <button class="stepper-btn minus" onclick="adjVital(${pIdx},${sIdx},'hp',-1)" title="Decrease HP">−</button>
+          <div class="vital-bar-wrap">
+            <div class="vital-bar-fill" id="hpbar-${sid}" style="width:${hpPct}%;background:${hpColor}"></div>
+          </div>
+          <button class="stepper-btn plus"  onclick="adjVital(${pIdx},${sIdx},'hp',+1)" title="Increase HP">+</button>
+        </div>
       </div>
       <div class="vital-box">
         <div class="vital-lbl">COMPOSURE</div>
-        <div class="vital-val">${compCur} <span>/ ${compMax}</span></div>
+        <div class="vital-val"><span id="compval-${sid}">${compCur}</span> <span>/ ${compMax}</span></div>
+        <div class="vital-stepper">
+          <button class="stepper-btn minus" onclick="adjVital(${pIdx},${sIdx},'comp',-1)" title="Decrease Composure">−</button>
+          <div class="vital-bar-wrap">
+            <div class="vital-bar-fill" id="compbar-${sid}" style="width:${compPct}%;background:${compColor}"></div>
+          </div>
+          <button class="stepper-btn plus"  onclick="adjVital(${pIdx},${sIdx},'comp',+1)" title="Increase Composure">+</button>
+        </div>
       </div>
     </div>
 
@@ -1102,7 +1227,10 @@ function updatePartyMeta(pIdx) {
 
   let avgSpike = '—';
   if (count > 0) {
-    const total = loaded.reduce((sum, s) => sum + (parseInt(s.charData.currentSpike) || 0), 0);
+    const total = loaded.reduce((sum, s) => {
+      const sp = s.sessionSpike !== undefined ? s.sessionSpike : (parseInt(s.charData.currentSpike) || 0);
+      return sum + sp;
+    }, 0);
     avgSpike = (total / count).toFixed(1);
   }
 
@@ -1150,7 +1278,10 @@ function loadFile(ev, pIdx, sIdx) {
       const existing = state[pIdx][sIdx];
       state[pIdx][sIdx] = {
         charData,
-        gmNotes: existing ? (existing.gmNotes || '') : ''
+        gmNotes:      existing ? (existing.gmNotes      || '') : '',
+        sessionSpike: existing ? existing.sessionSpike : undefined,
+        sessionHp:    existing ? existing.sessionHp    : undefined,
+        sessionComp:  existing ? existing.sessionComp  : undefined,
       };
       saveToStorage();
       // Re-render just this slot
@@ -1232,6 +1363,93 @@ function saveNotes(pIdx, sIdx) {
   if (!ta || !state[pIdx] || !state[pIdx][sIdx]) return;
   state[pIdx][sIdx].gmNotes = ta.value;
   saveToStorage();
+}
+
+// ═══════════════════════════════════════════════════════
+//  LIVE STAT ADJUSTMENTS
+// ═══════════════════════════════════════════════════════
+
+function getSlot(pIdx, sIdx) {
+  return state[pIdx] && state[pIdx][sIdx];
+}
+
+function adjSpike(pIdx, sIdx, delta) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  const cur = slot.sessionSpike !== undefined ? slot.sessionSpike : (parseInt(slot.charData.currentSpike) || 0);
+  setSpike(pIdx, sIdx, Math.min(11, Math.max(0, cur + delta)));
+}
+
+function setSpike(pIdx, sIdx, val) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  val = Math.min(11, Math.max(0, val));
+  slot.sessionSpike = val;
+  saveToStorage();
+  updateSpikeDOM(pIdx, sIdx, val);
+  updatePartyMeta(pIdx);
+}
+
+function updateSpikeDOM(pIdx, sIdx, val) {
+  const sid    = `${pIdx}-${sIdx}`;
+  const col    = spikeColor(val);
+  const pct    = Math.min(100, (val / 11) * 100);
+  const label  = spikeLabel(val);
+
+  const fill  = document.getElementById('spfill-' + sid);
+  const valEl = document.getElementById('spval-'  + sid);
+  const lblEl = document.getElementById('splbl-'  + sid);
+  const pips  = document.getElementById('sppips-' + sid);
+
+  if (fill)  { fill.style.width = pct + '%'; fill.style.background = col; }
+  if (valEl) { valEl.textContent = val; valEl.style.color = col; }
+  if (lblEl) { lblEl.textContent = label; lblEl.style.color = col; }
+  if (pips)  { pips.innerHTML = buildSpikePips(pIdx, sIdx, val); }
+}
+
+function buildSpikePips(pIdx, sIdx, val) {
+  return Array.from({length: 11}, (_, i) => {
+    const filled = i < val;
+    const col    = spikeColor(i + 1);
+    const target = (i + 1 === val) ? i : (i + 1); // click filled pip to unset
+    return `<div class="pip${filled ? ' filled' : ''}" style="${filled ? `background:${col};border-color:${col};` : ''}"
+      onclick="setSpike(${pIdx},${sIdx},${i+1 === val ? i : i+1})" title="Set SPIKE to ${i+1}"></div>`;
+  }).join('');
+}
+
+function adjVital(pIdx, sIdx, which, delta) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  const cd = slot.charData;
+
+  if (which === 'hp') {
+    const max = cd.hpMax ?? 0;
+    const cur = slot.sessionHp !== undefined ? slot.sessionHp : (cd.hpCurrent ?? 0);
+    const nv  = Math.min(max, Math.max(0, cur + delta));
+    slot.sessionHp = nv;
+    saveToStorage();
+    updateVitalDOM(pIdx, sIdx, 'hp', nv, max);
+  } else {
+    const max = cd.compMax ?? 0;
+    const cur = slot.sessionComp !== undefined ? slot.sessionComp : (cd.compCurrent ?? 0);
+    const nv  = Math.min(max, Math.max(0, cur + delta));
+    slot.sessionComp = nv;
+    saveToStorage();
+    updateVitalDOM(pIdx, sIdx, 'comp', nv, max);
+  }
+}
+
+function updateVitalDOM(pIdx, sIdx, which, cur, max) {
+  const sid    = `${pIdx}-${sIdx}`;
+  const pct    = max ? Math.min(100, Math.max(0, (cur / max) * 100)) : 0;
+  const col    = which === 'hp'
+    ? (pct > 50 ? 'var(--green-dim)' : pct > 25 ? 'var(--amber)' : 'var(--red-bright)')
+    : (pct > 50 ? 'var(--amber-dim)' : pct > 25 ? 'var(--amber)' : 'var(--red-bright)');
+
+  const valEl = document.getElementById(`${which}val-${sid}`);
+  const barEl = document.getElementById(`${which}bar-${sid}`);
+  if (valEl) valEl.textContent = cur;
+  if (barEl) { barEl.style.width = pct + '%'; barEl.style.background = col; }
 }
 
 // ═══════════════════════════════════════════════════════
