@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIKE: Timeline & Campaigns — GM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg: #090a07; --surface: #0e0f0b; --surface2: #131408; --surface3: #181a0e;
+  --border: #1e2014; --border-hi: #2a2d1a;
+  --text: #b8baa5; --text-dim: #555748; --text-hi: #dfe1cc;
+  --green: #7a9a28; --green-dim: #4a5e18;
+  --red: #8a2020; --red-bright: #c03030;
+  --amber: #b87820; --amber-dim: #6e4810; --amber-pale: #2a1e06;
+  --blue: #4a7a9a; --blue-dim: #1a2a3a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif; font-size: 16px;
+  line-height: 1.6; min-height: 100vh;
+}
+
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(0,0,0,.05) 3px, rgba(0,0,0,.05) 4px);
+  pointer-events: none; z-index: 9000;
+}
+
+.top-band {
+  background: var(--red); padding: 3px 24px;
+  display: flex; justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace; font-size: 8.5px;
+  letter-spacing: .2em; color: #fff;
+}
+
+.main-header {
+  background: var(--surface); border-bottom: 2px solid var(--red);
+  padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 500;
+}
+
+.mh-left, .mh-right { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .16em; color: var(--text-dim); line-height: 1.7; }
+.mh-center { text-align: center; }
+.mh-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .4em; color: var(--text-hi); }
+.mh-sub { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .22em; color: var(--red-bright); margin-top: 3px; }
+
+nav {
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto; padding: 0 28px;
+  position: sticky; z-index: 400;
+}
+
+nav a {
+  font-family: 'Share Tech Mono', monospace; font-size: 8.5px; letter-spacing: .14em;
+  color: var(--text-dim); text-decoration: none; padding: 8px 14px;
+  border-right: 1px solid var(--border); white-space: nowrap; transition: all .15s;
+}
+nav a:first-child { border-left: 1px solid var(--border); }
+nav a:hover, nav a.active { color: var(--red-bright); background: rgba(138,32,32,.07); }
+
+main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+
+.section { margin-bottom: 60px; }
+
+.section-head {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-hi); padding-bottom: 10px;
+}
+
+.sh-num { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: .2em; color: var(--red-bright); }
+.sh-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: .28em; color: var(--text-hi); }
+.sh-line { flex: 1; height: 1px; background: var(--border); margin-bottom: 3px; }
+
+/* ─── TIMELINE ─── */
+.timeline { position: relative; padding-left: 24px; }
+
+.timeline::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom, var(--red), var(--border));
+}
+
+.tl-entry { position: relative; margin-bottom: 4px; }
+
+.tl-entry::before {
+  content: ''; position: absolute; left: -28px; top: 8px;
+  width: 8px; height: 8px; background: var(--red); border: 2px solid var(--bg);
+  border-radius: 50%;
+}
+
+.tl-entry.campaign::before { background: var(--red-bright); width: 10px; height: 10px; left: -29px; }
+.tl-entry.minor::before { background: var(--border-hi); width: 6px; height: 6px; left: -27px; }
+
+.tl-header {
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 10px 14px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+  transition: background .15s; user-select: none;
+}
+
+.tl-header:hover { background: var(--surface3); }
+.tl-entry.campaign .tl-header { border-left: 3px solid var(--red); }
+.tl-entry.minor .tl-header { border-left: 3px solid var(--border-hi); }
+
+.tl-date {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px;
+  letter-spacing: .16em; color: var(--red-bright); flex-shrink: 0; min-width: 120px;
+}
+
+.tl-label {
+  font-family: 'Bebas Neue', sans-serif; font-size: 16px;
+  letter-spacing: .16em; color: var(--text-hi); flex: 1;
+}
+
+.tl-toggle {
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  color: var(--text-dim); flex-shrink: 0;
+}
+
+.tl-body {
+  background: var(--surface); border: 1px solid var(--border);
+  border-top: none; padding: 14px 16px; display: none;
+}
+
+.tl-body.open { display: block; }
+
+.tl-body ul { padding-left: 16px; margin: 6px 0; }
+.tl-body li { font-size: 13px; margin-bottom: 4px; color: var(--text); line-height: 1.5; }
+.tl-body strong { color: var(--text-hi); }
+.tl-body em { color: var(--text-dim); }
+.tl-body p { font-size: 14px; margin-bottom: 8px; }
+.tl-body p:last-child { margin-bottom: 0; }
+
+.tl-sub-head {
+  font-family: 'Share Tech Mono', monospace; font-size: 7.5px;
+  letter-spacing: .18em; color: var(--text-dim); margin: 10px 0 4px;
+  border-bottom: 1px solid var(--border); padding-bottom: 3px;
+}
+
+/* ─── PANELS ─── */
+.panel {
+  background: var(--surface2); border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--green-dim); padding: 16px 18px; margin-bottom: 12px;
+}
+.panel.red { border-left-color: var(--red); }
+.panel.amber { border-left-color: var(--amber-dim); }
+.panel.quiet { border-left-color: var(--border-hi); background: var(--surface); }
+.panel.blue { border-left-color: var(--blue-dim); }
+
+.panel-title { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .2em; color: var(--green); margin-bottom: 10px; }
+.panel-title.red { color: var(--red-bright); }
+.panel-title.amber { color: var(--amber); }
+.panel-title.blue { color: var(--blue); }
+
+.panel p { font-size: 14px; color: var(--text); line-height: 1.55; margin-bottom: 8px; }
+.panel p:last-child { margin-bottom: 0; }
+.panel strong { color: var(--text-hi); }
+.panel ul { padding-left: 16px; margin-top: 6px; }
+.panel li { font-size: 14px; margin-bottom: 5px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.mbr { margin-bottom: 14px; }
+
+/* ─── NPC CARDS ─── */
+.npc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+
+.npc-card {
+  background: var(--surface2); border: 1px solid var(--border-hi);
+  border-top: 2px solid var(--border-hi); padding: 14px;
+}
+.npc-card.key { border-top-color: var(--red); }
+.npc-card.suspect { border-top-color: var(--amber-dim); }
+.npc-card.ally { border-top-color: var(--green-dim); }
+
+.npc-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: .18em; color: var(--text-hi); margin-bottom: 2px; }
+.npc-role { font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .14em; color: var(--text-dim); margin-bottom: 8px; }
+.npc-body { font-size: 13px; color: var(--text); line-height: 1.5; }
+.npc-status { font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .1em; margin-top: 8px; padding: 3px 6px; display: inline-block; }
+.npc-status.alive { color: var(--green); border: 1px solid var(--green-dim); }
+.npc-status.unknown { color: var(--amber); border: 1px solid var(--amber-dim); }
+.npc-status.reset { color: var(--blue); border: 1px solid var(--blue-dim); }
+.npc-status.missing { color: var(--red-bright); border: 1px solid var(--red); }
+
+/* ─── LOCATION CARDS ─── */
+.loc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+.loc-card { background: var(--surface2); border: 1px solid var(--border-hi); border-left: 3px solid var(--green-dim); padding: 14px; }
+.loc-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: .18em; color: var(--text-hi); margin-bottom: 2px; }
+.loc-tag { font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .14em; color: var(--text-dim); margin-bottom: 8px; }
+.loc-body { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* ─── MYSTERY TABLE ─── */
+.mystery-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+.mystery-table th { font-family: 'Share Tech Mono', monospace; font-size: 7px; letter-spacing: .16em; color: var(--text-dim); text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border-hi); background: var(--surface); }
+.mystery-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.mystery-table tr:last-child td { border-bottom: none; }
+.mystery-table tr:hover td { background: rgba(255,255,255,.01); }
+.td-hi { color: var(--text-hi); font-weight: 600; }
+.td-g { color: var(--green); }
+.td-r { color: var(--red-bright); }
+
+footer {
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 10px 24px; display: flex; justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace; font-size: 7.5px;
+  letter-spacing: .12em; color: var(--text-dim);
+}
+
+@media (max-width: 640px) {
+  .g2, .npc-grid, .loc-grid { grid-template-columns: 1fr; }
+  .tl-date { min-width: 80px; font-size: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-band">
+  <span>■ UGD DIV IV // GM COMMAND // TIMELINE & CAMPAIGNS ■</span>
+  <span>GM-04 // MASTER ARCHIVE</span>
+  <span>■ GM EYES ONLY — FULL SPOILERS ■</span>
+</div>
+
+<div class="main-header">
+  <div class="mh-left">UGD // DIVISION IV<br>GM COMMAND CHANNEL</div>
+  <div class="mh-center">
+    <div class="mh-title">TIMELINE & CAMPAIGNS</div>
+    <div class="mh-sub">■ MASTER ARCHIVE // FULL SPOILER CONTENT ■</div>
+  </div>
+  <div class="mh-right">YEAR 5 POST-RESET<br>MASTER CLASSIFICATION</div>
+</div>
+
+<nav>
+  <a href="#timeline">TIMELINE</a>
+  <a href="#mysteries">MYSTERIES</a>
+  <a href="#npcs">KEY NPCS</a>
+  <a href="#locations">LOCATIONS</a>
+  <a href="#factions">FACTIONS</a>
+  <a href="#player-knowledge">PLAYER KNOWLEDGE</a>
+</nav>
+
+<main>
+
+<!-- ════ 01. TIMELINE ════ -->
+<section class="section" id="timeline">
+  <div class="section-head">
+    <span class="sh-num">01 //</span>
+    <span class="sh-title">MASTER TIMELINE</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="panel red mbr">
+    <div class="panel-title red">■ FULL SPOILER CONTENT — DO NOT DISPLAY DURING ACTIVE SESSIONS</div>
+    <p>This timeline contains classified information including true identities, mystery reveals, branching outcomes, and information players must not access before the appropriate campaign moments. Use for prep only.</p>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2040–2044</div>
+        <div class="tl-label">WWIII — THE COLLAPSE</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body open">
+        <div class="tl-sub-head">WAR ITSELF — 300+ MILLION DEAD</div>
+        <ul>
+          <li>Direct combatants and civilians lost to conventional bombardment, drone strikes, urban warfare across multiple continents</li>
+          <li>72MT nuke dropped on the Black Sea Grain Region — prevailing winds carry radioactive fallout into Russia</li>
+          <li>Nuclear winter lowers temperatures worldwide; growing seasons disrupted in the Americas, monsoons fail in Asia</li>
+          <li>Most productive farmland in Europe, Asia, and Africa sterilized</li>
+        </ul>
+        <div class="tl-sub-head">CASCADING COLLAPSE — 2.7+ BILLION DEAD</div>
+        <ul>
+          <li><strong>Famine (1.5B+):</strong> Global trade and shipping annihilated. Fertilizer and fuel production ceases. Climate aftershocks cause global crop failures for years.</li>
+          <li><strong>Pandemic (700M+):</strong> Healthcare systems collapse. Refugee camps breed cholera, typhoid, dysentery. Engineered biological agents involved in the war itself.</li>
+          <li><strong>Infrastructure/Societal Breakdown (500M+):</strong> Total supply chain collapse. No fuel, no electricity, no law enforcement. Violence and exposure compound every other crisis.</li>
+        </ul>
+        <div class="tl-sub-head">EMERGENCE OF SPIKE</div>
+        <ul>
+          <li>Humongous global uptick in mental health disorders and violent behavior — the psychological manifestation of total civilizational collapse</li>
+          <li>Violent crime, arson, bombings, mass psychogenic events all symptoms of a civilization that has ceased to function</li>
+          <li>The former 127-nation UN becomes the sole governing body, reorganizing into the UGD (United Global Directorate)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2045</div>
+        <div class="tl-label">POST-WAR RESPONSE & WHOUMHS</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>UGD commits vast resources to combating SPIKE; WHO convenes the Underground Mental Health Summit</li>
+          <li>In the first session: Dr. Reeves proposes "The Reset" — an aerosolized bacterial solution to "recalibrate" emotions using military-grade dispersal tech</li>
+          <li>Proposal is <strong>rejected with prejudice</strong></li>
+          <li>Multiple subsequent sessions fail to produce a solution; global decline toward anarchy continues; the UGD forces WHO's hand</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2046</div>
+        <div class="tl-label">THE FOUR RESEARCHERS</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>Funding committed to four researchers with the most promising proposals — research labs built and UGD-monitored</li>
+          <li><strong>Dr. Elias Reeves IV (US):</strong> Newly proposed gene therapy (cover for his original Reset project)</li>
+          <li><strong>Dr. Calafiori (Italy):</strong> Incendiary therapy — "cauterizing a mental wound"</li>
+          <li><strong>Dr. Qi (China):</strong> Psychotherapeutics and medicine</li>
+          <li><strong>Dr. Gumede (South Africa):</strong> Robotics and nanites</li>
+          <li>Collaboration begins instantly; resources and methods shared between the four</li>
+          <li>Reeves begins animal trials on monkeys — claims small-area aerosolized SPIKE treatment (true nature concealed)</li>
+          <li><strong>[CLASSIFIED]</strong> Reeves is still secretly working on the Reset proposal, looping in an outside terrorist faction (Alan Prater) for resources and expertise</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2047</div>
+        <div class="tl-label">RESEARCH INTENSIFIES — ALLIANCE FRACTURES</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>Collaboration breaks down as Gumede and Qi disagree with the ethics of Reeves and Calafiori</li>
+          <li>Dr. Qi requests LEO satellites from UGD — launches them to monitor his lab premises as unrest grows</li>
+          <li>Pressure mounts; all four researchers intensify their own work</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2048</div>
+        <div class="tl-label">CONSPIRACY AND THE RESET // SPIKE: HARDWARE</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body open">
+        <p><strong style="color:var(--red-bright)">This is the setting of SPIKE: Hardware. Full spoiler content.</strong></p>
+        <ul>
+          <li>Gumede and Qi learn collaboration between Calafiori and Reeves goes deeper than known</li>
+          <li>A conscientious objector in Calafiori's lab reports contact between Reeves and "Alan Prater"</li>
+          <li>UGD deems Qi's methods too slow; begins pulling funding</li>
+          <li>UGD grows suspicious of Reeves' pivot from rejected Reset to "genome sequencing"</li>
+          <li><strong>The Italian lab goes dark</strong> — monitoring system shows a major fire (in reality: arson by a horrified subordinate, not accident)</li>
+          <li>Reeves' human trials reveal Prime Signal must come from a living human — synthetic sources quickly experience entropy</li>
+          <li>A team is dispatched by the UGD Chairman to investigate Reeves' lab; Calafiori's lab and team deemed lost</li>
+          <li><strong>The South African lab is "taken over by terrorists and destroyed"</strong> — in reality, Gumede directed her own robots to prevent her technology reaching Reeves</li>
+          <li>Reeves builds nanite production tanks — enough bacterial nanites for the remaining global population</li>
+          <li>The UGD-commissioned team arrives and investigates — and may be too late to stop what's in motion</li>
+        </ul>
+        <div class="tl-sub-head">THE MITCHELL TRIAD — OUTCOME DETERMINES CONTROL IDENTITY</div>
+        <ul>
+          <li><strong>FREE:</strong> Reeves terminates Mitchell and takes the PC with the lowest SPIKE as new Prime. TPK. Reset happens with this PC in Mitchell's place. → Branch R (modified)</li>
+          <li><strong>LEAVE:</strong> Team's escape halted. They watch drones launch the Reset before falling unconscious. → Branch R or P depending on subsequent events</li>
+          <li><strong>TERMINATE:</strong> Prater learns he won't be Prime; kills Reeves; initiates Reset himself, sparing himself and two scientists → Branch P (Prater)</li>
+        </ul>
+        <div class="tl-sub-head">THE RESET OCCURS</div>
+        <ul>
+          <li>High-altitude dispersal via terrorist-provided drone tech</li>
+          <li>Worldwide unconsciousness for 5–7 days</li>
+          <li>Autobiographical memory converted to semantic memory — facts without connection. Trauma, passion, deep love: erased.</li>
+          <li>Charles Mitchell (psychopath, no emotional baseline) becomes the Prime — his signal flattens all emotion rather than generating positive feeling</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2049 — YEAR 1</div>
+        <div class="tl-label">THE NEW WORLD</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>The world wakes up. Society resumes. The Reset is celebrated, though not understood.</li>
+          <li>Dr. Reeves and his team vanish — theorized to have become martyrs of their work. His lab's blast doors remain sealed; turrets active.</li>
+          <li>The UGD Chairman reported missing along with two other members — no alarms raised</li>
+          <li><strong>[CLASSIFIED]</strong> The Control seizes the Chairman during the Quiet Period. His security credentials used to monitor UGD data and redirect recovered tech and weaponry.</li>
+          <li>Art, music, media become purely aesthetic and soothing — anything evoking complex negative emotion labeled "degenerate" and destroyed</li>
+          <li>Economy becomes state-managed rationing and distribution</li>
+          <li>Pre-Reset technology maintained by manuals — true innovation is gone; advanced tech confiscated by UGD, ends up in Control's hands</li>
+          <li>The Immune (Reset-resistant fraction) cause unease in those around them — targeted by UGD; nearly eliminated by Year 5</li>
+          <li>Grievers appear — individuals who know factually they suffered loss, but cannot feel it. Often found in public distress.</li>
+          <li>Nanite decay begins — mesh cannot replicate effectively in sub-ideal conditions; mutation has begun to occur</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2054 — YEAR 5</div>
+        <div class="tl-label">SPIKE: THE REEVES TRIALS // CAMPAIGN 1</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body open">
+        <ul>
+          <li>Society rebuilt enough to restore a basic global communications network</li>
+          <li>Nations disbanded; global administration remains under UGD. Former Chairman still missing — no urgency.</li>
+          <li>First SPIKE Storm sweeps through the world — an hour of waves of unexplained anxiety, sadness, anger. Chaos until it dissipates.</li>
+          <li>Party commissioned for off-the-books investigation of Reeves' defunct Indiana lab</li>
+          <li>They find: research logs, evidence of human testing, SPIKED scavengers, Charles Mitchell's containment dome (labeled by name), undeniable link to Calafiori's lab in Italy</li>
+          <li>Information found but not yet understood — <em>the picture is incomplete by design</em></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2055 — YEAR 6</div>
+        <div class="tl-label">SPIKE: WHISPERED ECHOES // CAMPAIGN 2</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>Storms worsen and increase in frequency</li>
+          <li>Party travels to Italy; discovers the Purified (survivors of Calafiori's incendiary methods — no emotional capacity whatsoever)</li>
+          <li>Discovers Calafiori saw SPIKE not as a condition to manage but a disease to cure — his methods were "burning out the emotional centers"</li>
+          <li><strong>Pivotal choice:</strong> Give Calafiori's findings to the UN (feeding the Control's reach) OR destroy them (players must SPIKE and make Saving Throws)</li>
+          <li>Successful saves on destruction → one step closer to Awakening. Failed saves → destructive behavior, eventual new character creation.</li>
+          <li>Ends with team returning to UN</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2055–56 — YEAR 6-7</div>
+        <div class="tl-label">SPIKE: DRONE REBELLION // CAMPAIGN 3</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>Mesh network begins failing in parts of Asia — targeted and deliberate by the Control (presented publicly as equipment failure)</li>
+          <li>PCs break from UN control and seek Gumede's laboratory to learn about the other faction within the four scientists</li>
+          <li>Individual SPIKE events become more common; whispers of an "Awakening" movement reach the party</li>
+          <li>Gumede drones reveal extent of pre-Reset cooperation between Gumede and Qi</li>
+          <li>Party begins piecing together that the Prime Signal comes from a living human</li>
+          <li>First opportunity for a party member to Awaken — guided by an NPC</li>
+          <li>Prime Signal coverage slowly starts collapsing globally</li>
+          <li>UGD initiates "Containment Directive" — an empty promise to slow SPIKE increase</li>
+          <li><strong>[CLASSIFIED]</strong> The Control does not have the means to suppress non-compliance. The Awakened movement is an existential threat to the system — but also an object of study.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2056 — YEAR 7</div>
+        <div class="tl-label">SPIKE: THE LOST TRANSMISSION // CAMPAIGN 4</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li><strong>[Branch R]</strong> The Control deliberately shuts down parts of Asia — discovering the Awakened movement in the process. What looks like chaos is a controlled experiment.</li>
+          <li>Party travels to China to seek Dr. Qi — found as the polite, vacant "Custodian" of his own sterile, empty lab</li>
+          <li>Lab has non-lethal security: sonic emitters, hallucinogenic aerosols, automated lockdowns. Challenge is logical, not combative.</li>
+          <li>During a SPIKE Storm: Qi has a moment of fractured lucidity — can be the key to bypassing final security</li>
+          <li>Under the right conditions, with empathic action from PCs: Qi can be Awakened</li>
+          <li>Qi's satellites contain surveillance data pointing to Reeves' location: Point Nemo</li>
+          <li>Truth of the Prime Signal discovered. Point Nemo identified as the emotional dead zone.</li>
+          <li>End: Hardware revealed to players as "the lost transmission." Players transition into the prequel campaign — new characters, living the events of 2048.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry campaign">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2056–57 — YEAR 7/8</div>
+        <div class="tl-label">SPIKE: CURE // CAMPAIGN 5 — THE FINALE</div>
+        <div class="tl-toggle">▼</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>Dual finale path: Branch R (Reeves) or Branch P (Prater) — determined by Hardware's outcome</li>
+          <li>Party heads to Moto Nui (Control's first post-Reset base) expecting Mitchell — find computers and data pointing to Point Nemo</li>
+          <li>Point Nemo: floating installation at Earth's oceanic pole of inaccessibility. Houses the Control and Charles Mitchell (the Prime). Acts as an emotional dead zone.</li>
+          <li><strong>[Branch R]</strong> Reeves is planning Reset 2.0 calibrated to an Awakened Prime. His "chaos" in Asia is a search for the perfect candidate. NPCs the party knows from previous campaigns may be among his subjects — and may agree with him.</li>
+          <li><strong>[Branch P]</strong> Prater is at UGD HQ building his arsenal and recruiting the Awakened. Plans to shoot Mitchell, overthrow UGD, and let the "damned" tear themselves apart while positioning himself as humanity's savior.</li>
+        </ul>
+        <div class="tl-sub-head">FINAL CHOICES — ALL CARRY COST</div>
+        <ul>
+          <li><strong>Assimilate as Primes:</strong> Theoretically awakens the entire network — but requires consent to choose for all of humanity</li>
+          <li><strong>Destroy the network:</strong> SPIKE returns at full force, no gentle awakening. Chaos but freedom.</li>
+          <li><strong>Do nothing:</strong> Walk away. Try to find another way. The world continues to suffer the current system.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+</section>
+
+<!-- ════ 02. MYSTERIES ════ -->
+<section class="section" id="mysteries">
+  <div class="section-head">
+    <span class="sh-num">02 //</span>
+    <span class="sh-title">MYSTERIES & REVEALS</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <table class="mystery-table mbr">
+    <thead>
+      <tr>
+        <th>MYSTERY</th>
+        <th>TRUTH</th>
+        <th>WHEN REVEALED</th>
+        <th>HOW</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="td-hi">Identity of the Control</td>
+        <td>Branch R: Reeves. Branch P: Prater. Determined by Hardware.</td>
+        <td class="td-r">End of Lost Transmission / Hardware</td>
+        <td>Players live it firsthand in Hardware — no narrative explanation, they experience it</td>
+      </tr>
+      <tr>
+        <td class="td-hi">The Reset Mechanism</td>
+        <td>Bacterial nanites calibrated to a living human Prime (Charles Mitchell)</td>
+        <td class="td-r">Gradually across Reeves Trials and Whispered Echoes</td>
+        <td>Research logs, Calafiori's notes, Gumede drone recordings, Qi's satellite data</td>
+      </tr>
+      <tr>
+        <td class="td-hi">Charles Mitchell</td>
+        <td>Former hardware store employee; psychopath; sole source of Prime Signal. Single point of failure for entire system.</td>
+        <td class="td-r">Name in Reeves Trials; role in Drone Rebellion; full truth in Lost Transmission</td>
+        <td>Containment dome label → partial understanding → Gumede recordings → Hardware reveals full scope</td>
+      </tr>
+      <tr>
+        <td class="td-hi">The Italian lab fire</td>
+        <td>Arson by a horrified subordinate — not an accident. Notes, audio logs, and links to Gumede/Qi hidden in a locked safe.</td>
+        <td class="td-r">Whispered Echoes</td>
+        <td>Physical investigation of Calafiori's ruins; the subordinate's locked safe</td>
+      </tr>
+      <tr>
+        <td class="td-hi">The South African "terrorist attack"</td>
+        <td>Gumede directed her own robots to destroy the facility — to prevent her technology reaching Reeves</td>
+        <td class="td-r">Drone Rebellion</td>
+        <td>Surviving Gumede drones; their journal recordings reveal the truth</td>
+      </tr>
+      <tr>
+        <td class="td-hi">The UGD Chairman's disappearance</td>
+        <td>Captured by the Control during the Quiet Period. His credentials used for UGD backdoor access to monitor and redirect.</td>
+        <td class="td-r">Lost Transmission / Hardware</td>
+        <td>Players encounter the backdoor evidence in the Chinese lab; confirmed in Hardware</td>
+      </tr>
+      <tr>
+        <td class="td-hi">Dr. Qi's state</td>
+        <td>Alive, Reset, serving as Custodian of his own empty lab. Can be Awakened under the right conditions.</td>
+        <td class="td-r">Lost Transmission</td>
+        <td>Direct encounter; SPIKE Storm lucidity moment; empathic actions by PCs</td>
+      </tr>
+      <tr>
+        <td class="td-hi">The Mesh Decay</td>
+        <td>Mutation has begun; cannot replicate in sub-ideal conditions. Deliberately accelerated in Asia by the Control as an experiment.</td>
+        <td class="td-r">Drone Rebellion (disclosed); Lost Transmission (confirmed irreversible)</td>
+        <td>Gumede drone data; Qi's lab systems; Control's deliberate shutdown</td>
+      </tr>
+      <tr>
+        <td class="td-hi">Dr. Reeves' location</td>
+        <td>Point Nemo — a floating installation at Earth's oceanic pole of inaccessibility</td>
+        <td class="td-r">Lost Transmission</td>
+        <td>Qi's LEO satellites contain surveillance data — accessed after security bypass</td>
+      </tr>
+      <tr>
+        <td class="td-hi">What the Awakened are</td>
+        <td>A tiny fraction developing emotional awareness beyond the Reset's suppression. Both hope and threat to the Control.</td>
+        <td class="td-r">Whispered Echoes (whispers); Drone Rebellion (confirmation)</td>
+        <td>NPC encounters; Gumede drone recordings; the Control's reaction to them</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════ 03. KEY NPCs ════ -->
+<section class="section" id="npcs">
+  <div class="section-head">
+    <span class="sh-num">03 //</span>
+    <span class="sh-title">KEY NPCs</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="npc-grid">
+    <div class="npc-card key">
+      <div class="npc-name">DR. ELIAS REEVES IV</div>
+      <div class="npc-role">CHIEF ARCHITECT OF THE RESET // [BRANCH R] THE CONTROL</div>
+      <div class="npc-body">A perfectionist who cannot stand that his solution was imperfect. Believes himself the sole enlightened individual. Views the post-Reset population as guinea pigs to study and improve upon. Has manufactured a world where he will never receive the recognition he denies himself wanting. Planning Reset 2.0 calibrated to an Awakened Prime.</div>
+      <div class="npc-status alive">ALIVE — POINT NEMO</div>
+    </div>
+
+    <div class="npc-card suspect">
+      <div class="npc-name">ALAN PRATER</div>
+      <div class="npc-role">TERRORIST FACTION LEADER // [BRANCH P] THE CONTROL</div>
+      <div class="npc-body">Prime opportunist. Believes SPIKE is natural selection — those who succumb deserve to filter out. He considers himself superior for not having SPIKED during WWIII. Has been stockpiling weaponry, causing SPIKE Storms deliberately (music, torture, substances), and recruiting the Awakened by blaming the UGD. Plans to shoot Mitchell and build a new world as its savior.</div>
+      <div class="npc-status alive">ALIVE — LOCATION UNKNOWN</div>
+    </div>
+
+    <div class="npc-card key">
+      <div class="npc-name">CHARLES MITCHELL</div>
+      <div class="npc-role">THE PRIME — SOLE SOURCE OF THE PRIME SIGNAL</div>
+      <div class="npc-body">Former hardware store customer service employee. A psychopath with no emotional baseline — selected for this exact trait. His signal flattens all emotion rather than generating positive feeling. When he falters (nightmares, interference), SPIKE Storms ripple worldwide. Has left etchings in his containment dome. <em>"Even at the end of the world, humanity cannot resist a flair for the dramatic."</em></div>
+      <div class="npc-status unknown">STATUS DEPENDENT ON HARDWARE OUTCOME</div>
+    </div>
+
+    <div class="npc-card ally">
+      <div class="npc-name">DR. QI</div>
+      <div class="npc-role">PSYCHOTHERAPEUTICS & MEDICINE // CHINA</div>
+      <div class="npc-body">Survived the Reset; serves as Custodian-archivist of his own sterile, empty lab. Polite, helpful, utterly vacant. Launched LEO satellites before the Reset — still in orbit, containing data pointing to Point Nemo. During a SPIKE Storm, fractured lucidity emerges. Can be Awakened with empathic action from PCs. Collaborated with Gumede and grew suspicious of Reeves.</div>
+      <div class="npc-status reset">ALIVE — RESET — CHINA LAB</div>
+    </div>
+
+    <div class="npc-card ally">
+      <div class="npc-name">DR. GUMEDE</div>
+      <div class="npc-role">ROBOTICS & NANITES // SOUTH AFRICA</div>
+      <div class="npc-body">Directed her own robots to destroy her lab — preventing her technology from reaching Reeves. Her surviving drones carry recordings of her journal and the full extent of pre-Reset scientific cooperation. Collaborated with Qi; shared concerns about Reeves and Calafiori. Her sacrifice was tactical and deliberate.</div>
+      <div class="npc-status missing">STATUS UNKNOWN — PRESUMED RESET</div>
+    </div>
+
+    <div class="npc-card">
+      <div class="npc-name">DR. CALAFIORI</div>
+      <div class="npc-role">INCENDIARY THERAPY // ITALY</div>
+      <div class="npc-body">Sold the UGD on "cauterizing a mental wound." Secretly collaborated with Reeves beyond what the UGD knew. His methods created the Purified — individuals with no emotional capacity. His subordinate's arson destroyed the lab; the subordinate left behind notes, audio logs, and a link to Gumede and Qi in a locked safe. His research notes survive among the Purified.</div>
+      <div class="npc-status missing">FATE UNKNOWN — PRESUMED DEAD OR RESET</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 04. LOCATIONS ════ -->
+<section class="section" id="locations">
+  <div class="section-head">
+    <span class="sh-num">04 //</span>
+    <span class="sh-title">KEY LOCATIONS</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="loc-grid">
+    <div class="loc-card" style="border-left-color:var(--red)">
+      <div class="loc-name">REEVES' LAB — INDIANA</div>
+      <div class="loc-tag">CAMPAIGN 1 // THE REEVES TRIALS</div>
+      <div class="loc-body">A UGD-monitored gene therapy facility in reality housing Reeves' secret Reset project. Animal testing chambers, human trial domes, nanite production tanks. Exterior blast doors sealed, motion-sensing turrets active since the Reset. Contains research logs, SPIKED scavengers, and Charles Mitchell's labeled containment dome.</div>
+    </div>
+
+    <div class="loc-card" style="border-left-color:var(--amber-dim)">
+      <div class="loc-name">CALAFIORI'S LAB — ITALY</div>
+      <div class="loc-tag">CAMPAIGN 2 // WHISPERED ECHOES</div>
+      <div class="loc-body">Deliberately burned by a horrified subordinate in 2048. Ruins contain: the Purified (survivors of incendiary therapy with no emotional capacity), the subordinate's notes and audio logs, and a locked safe linking to Gumede and Qi. Research notes survive in fragments. A site of quiet, clinical horror.</div>
+    </div>
+
+    <div class="loc-card" style="border-left-color:var(--green-dim)">
+      <div class="loc-name">GUMEDE'S LAB — SOUTH AFRICA</div>
+      <div class="loc-tag">CAMPAIGN 3 // DRONE REBELLION</div>
+      <div class="loc-body">Officially destroyed by terrorists; in reality destroyed by Gumede herself. Surviving robots carry recordings of her journal and the pre-Reset scientific cooperation. The "terrorist attack" narrative holds until Drone Rebellion. The lab's surviving systems provide the first concrete evidence of the Prime Signal's living-human requirement.</div>
+    </div>
+
+    <div class="loc-card" style="border-left-color:var(--blue-dim)">
+      <div class="loc-name">QI'S LAB — CHINA</div>
+      <div class="loc-tag">CAMPAIGN 4 // THE LOST TRANSMISSION</div>
+      <div class="loc-body">A perfectly preserved, sterile, hauntingly empty monument to order. Non-lethal security: sonic emitters, hallucinogenic aerosols, automated lockdowns. The challenge is logical and systematic, not combative. LEO satellites still in orbit. Contains surveillance data pointing to Point Nemo. Qi serves here as Custodian — polite, vacant, recoverable.</div>
+    </div>
+
+    <div class="loc-card" style="border-left-color:var(--red-bright)">
+      <div class="loc-name">POINT NEMO</div>
+      <div class="loc-tag">CAMPAIGN 5 // CURE — BRANCH R FINALE</div>
+      <div class="loc-body">Earth's oceanic pole of inaccessibility — the furthest point from any landmass. A floating installation built during the Quiet Period while humanity was unconscious. Houses the Control's operations and Charles Mitchell (the Prime). Acts as an emotional dead zone — the Prime Signal radiates outward from here. The final destination for Branch R.</div>
+    </div>
+
+    <div class="loc-card" style="border-left-color:var(--amber-dim)">
+      <div class="loc-name">UGD HEADQUARTERS — COPENHAGEN</div>
+      <div class="loc-tag">CAMPAIGN 5 // CURE — BRANCH P FINALE</div>
+      <div class="loc-body">Former Ørestad district, Copenhagen, Denmark. Central seat of global governance. Staffed primarily by pre-Reset members with no memory of what caused the Reset. Bureaucratic and largely unaware that the former Chairman's backdoor credentials are still active. Final destination for Branch P — Prater's endgame plays out here.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 05. FACTIONS ════ -->
+<section class="section" id="factions">
+  <div class="section-head">
+    <span class="sh-num">05 //</span>
+    <span class="sh-title">FACTIONS</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="g2 mbr">
+    <div class="panel">
+      <div class="panel-title">THE UGD</div>
+      <p>The United Global Directorate — reorganized from the 127-nation UN. Monolithic; no other major organization exists as of Year 5. Made up primarily of pre-Reset members. Main focus: cleanup, rebuilding, containing SPIKE outbreaks and advanced tech. Acts quickly and sometimes coldly. Tends toward bureaucracy but is logical and effective.</p>
+      <p style="margin-bottom:0"><strong>Hidden vulnerability:</strong> The former Chairman's backdoor credentials remain active, allowing the Control to monitor internal reports and redirect recovered tech and weaponry. UGD leadership is unaware.</p>
+    </div>
+    <div class="panel amber">
+      <div class="panel-title amber">THE AWAKENED</div>
+      <p>A tiny fraction of the population developing emotional awareness beyond the Reset's suppression. Their existence represents both hope and a direct threat to the Control — their presence causes "static" in those around them.</p>
+      <p style="margin-bottom:0">Not revealed at the start of campaign — first whispers appear during Drone Rebellion. By Cure, they are the pivotal political force. Both Reeves and Prater have plans for them, for opposite reasons.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="panel quiet">
+      <div class="panel-title">THE PURIFIED</div>
+      <p>Survivors of Calafiori's incendiary therapy. No emotional capacity whatsoever — not dulled, but <em>removed</em>. They exist, they function, they do not feel. Calafiori's research notes survive among them.</p>
+      <p style="margin-bottom:0">They are the extreme endpoint of Calafiori's logic: if SPIKE is a disease of emotion, you cure it by removing the emotional centers entirely. They are a warning about where that reasoning leads.</p>
+    </div>
+    <div class="panel quiet">
+      <div class="panel-title">GRIEVERS</div>
+      <p>Individuals who factually know they suffered a loss — a dead child, a destroyed home — but cannot <em>feel</em> the grief. Often found screaming in frustration. Psychological horror made human.</p>
+      <p style="margin-bottom:0">They are the Reset's most visible flaw visible to the public — the evidence that something is wrong with the world that people cannot yet name or explain. Use them to establish tone early.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 06. PLAYER KNOWLEDGE ════ -->
+<section class="section" id="player-knowledge">
+  <div class="section-head">
+    <span class="sh-num">06 //</span>
+    <span class="sh-title">PLAYER KNOWLEDGE MAP</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="panel red mbr">
+    <div class="panel-title red">WHAT PLAYERS KNOW AT THE START OF THE REEVES TRIALS (YEAR 5 / 2054)</div>
+    <ul>
+      <li>The world was ravaged by WWIII roughly a decade ago — hundreds of millions died from war, famine, disease, and societal collapse</li>
+      <li>A global psychological phenomenon called SPIKE emerged — a catastrophic uptick in mental illness and violent behavior</li>
+      <li>A cure was found and implemented — known simply as "the Reset." Humanity knew peace almost overnight</li>
+      <li>Nobody quite knows how or why the Reset worked. Fewer still care to find out.</li>
+      <li>The world is run by the UGD — a reorganized version of the UN. Nations no longer exist as independent states.</li>
+      <li>The SPIKE Scale (0–11) is a diagnostic tool used by handheld wands and implants — a common part of everyday life</li>
+      <li>It is Year 5. A basic global communications network has just been restored.</li>
+      <li>Players are UGD operatives, commissioned to conduct an off-the-books investigation of a defunct research lab in Indiana — formerly belonging to a Dr. Reeves</li>
+      <li>The UGD's stated goal: understand what happened during the research period, and whether any useful data remains</li>
+    </ul>
+  </div>
+
+  <div class="panel quiet">
+    <div class="panel-title">WHAT PLAYERS DO NOT KNOW YET</div>
+    <ul>
+      <li>The true mechanism of the Reset — bacterial nanites calibrated to a living human Prime</li>
+      <li>The identity or existence of the Prime (Charles Mitchell)</li>
+      <li>The existence of the Control or their location</li>
+      <li>The fate of the four researchers (Reeves, Calafiori, Qi, Gumede)</li>
+      <li>That their mission reports are likely being monitored by the Control through UGD backdoor access</li>
+      <li>That the Reset was not a purely humanitarian solution — it was a power grab</li>
+      <li>That the world's current stability is the result of a single psychopath's brainwaves being broadcast globally</li>
+      <li>That the system is already failing, slowly and quietly, in sub-ideal conditions across the planet</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>UGD // SPIKE: THE REEVES TRIALS // TIMELINE & CAMPAIGNS</span>
+  <span>■ GM EYES ONLY — FULL SPOILERS // CLEARANCE ALPHA ■</span>
+</footer>
+
+<script>
+function toggleEntry(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.tl-toggle');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  toggle.textContent = isOpen ? '▶' : '▼';
+}
+
+// Nav active
+const sections = document.querySelectorAll('.section');
+const links = document.querySelectorAll('nav a');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { threshold: 0.1, rootMargin: '-80px 0px 0px 0px' });
+sections.forEach(s => io.observe(s));
+
+(function() {
+  function fix() {
+    const header = document.querySelector('.main-header');
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    nav.style.top = header ? header.offsetHeight + 'px' : '0';
+  }
+  document.addEventListener('DOMContentLoaded', fix);
+  window.addEventListener('resize', fix);
+})();
+</script>
+</body>
+</html>

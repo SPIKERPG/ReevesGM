@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIKE: Party Tracker — GM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg:         #090a07;
+  --surface:    #0e0f0b;
+  --surface2:   #131408;
+  --surface3:   #181a0e;
+  --border:     #1e2014;
+  --border-hi:  #2a2d1a;
+  --text:       #b8baa5;
+  --text-dim:   #555748;
+  --text-hi:    #dfe1cc;
+  --green:      #7a9a28;
+  --green-dim:  #4a5e18;
+  --red:        #8a2020;
+  --red-bright: #c03030;
+  --amber:      #b87820;
+  --amber-dim:  #6e4810;
+  --spike-0:    #5a9a5a;
+  --spike-3:    #c8b840;
+  --spike-6:    #c87820;
+  --spike-8:    #d04820;
+  --spike-10:   #c03030;
+  --spike-11:   #8a0808;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(0,0,0,.05) 3px, rgba(0,0,0,.05) 4px);
+  pointer-events: none;
+  z-index: 9000;
+}
+
+.top-band {
+  background: var(--red);
+  padding: 3px 24px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .2em;
+  color: #fff;
+}
+
+.main-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--red);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mh-left, .mh-right {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .16em;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.mh-center { text-align: center; }
+
+.mh-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: .4em;
+  color: var(--text-hi);
+}
+
+.mh-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .22em;
+  color: var(--red-bright);
+  margin-top: 3px;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ─── PARTY GRID ─── */
+.party-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+/* ─── SLOT ─── */
+.slot {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  min-height: 400px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.slot-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-hi);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slot-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .2em;
+  color: var(--text-dim);
+}
+
+.slot-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-sm {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .12em;
+  padding: 3px 8px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.btn-sm:hover { border-color: var(--red); color: var(--red-bright); }
+.btn-sm.load { border-color: var(--green-dim); color: var(--green); }
+.btn-sm.load:hover { background: rgba(122,154,40,.08); border-color: var(--green); }
+.btn-sm.clear { border-color: var(--border-hi); }
+
+/* ─── EMPTY STATE ─── */
+.slot-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 20px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.slot-empty:hover { background: rgba(122,154,40,.03); }
+
+.slot-empty-icon {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 28px;
+  color: var(--border-hi);
+}
+
+.slot-empty-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .2em;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.slot-empty-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+  opacity: .7;
+}
+
+/* ─── CHARACTER CARD ─── */
+.char-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  gap: 10px;
+}
+
+.char-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: .18em;
+  color: var(--text-hi);
+  line-height: 1;
+}
+
+.char-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .18em;
+  color: var(--text-dim);
+  margin-top: -4px;
+}
+
+/* SPIKE BAR */
+.spike-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spike-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.spike-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.spike-fill {
+  height: 100%;
+  transition: width .4s, background-color .4s;
+}
+
+.spike-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  font-weight: bold;
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* HP / COMPOSURE */
+.vitals-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.vital-box {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+}
+
+.vital-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.vital-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  color: var(--text-hi);
+}
+
+/* ATTRS */
+.attrs-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.attr-box {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  padding: 5px 4px;
+  text-align: center;
+}
+
+.attr-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6.5px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.attr-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--text-hi);
+  line-height: 1;
+}
+
+/* SKILLS */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.skill-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .1em;
+  color: var(--green);
+  border: 1px solid var(--green-dim);
+  padding: 2px 6px;
+  background: rgba(122,154,40,.06);
+}
+
+/* TRAITS / FLAWS */
+.mini-section-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .18em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.trait-item {
+  font-size: 12px;
+  color: var(--text);
+  padding: 2px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.flaw-item {
+  font-size: 12px;
+  color: var(--amber);
+  padding: 2px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.notes-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.45;
+  max-height: 80px;
+  overflow-y: auto;
+  font-style: italic;
+}
+
+/* ─── INFO BAR ─── */
+.info-bar {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--red);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+/* ─── HIDDEN INPUT ─── */
+.file-input { display: none; }
+
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+}
+
+@media (max-width: 800px) {
+  .party-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 500px) {
+  .attrs-grid { grid-template-columns: repeat(5, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="top-band">
+  <span>■ UGD DIV IV // GM COMMAND // PARTY TRACKER ■</span>
+  <span>GM-01 // FIELD OVERSIGHT</span>
+  <span>■ GM EYES ONLY ■</span>
+</div>
+
+<div class="main-header">
+  <div class="mh-left">
+    UGD // DIVISION IV<br>
+    GM COMMAND CHANNEL
+  </div>
+  <div class="mh-center">
+    <div class="mh-title">PARTY TRACKER</div>
+    <div class="mh-sub">■ OPERATIVE DOSSIER OVERVIEW ■</div>
+  </div>
+  <div class="mh-right">
+    YEAR 5 POST-RESET<br>
+    INDIANA OPERATION
+  </div>
+</div>
+
+<main>
+
+  <div class="info-bar">
+    ■ LOAD OPERATIVE DOSSIERS // Click <strong style="color:var(--text)">[ ↑ LOAD JSON ]</strong> on any slot, or click the empty slot area, to load a character sheet .json exported from the player portal. Up to 3 operatives may be tracked simultaneously. Data is stored in browser session only — nothing is transmitted externally.
+  </div>
+
+  <div class="party-grid">
+    <div class="slot" id="slot-0">
+      <div class="slot-header">
+        <span class="slot-id">OPERATIVE SLOT 01</span>
+        <div class="slot-controls">
+          <button class="btn-sm load" onclick="triggerLoad(0)">↑ LOAD JSON</button>
+          <button class="btn-sm clear" onclick="clearSlot(0)" style="display:none" id="clear-0">✕ CLEAR</button>
+        </div>
+      </div>
+      <div class="slot-empty" id="empty-0" onclick="triggerLoad(0)">
+        <div class="slot-empty-icon">[ ]</div>
+        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
+        <div class="slot-empty-hint">Click to load a .json dossier</div>
+      </div>
+      <div class="char-card" id="card-0" style="display:none"></div>
+    </div>
+
+    <div class="slot" id="slot-1">
+      <div class="slot-header">
+        <span class="slot-id">OPERATIVE SLOT 02</span>
+        <div class="slot-controls">
+          <button class="btn-sm load" onclick="triggerLoad(1)">↑ LOAD JSON</button>
+          <button class="btn-sm clear" onclick="clearSlot(1)" style="display:none" id="clear-1">✕ CLEAR</button>
+        </div>
+      </div>
+      <div class="slot-empty" id="empty-1" onclick="triggerLoad(1)">
+        <div class="slot-empty-icon">[ ]</div>
+        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
+        <div class="slot-empty-hint">Click to load a .json dossier</div>
+      </div>
+      <div class="char-card" id="card-1" style="display:none"></div>
+    </div>
+
+    <div class="slot" id="slot-2">
+      <div class="slot-header">
+        <span class="slot-id">OPERATIVE SLOT 03</span>
+        <div class="slot-controls">
+          <button class="btn-sm load" onclick="triggerLoad(2)">↑ LOAD JSON</button>
+          <button class="btn-sm clear" onclick="clearSlot(2)" style="display:none" id="clear-2">✕ CLEAR</button>
+        </div>
+      </div>
+      <div class="slot-empty" id="empty-2" onclick="triggerLoad(2)">
+        <div class="slot-empty-icon">[ ]</div>
+        <div class="slot-empty-label">NO OPERATIVE LOADED</div>
+        <div class="slot-empty-hint">Click to load a .json dossier</div>
+      </div>
+      <div class="char-card" id="card-2" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" class="file-input" id="file-0" accept=".json" onchange="loadFile(event, 0)">
+  <input type="file" class="file-input" id="file-1" accept=".json" onchange="loadFile(event, 1)">
+  <input type="file" class="file-input" id="file-2" accept=".json" onchange="loadFile(event, 2)">
+
+</main>
+
+<footer>
+  <span>UGD // SPIKE: THE REEVES TRIALS // PARTY TRACKER</span>
+  <span>■ GM EYES ONLY // CLEARANCE ALPHA ■</span>
+</footer>
+
+<script>
+// ─── SPIKE COLOR ───
+function spikeColor(val) {
+  const n = parseInt(val) || 0;
+  if (n <= 0)  return 'var(--spike-0)';
+  if (n <= 2)  return 'var(--spike-0)';
+  if (n <= 5)  return 'var(--spike-3)';
+  if (n <= 7)  return 'var(--spike-6)';
+  if (n <= 9)  return 'var(--spike-8)';
+  if (n === 10) return 'var(--spike-10)';
+  return 'var(--spike-11)';
+}
+
+function spikeLabel(val) {
+  const n = parseInt(val) || 0;
+  if (n === 0) return 'SERENE';
+  if (n <= 2)  return 'STABLE';
+  if (n <= 5)  return 'SHAKEN';
+  if (n <= 7)  return 'CRACKED';
+  if (n <= 9)  return 'OVERLOADED';
+  if (n === 10) return 'SPIKED';
+  return 'CONSUMED';
+}
+
+// ─── RENDER CHARACTER CARD ───
+function renderCard(data, idx) {
+  const card = document.getElementById('card-' + idx);
+  const spike = parseInt(data.spike) || 0;
+  const spikeColor_ = spikeColor(spike);
+  const spikePct   = Math.min(100, (spike / 11) * 100);
+
+  const attrs = data.attributes || {};
+  const attrKeys = ['BODY','MIND','TECH','AWARENESS','RESOLVE'];
+
+  const skills = Array.isArray(data.skills) ? data.skills : [];
+  const traits = Array.isArray(data.traits) ? data.traits : [];
+  const flaws  = Array.isArray(data.flaws)  ? data.flaws  : [];
+
+  const hp = data.hp !== undefined ? data.hp : '—';
+  const maxHp = data.maxHp !== undefined ? data.maxHp : '—';
+  const composure = data.composure !== undefined ? data.composure : '—';
+  const maxComposure = data.maxComposure !== undefined ? data.maxComposure : '—';
+
+  let skillsHtml = skills.length
+    ? `<div class="skills-list">${skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>`
+    : `<div style="font-size:12px;color:var(--text-dim);font-style:italic">No skills recorded</div>`;
+
+  let traitsHtml = '';
+  if (traits.length) {
+    traitsHtml = `<div class="mini-section-lbl">TRAITS</div>` +
+      traits.map(t => `<div class="trait-item">${typeof t === 'object' ? (t.name || JSON.stringify(t)) : t}</div>`).join('');
+  }
+
+  let flawsHtml = '';
+  if (flaws.length) {
+    flawsHtml = `<div class="mini-section-lbl" style="margin-top:8px">EMOTIONAL FLAWS</div>` +
+      flaws.map(f => `<div class="flaw-item">⚠ ${typeof f === 'object' ? (f.name || JSON.stringify(f)) : f}</div>`).join('');
+  }
+
+  const notes = data.fieldNotes || data.notes || '';
+  const notesHtml = notes
+    ? `<div class="mini-section-lbl">FIELD NOTES</div><div class="notes-box">${notes}</div>`
+    : '';
+
+  const awoken = data.awoken ? `<span style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--amber);border:1px solid var(--amber-dim);padding:1px 5px;margin-left:6px;letter-spacing:.1em">AWOKEN</span>` : '';
+
+  card.innerHTML = `
+    <div>
+      <div class="char-name">${data.name || 'UNKNOWN OPERATIVE'}${awoken}</div>
+      <div class="char-role">${data.role || data.background || data.concept || 'FIELD OPERATIVE'}</div>
+    </div>
+
+    <div class="spike-row">
+      <div class="spike-label">SPIKE</div>
+      <div class="spike-bar">
+        <div class="spike-fill" style="width:${spikePct}%;background:${spikeColor_}"></div>
+      </div>
+      <div class="spike-val" style="color:${spikeColor_}">${spike}</div>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.16em;color:${spikeColor_};margin-top:-6px;padding-left:44px">${spikeLabel(spike)}</div>
+
+    <div class="vitals-row">
+      <div class="vital-box">
+        <div class="vital-lbl">HP</div>
+        <div class="vital-val">${hp} <span style="font-size:11px;color:var(--text-dim)">/ ${maxHp}</span></div>
+      </div>
+      <div class="vital-box">
+        <div class="vital-lbl">COMPOSURE</div>
+        <div class="vital-val">${composure} <span style="font-size:11px;color:var(--text-dim)">/ ${maxComposure}</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mini-section-lbl">ATTRIBUTES</div>
+      <div class="attrs-grid">
+        ${attrKeys.map(k => `
+          <div class="attr-box">
+            <div class="attr-lbl">${k.slice(0,3)}</div>
+            <div class="attr-val">${attrs[k] !== undefined ? attrs[k] : '—'}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div>
+      <div class="mini-section-lbl">SKILLS</div>
+      ${skillsHtml}
+    </div>
+
+    ${(traitsHtml || flawsHtml) ? `<div>${traitsHtml}${flawsHtml}</div>` : ''}
+
+    ${notesHtml}
+  `;
+}
+
+// ─── FILE LOAD ───
+function triggerLoad(idx) {
+  document.getElementById('file-' + idx).click();
+}
+
+function loadFile(evt, idx) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      showCard(data, idx);
+      // persist in sessionStorage
+      sessionStorage.setItem('spike_party_' + idx, JSON.stringify(data));
+    } catch(err) {
+      alert('Could not parse JSON file. Make sure this is a valid SPIKE Operative Dossier export.');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+function showCard(data, idx) {
+  document.getElementById('empty-' + idx).style.display = 'none';
+  const card = document.getElementById('card-' + idx);
+  card.style.display = 'flex';
+  document.getElementById('clear-' + idx).style.display = '';
+  renderCard(data, idx);
+}
+
+function clearSlot(idx) {
+  document.getElementById('empty-' + idx).style.display = 'flex';
+  document.getElementById('card-' + idx).style.display = 'none';
+  document.getElementById('clear-' + idx).style.display = 'none';
+  sessionStorage.removeItem('spike_party_' + idx);
+}
+
+// ─── RESTORE FROM SESSION ───
+window.addEventListener('DOMContentLoaded', () => {
+  for (let i = 0; i < 3; i++) {
+    const saved = sessionStorage.getItem('spike_party_' + i);
+    if (saved) {
+      try {
+        showCard(JSON.parse(saved), i);
+      } catch(e) {
+        sessionStorage.removeItem('spike_party_' + i);
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

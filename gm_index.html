@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIKE: GM Command — The Reeves Trials</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:         #090a07;
+  --surface:    #0e0f0b;
+  --surface2:   #131408;
+  --border:     #1e2014;
+  --border-hi:  #2a2d1a;
+  --text:       #b8baa5;
+  --text-dim:   #555748;
+  --text-hi:    #dfe1cc;
+  --green:      #7a9a28;
+  --green-dim:  #4a5e18;
+  --green-pale: #181e06;
+  --red:        #8a2020;
+  --red-bright: #c03030;
+  --amber:      #b87820;
+  --amber-dim:  #6e4810;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent 0, transparent 3px,
+    rgba(0,0,0,.06) 3px, rgba(0,0,0,.06) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.top-band {
+  background: var(--red);
+  padding: 3px 20px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .2em;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.main {
+  flex: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
+  width: 100%;
+}
+
+.clearance-stamp {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .28em;
+  color: var(--red-bright);
+  border: 1px solid var(--red);
+  padding: 3px 12px;
+  display: inline-block;
+  margin-bottom: 16px;
+  transform: rotate(-.3deg);
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 9vw, 72px);
+  letter-spacing: .12em;
+  color: var(--text-hi);
+  line-height: .95;
+  margin-bottom: 6px;
+}
+
+h1 span { color: var(--red-bright); }
+
+.subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .3em;
+  color: var(--text-dim);
+  margin-bottom: 48px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-hi);
+  margin: 0 0 40px;
+}
+
+.section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .22em;
+  color: var(--red-bright);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-hi);
+  margin-bottom: 16px;
+}
+
+/* ─── DOC CARDS ─── */
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.doc-card {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  border-top: 2px solid var(--red);
+  padding: 16px;
+  text-decoration: none;
+  display: block;
+  transition: all .15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.doc-card:hover {
+  border-top-color: var(--red-bright);
+  background: #161208;
+}
+
+.doc-card::after {
+  content: '→';
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--red);
+  transition: color .15s;
+}
+
+.doc-card:hover::after { color: var(--red-bright); }
+
+.card-doc-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .18em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: .2em;
+  color: var(--text-hi);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.45;
+  padding-bottom: 20px;
+}
+
+/* ─── ACCESS NOTE ─── */
+.access-note {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--red);
+  padding: 18px 20px;
+  margin-bottom: 48px;
+}
+
+.access-note h2 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .22em;
+  color: var(--red-bright);
+  margin-bottom: 12px;
+}
+
+.access-note p {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.access-note p:last-child { margin-bottom: 0; }
+
+.access-note strong { color: var(--text-hi); font-weight: 600; }
+
+.access-note code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  background: rgba(138,32,32,.12);
+  color: var(--red-bright);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+/* ─── PLAYER LINK ─── */
+.player-link-block {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--green-dim);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.player-link-block span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .16em;
+  color: var(--text-dim);
+}
+
+.player-link-block a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .14em;
+  color: var(--green);
+  text-decoration: none;
+  border: 1px solid var(--green-dim);
+  padding: 4px 10px;
+  transition: all .15s;
+  white-space: nowrap;
+}
+
+.player-link-block a:hover {
+  background: rgba(122,154,40,.1);
+  color: #a0c040;
+}
+
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .top-band { font-size: 7px; }
+  .doc-grid { grid-template-columns: 1fr; }
+  .player-link-block { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-band">
+  <span>■ UGD DIV IV // GM COMMAND CHANNEL ■</span>
+  <span>RESTRICTED ACCESS — CLEARANCE ALPHA</span>
+  <span>■ YEAR 5 POST-RESET ■</span>
+</div>
+
+<div class="main">
+
+  <div class="clearance-stamp">■ GM EYES ONLY ■ DO NOT DISTRIBUTE ■</div>
+
+  <h1>SPIKE<br><span>GM COMMAND</span></h1>
+  <div class="subtitle">GAME MASTER OPERATIONS HUB // INDIANA RECOVERY OPERATION</div>
+
+  <hr class="divider">
+
+  <div class="section-label">■ GM DOCUMENTS</div>
+
+  <div class="doc-grid">
+    <a class="doc-card" href="gm_party_tracker.html">
+      <div class="card-doc-id">GM-01 // FIELD OVERSIGHT</div>
+      <div class="card-title">PARTY TRACKER</div>
+      <div class="card-desc">Upload and manage up to three operative dossiers. View full character state, SPIKE levels, HP, and field notes at a glance.</div>
+    </a>
+    <a class="doc-card" href="gm_running_doc.html">
+      <div class="card-doc-id">GM-02 // OPERATIONS MANUAL</div>
+      <div class="card-title">RUNNING SPIKE</div>
+      <div class="card-desc">TN reference, mystery-building framework, encounter tools, SPIKE behavior table, and session management guidance.</div>
+    </a>
+    <a class="doc-card" href="gm_notes.html">
+      <div class="card-doc-id">GM-03 // DESIGN BRIEF</div>
+      <div class="card-title">GM NOTES</div>
+      <div class="card-desc">The philosophy of SPIKE, design principles, campaign structure, execution guidelines, and the endgame question.</div>
+    </a>
+    <a class="doc-card" href="gm_timeline.html">
+      <div class="card-doc-id">GM-04 // MASTER ARCHIVE</div>
+      <div class="card-title">TIMELINE & CAMPAIGNS</div>
+      <div class="card-desc">Full campaign chronology, story threads, faction map, key NPCs, locations, and the master mystery reveal sequence.</div>
+    </a>
+  </div>
+
+  <div class="section-label">■ COMMAND NOTES</div>
+
+  <div class="access-note">
+    <h2>■ GM ACCESS PROTOCOL</h2>
+    <p>These documents are <strong>GM eyes only</strong>. They contain classified campaign information including true identities, mystery reveals, and branching outcomes that players must not see before play.</p>
+    <p>The <strong>Party Tracker</strong> accepts character sheet <code>.json</code> files exported directly from the player-facing Operative Dossier. Load up to three party members simultaneously. Data stays in your browser — nothing is transmitted externally.</p>
+    <p>The <strong>Running SPIKE</strong> doc is your live-session reference. Keep it open alongside the party tracker during play for instant TN lookup, encounter building, and SPIKE behavior resolution.</p>
+    <p><strong>Timeline & Campaigns</strong> contains full spoiler content for all five campaigns. Use it for prep only — never share the screen during active sessions.</p>
+  </div>
+
+  <div class="section-label">■ PLAYER PORTAL</div>
+
+  <div class="player-link-block">
+    <span>OPERATIVE DOCUMENT HUB // PLAYER-FACING MATERIALS</span>
+    <a href="index.html">→ OPEN PLAYER PORTAL</a>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>UGD // SPIKE: THE REEVES TRIALS // GM COMMAND</span>
+  <span>■ CLEARANCE ALPHA // AUTHORIZED PERSONNEL ONLY ■</span>
+</div>
+
+</body>
+</html>
