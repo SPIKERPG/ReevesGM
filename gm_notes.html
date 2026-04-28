@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIKE: GM Notes — The Reeves Trials</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg: #090a07; --surface: #0e0f0b; --surface2: #131408; --surface3: #181a0e;
+  --border: #1e2014; --border-hi: #2a2d1a;
+  --text: #b8baa5; --text-dim: #555748; --text-hi: #dfe1cc;
+  --green: #7a9a28; --green-dim: #4a5e18;
+  --red: #8a2020; --red-bright: #c03030;
+  --amber: #b87820; --amber-dim: #6e4810; --amber-pale: #2a1e06;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif; font-size: 16px;
+  line-height: 1.6; min-height: 100vh;
+}
+
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(0,0,0,.05) 3px, rgba(0,0,0,.05) 4px);
+  pointer-events: none; z-index: 9000;
+}
+
+.top-band {
+  background: var(--red); padding: 3px 24px;
+  display: flex; justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace; font-size: 8.5px;
+  letter-spacing: .2em; color: #fff;
+}
+
+.main-header {
+  background: var(--surface); border-bottom: 2px solid var(--red);
+  padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 500;
+}
+
+.mh-left, .mh-right { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .16em; color: var(--text-dim); line-height: 1.7; }
+.mh-center { text-align: center; }
+.mh-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .4em; color: var(--text-hi); }
+.mh-sub { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .22em; color: var(--red-bright); margin-top: 3px; }
+
+nav {
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto; padding: 0 28px;
+  position: sticky; z-index: 400;
+}
+
+nav a {
+  font-family: 'Share Tech Mono', monospace; font-size: 8.5px; letter-spacing: .14em;
+  color: var(--text-dim); text-decoration: none; padding: 8px 16px;
+  border-right: 1px solid var(--border); white-space: nowrap; transition: all .15s;
+}
+nav a:first-child { border-left: 1px solid var(--border); }
+nav a:hover, nav a.active { color: var(--red-bright); background: rgba(138,32,32,.07); }
+
+main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+.section { margin-bottom: 60px; }
+
+.section-head {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px;
+  border-bottom: 1px solid var(--border-hi); padding-bottom: 10px;
+}
+
+.sh-num { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: .2em; color: var(--red-bright); }
+.sh-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: .28em; color: var(--text-hi); }
+.sh-line { flex: 1; height: 1px; background: var(--border); margin-bottom: 3px; }
+
+/* ─── PANELS ─── */
+.panel {
+  background: var(--surface2); border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--green-dim); padding: 18px 20px; margin-bottom: 14px;
+}
+.panel.red { border-left-color: var(--red); }
+.panel.amber { border-left-color: var(--amber-dim); background: var(--amber-pale); }
+.panel.quiet { border-left-color: var(--border-hi); background: var(--surface); }
+.panel.full { border-left-color: var(--red-bright); }
+
+.panel-title {
+  font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .2em;
+  color: var(--green); margin-bottom: 12px;
+}
+.panel-title.red { color: var(--red-bright); }
+.panel-title.amber { color: var(--amber); }
+
+.panel p { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+.panel p:last-child { margin-bottom: 0; }
+.panel strong { color: var(--text-hi); }
+.panel em { color: var(--text-dim); font-style: italic; }
+.panel ul { padding-left: 16px; margin-top: 6px; }
+.panel li { font-size: 14px; margin-bottom: 6px; line-height: 1.5; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.mbr { margin-bottom: 14px; }
+
+/* ─── QUOTE BLOCK ─── */
+.quote-block {
+  border-left: 3px solid var(--red);
+  padding: 14px 20px; margin-bottom: 14px;
+  background: rgba(138,32,32,.05);
+}
+
+.quote-block p {
+  font-size: 15px; color: var(--text-hi); font-style: italic;
+  line-height: 1.65; margin-bottom: 6px;
+}
+
+.quote-block .attr {
+  font-family: 'Share Tech Mono', monospace; font-size: 8px;
+  letter-spacing: .16em; color: var(--text-dim);
+}
+
+/* ─── PRINCIPLE ITEM ─── */
+.principle {
+  display: grid; grid-template-columns: 3px 1fr; gap: 16px;
+  margin-bottom: 18px; align-items: start;
+}
+
+.principle-bar { background: var(--red); width: 3px; }
+.principle-label {
+  font-family: 'Bebas Neue', sans-serif; font-size: 17px;
+  letter-spacing: .18em; color: var(--text-hi); margin-bottom: 4px;
+}
+.principle-body { font-size: 14px; color: var(--text); line-height: 1.55; }
+
+/* ─── CAMPAIGN CARDS ─── */
+.campaign-card {
+  background: var(--surface2); border: 1px solid var(--border-hi);
+  border-top: 2px solid var(--red); padding: 18px; margin-bottom: 12px;
+}
+
+.cc-meta {
+  font-family: 'Share Tech Mono', monospace; font-size: 7.5px;
+  letter-spacing: .18em; color: var(--text-dim); margin-bottom: 8px;
+}
+
+.cc-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 22px;
+  letter-spacing: .2em; color: var(--text-hi); margin-bottom: 4px;
+}
+
+.cc-question {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px;
+  letter-spacing: .18em; color: var(--red-bright); margin-bottom: 10px;
+}
+
+.cc-body { font-size: 14px; color: var(--text); line-height: 1.55; }
+
+/* ─── BRANCH ─── */
+.branch {
+  background: var(--surface3); border: 1px solid var(--border);
+  padding: 14px 16px; margin-bottom: 10px;
+}
+
+.branch-title {
+  font-family: 'Share Tech Mono', monospace; font-size: 8px;
+  letter-spacing: .18em; margin-bottom: 8px;
+}
+.branch-title.r { color: var(--red-bright); }
+.branch-title.p { color: var(--amber); }
+
+.branch-body { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+footer {
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 10px 24px; display: flex; justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace; font-size: 7.5px;
+  letter-spacing: .12em; color: var(--text-dim);
+}
+
+@media (max-width: 600px) {
+  .g2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-band">
+  <span>■ UGD DIV IV // GM COMMAND // GM NOTES ■</span>
+  <span>GM-03 // DESIGN BRIEF</span>
+  <span>■ GM EYES ONLY ■</span>
+</div>
+
+<div class="main-header">
+  <div class="mh-left">UGD // DIVISION IV<br>GM COMMAND CHANNEL</div>
+  <div class="mh-center">
+    <div class="mh-title">GM NOTES</div>
+    <div class="mh-sub">■ PHILOSOPHY // PRINCIPLES // STRUCTURE // EXECUTION ■</div>
+  </div>
+  <div class="mh-right">YEAR 5 POST-RESET<br>INDIANA OPERATION</div>
+</div>
+
+<nav>
+  <a href="#philosophy">PHILOSOPHY</a>
+  <a href="#structure">STRUCTURE</a>
+  <a href="#execution">EXECUTION</a>
+  <a href="#branches">BRANCHES</a>
+  <a href="#endgame">ENDGAME</a>
+</nav>
+
+<main>
+
+<!-- ════ 01. PHILOSOPHY ════ -->
+<section class="section" id="philosophy">
+  <div class="section-head">
+    <span class="sh-num">01 //</span>
+    <span class="sh-title">THE PHILOSOPHY OF SPIKE</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="quote-block mbr">
+    <p>SPIKE is a narrative-first sci-fi TTRPG built around player philosophy. The role of the GM is not to guide players to a correct outcome, but to construct situations where every outcome carries a meaningful cost.</p>
+  </div>
+
+  <div class="principle">
+    <div class="principle-bar"></div>
+    <div>
+      <div class="principle-label">PRESENT TRADE-OFFS, NOT PROBLEMS</div>
+      <div class="principle-body">Do not present problems with optimal solutions. Present problems with trade-offs. If players attempt to avoid the cost of a decision, the world should reinforce that avoidance is itself a choice with consequences. There is no "having both." If players try, introduce pressure that forces prioritization.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="principle-bar"></div>
+    <div>
+      <div class="principle-label">SHOW CONSEQUENCES BEFORE EXPLAINING THEM</div>
+      <div class="principle-body">Let players experience the world before revealing why it works that way. Make the cost visible in people, not systems. A stable world should feel emotionally hollow. A harsh world should feel brutally alive but unjust. Exposition is a last resort — atmosphere is your primary tool.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="principle-bar"></div>
+    <div>
+      <div class="principle-label">REFLECT PLAYER VALUES BACK AT THEM</div>
+      <div class="principle-body">NPCs, factions, and outcomes should echo the logic of the party's past decisions. If they acted ruthlessly, the world around them begins to feel ruthlessly logical. If they acted with compassion, the world offers fragile hope. Players shape the fiction — the GM reflects it.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="principle-bar"></div>
+    <div>
+      <div class="principle-label">REMOVE THE ILLUSION OF A PERFECT OUTCOME</div>
+      <div class="principle-body">Every meaningful choice in SPIKE costs something. Victory is not the standard. The standard is: what did you preserve, and what did you sacrifice to do it? Players who reach the end of SPIKE should feel the weight of those answers — not the satisfaction of having avoided them.</div>
+    </div>
+  </div>
+
+  <div class="panel quiet mbr">
+    <div class="panel-title">WHAT YOU ARE RUNNING</div>
+    <p>SPIKE is a psychological thriller and mystery. It rewards players who ask questions, who sit with uncertainty, and who let things land slowly. Sessions will not always have clear climaxes or tidy resolutions. A session might end mid-corridor, mid-conversation, mid-realisation. <strong>This is intentional.</strong></p>
+    <p style="margin-bottom:0">The horror, when it comes, is quiet before it is loud. The game rewards paying attention to the things that feel slightly wrong before anything feels dramatically wrong. Trust the design. The arc works.</p>
+  </div>
+</section>
+
+<!-- ════ 02. CAMPAIGN STRUCTURE ════ -->
+<section class="section" id="structure">
+  <div class="section-head">
+    <span class="sh-num">02 //</span>
+    <span class="sh-title">CAMPAIGN STRUCTURE</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="panel red mbr">
+    <div class="panel-title red">THE SHAPE OF THE CAMPAIGN</div>
+    <p>SPIKE is built in five interconnected campaigns. Each asks a different philosophical question. Each answer is shaped by the decisions made in the one before. The campaigns accumulate — small things compound into something large. The endgame question cannot be reached without traveling through everything that preceded it.</p>
+  </div>
+
+  <div class="campaign-card">
+    <div class="cc-meta">CAMPAIGN 1 // INDIANA, USA // YEAR 5</div>
+    <div class="cc-title">SPIKE: THE REEVES TRIALS</div>
+    <div class="cc-question">WHAT HAPPENED? WHAT'S WRONG?</div>
+    <div class="cc-body">Players are UGD operatives investigating a defunct research lab in Indiana. They find research logs, evidence of human testing, SPIKED scavengers, and an undeniable link to Calafiori's lab in Italy. <strong>They uncover information they do not yet understand.</strong> The picture is incomplete by design. Let the mystery breathe.</div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="cc-meta">CAMPAIGN 2 // ITALY // YEAR 6</div>
+    <div class="cc-title">SPIKE: WHISPERED ECHOES</div>
+    <div class="cc-question">WHAT DID WE LOSE?</div>
+    <div class="cc-body">The party discovers Calafiori's incendiary methods and the Purified. They face a pivotal choice: give this information to the UN (feeding the Control), or destroy it (at great personal SPIKE cost). <strong>Both paths cost something irreplaceable.</strong> The campaign ends with the team returning to the UN, changed.</div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="cc-meta">CAMPAIGN 3 // SOUTH AFRICA // YEAR 6–7</div>
+    <div class="cc-title">SPIKE: DRONE REBELLION</div>
+    <div class="cc-question">WHAT'S BREAKING?</div>
+    <div class="cc-body">Awakening becomes possible for the first time. The nanite mesh begins to fail in targeted areas of Asia — the Control's controlled experiment. Gumede's surviving drones reveal the true scope of pre-Reset cooperation. <strong>This is the first domino pointing toward global collapse.</strong></div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="cc-meta">CAMPAIGN 4 // CHINA // YEAR 7</div>
+    <div class="cc-title">SPIKE: THE LOST TRANSMISSION</div>
+    <div class="cc-question">WHERE'S OUR PATH FORWARD?</div>
+    <div class="cc-body">The party seeks Dr. Qi — alive, Reset, and serving as archivist of his own dead lab. His satellites contain data pointing to the Control's location. A SPIKE Storm offers a moment of fractured lucidity. Under the right conditions, <strong>Qi can be Awakened</strong>. The campaign ends with the revelation of the lost transmission — the players transition into Hardware.</div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="cc-meta">PREQUEL // THE ROCKIES, USA // 2048</div>
+    <div class="cc-title">SPIKE: HARDWARE</div>
+    <div class="cc-question">HOW DID WE CAUSE THIS?</div>
+    <div class="cc-body">Players create new characters and <em>live</em> the events of the lost transmission. A team dispatched by the UGD Chairman infiltrates Reeves' lab. They find the true nature of the Reset and face the Mitchell triad: <strong>FREE, LEAVE, or TERMINATE.</strong> This decision determines who becomes the Control and shapes everything in SPIKE: CURE.</div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="cc-meta">CAMPAIGN 5 / FINALE // MOTO NUI / POINT NEMO</div>
+    <div class="cc-title">SPIKE: CURE</div>
+    <div class="cc-question">WHAT DO WE DO NOW?</div>
+    <div class="cc-body">Dual finale path based on Hardware's outcome. Branch R (Reeves) and Branch P (Prater) present different final antagonists, different world-states, and different versions of the final question. <strong>The finale is not about winning.</strong> It is about what your players believe should exist.</div>
+  </div>
+</section>
+
+<!-- ════ 03. EXECUTION ════ -->
+<section class="section" id="execution">
+  <div class="section-head">
+    <span class="sh-num">03 //</span>
+    <span class="sh-title">EXECUTION GUIDELINES</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="g2 mbr">
+    <div class="panel">
+      <div class="panel-title">HARDWARE // THE PREQUEL</div>
+      <p>Hardware establishes the party's <strong>moral baseline</strong> through decisive action. Players must act as separate characters — they are not extensions of their current campaign selves. They don't know what they're building toward.</p>
+      <p style="margin-bottom:0">The choice at the end of Hardware (FREE / LEAVE / TERMINATE) is the most consequential decision in the campaign. Make sure the weight is felt without telegraphing that it's a fork. They should not know they are choosing the final antagonist.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">CURE // THE FINALE</div>
+      <p>Cure presents a world <strong>shaped by Hardware</strong>. The final conflict reflects and challenges the values demonstrated in the prequel. Players who were ruthless in Hardware will encounter a world that has grown ruthless in return — and must decide if they will reinforce it or reject it.</p>
+      <p style="margin-bottom:0">Players who were compassionate will encounter a world offering fragile hope — and must decide if the safety is worth what it cost.</p>
+    </div>
+  </div>
+
+  <div class="panel red mbr">
+    <div class="panel-title red">THE RESET AS ROLEPLAY CONSTRAINT</div>
+    <p>Post-Reset characters have limited emotional access. They know facts about their pasts but feel no personal connection. Trauma, passion, and deep love are absent. Relationships are pleasant but shallow. Conflict fizzles quickly. <strong>This is the setup. SPIKE is the payoff.</strong></p>
+    <p>When a character's SPIKE rises and something breaks through — when they experience something they have absolutely no category for — that is one of the most interesting things you can play. The Reset is not a cage. It is the dramatic tension.</p>
+    <p style="margin-bottom:0">As GM: do not rush to resolve emotional moments. Let them be strange. Let them be slow. The game is built around that arc — trust it.</p>
+  </div>
+
+  <div class="panel amber mbr">
+    <div class="panel-title amber">SPIKED AS A MEDICAL EMERGENCY</div>
+    <p>When a PC reaches SPIKE 10, it is a person in crisis — not a villain reveal. They are experiencing every emotion they were never taught to manage, all at once, at full intensity, with no framework. <strong>This is not fun for the character.</strong></p>
+    <p style="margin-bottom:0">Hold the moment as a table. The Behavior Table gives mechanics. The roleplay gives meaning. Lean into the tragedy. It can be powerful and even beautiful if the table holds it well. CONSUMED (11) should always be discussed with the player first.</p>
+  </div>
+
+  <div class="g2">
+    <div class="panel quiet">
+      <div class="panel-title">PLAYER VS. CHARACTER KNOWLEDGE</div>
+      <p>There will be moments where players understand something their characters do not. This is a feature. The dramatic tension of knowing something your character can't fully articulate is one of the most powerful tools available.</p>
+      <p style="margin-bottom:0">Do not rush players to give their characters player-level understanding. Let the characters earn it at their own pace. <em>The gap between what you know and what they know is where the story happens.</em></p>
+    </div>
+    <div class="panel quiet">
+      <div class="panel-title">FAILURE AS STORY ENGINE</div>
+      <p>A failed roll that costs something — a raised SPIKE, a lost resource, a new complication — generates more story than a clean success. The worst moments for characters are often the best moments for the game.</p>
+      <p style="margin-bottom:0">Reward meaningful failure with narrative momentum. A complication on a Nat 1 is not punishment — it is an invitation. Design the invitation thoughtfully.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 04. BRANCHES ════ -->
+<section class="section" id="branches">
+  <div class="section-head">
+    <span class="sh-num">04 //</span>
+    <span class="sh-title">HARDWARE / CURE REFLECTION</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="panel red mbr">
+    <div class="panel-title red">THE MITCHELL TRIAD</div>
+    <p>The choice made at the end of Hardware — to FREE, LEAVE, or TERMINATE Charles Mitchell — determines the identity of the Control and the shape of CURE. The players will not know they are making this choice until it is made.</p>
+  </div>
+
+  <div class="branch mbr">
+    <div class="branch-title r">■ BRANCH R — REEVES AS CONTROL (TERMINATE or specific FREE outcomes)</div>
+    <div class="branch-body">
+      <p style="font-size:14px;line-height:1.55;margin-bottom:8px">Reeves survives and relocates to Point Nemo. He monitors humanity from a floating base, refining his work toward Reset 2.0. A perfectionist who cannot stand that his solution was imperfect — who manufactured a world where he will never receive the recognition he denies himself wanting.</p>
+      <p style="font-size:14px;line-height:1.55;margin-bottom:8px"><strong style="color:var(--text-hi)">World State:</strong> Reeves is conducting controlled experiments on the Awakened in Asia. He has deliberately accelerated mesh decay there to study effects. He wants to find the perfect Awakened candidate for a new Prime — possibly two Awakened who could produce a child. The chaos is his laboratory.</p>
+      <p style="font-size:14px;line-height:1.55;margin-bottom:0"><strong style="color:var(--text-hi)">Cure Path:</strong> The final question becomes about perfection and consent. Is a perfect, involuntary peace worth more than an imperfect, chosen one? Among the Awakened at Reeves' facility are NPCs the party met in Drone Rebellion and The Lost Transmission. Some may agree with Reeves.</p>
+    </div>
+  </div>
+
+  <div class="branch mbr">
+    <div class="branch-title p">■ BRANCH P — PRATER AS CONTROL (LEAVE or specific TERMINATE outcomes)</div>
+    <div class="branch-body">
+      <p style="font-size:14px;line-height:1.55;margin-bottom:8px">Prater kills Reeves and seizes control. A prime opportunist who believes SPIKE is natural selection — that those who succumb to it simply cannot handle reality and deserve to filter out. He has been stockpiling weaponry, recruiting the Awakened by blaming the UGD, and deliberately causing SPIKE Storms through interference with the Prime.</p>
+      <p style="font-size:14px;line-height:1.55;margin-bottom:8px"><strong style="color:var(--text-hi)">World State:</strong> Prater is rerouting nanites from Asia using non-Reset scientists. The collapse there is not accidental — it is deliberate destabilization. He plans to recruit the survivors and overthrow the UGD using his accumulated arsenal. Once in power, he intends to let the "damned" tear themselves apart.</p>
+      <p style="font-size:14px;line-height:1.55;margin-bottom:0"><strong style="color:var(--text-hi)">Cure Path:</strong> Players meet Prater at UGD headquarters. The final question becomes about who deserves to survive and who has the right to decide. Some of his logic will be internally consistent. That's the point.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">TERMINATE (RUTHLESSNESS)</div>
+      <p>The world becomes harsh, selective, and survival-driven. Systems are efficient but cold.</p>
+      <p style="margin-bottom:0">Players must decide: <em>Do they reinforce this system? Or reject it and risk total collapse?</em></p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">FREE / LEAVE (COMPASSION)</div>
+      <p>The world offers the possibility of universal stability — at the cost of emotional depth and individuality.</p>
+      <p style="margin-bottom:0">Players must decide: <em>Is safety worth the loss of what made them who they are?</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 05. ENDGAME ════ -->
+<section class="section" id="endgame">
+  <div class="section-head">
+    <span class="sh-num">05 //</span>
+    <span class="sh-title">THE ENDGAME QUESTION</span>
+    <div class="sh-line"></div>
+  </div>
+
+  <div class="panel full mbr" style="border-left-color:var(--red-bright)">
+    <div class="panel-title red">THE FINAL DECISION IN CURE</div>
+    <p>The final decision in Cure should not be about winning. It should be about answering — in front of each other, in character, with full knowledge of what it costs — three questions:</p>
+    <ul>
+      <li><strong>What is worth preserving?</strong></li>
+      <li><strong>What is acceptable to sacrifice?</strong></li>
+      <li><strong>What kind of imperfect world do your players believe should exist?</strong></li>
+    </ul>
+    <p style="margin-bottom:0">The available final choices in Cure all have costs. Assimilating as Primes theoretically awakens the entire network — but at what personal cost, and what does it mean to make that choice for all of humanity? Destroying the network causes SPIKE to return at full force with no gentle awakening. Doing nothing and walking away is also a choice — and the world will continue to suffer it. There is no optimal outcome. The design is working correctly if the players feel the weight of that.</p>
+  </div>
+
+  <div class="quote-block">
+    <p>"Humanity needs to evolve, but perhaps it already has. The evolution of the human mind is unparalleled and undefeated. But it has tripped, and now it brings itself back up. Behold, today is the day we bridle the mind and lead it as a slave."</p>
+    <div class="attr">— DR. ELIAS REEVES IV // SPIKE: HARDWARE</div>
+  </div>
+
+  <div class="quote-block">
+    <p>"You want me to look in your eyes and tell you my wife died, or my daughter died, and I blame the UN, or the deviants of the old world? TOUGH! I was right, and I paid myself for my work. Recognition is what is deserved of a great achievement! I have been humble enough to manufacture a world where I won't even get that. Me, a villain? I will not allow your petty ideals and misguided self-righteousness to ruin the salvation of the world!"</p>
+    <div class="attr">— DR. ELIAS REEVES IV // SPIKE: CURE</div>
+  </div>
+
+  <div class="quote-block">
+    <p>"When both the governments of the world and the anarchists hate you, you're either doing something very right or something terribly wrong."</p>
+    <div class="attr">— ALAN PRATER // SPIKE: HARDWARE</div>
+  </div>
+
+  <div class="panel quiet">
+    <div class="panel-title">A FINAL NOTE ON YOUR ROLE</div>
+    <p>You are not the storyteller. You are the world. The players are the storytellers — they are writing the answer to the questions SPIKE is asking. Your job is to make sure the questions are asked honestly, that the costs are real, and that the world responds to choices as a world would: slowly, imperfectly, and without mercy for the things people tried to avoid.</p>
+    <p style="margin-bottom:0"><strong>Make it worth the journey. Hold it well.</strong></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>UGD // SPIKE: THE REEVES TRIALS // GM NOTES</span>
+  <span>■ GM EYES ONLY // CLEARANCE ALPHA ■</span>
+</footer>
+
+<script>
+const sections = document.querySelectorAll('.section');
+const links = document.querySelectorAll('nav a');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { threshold: 0.15, rootMargin: '-80px 0px 0px 0px' });
+sections.forEach(s => io.observe(s));
+
+(function() {
+  function fix() {
+    const header = document.querySelector('.main-header');
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    nav.style.top = header ? header.offsetHeight + 'px' : '0';
+  }
+  document.addEventListener('DOMContentLoaded', fix);
+  window.addEventListener('resize', fix);
+})();
+</script>
+</body>
+</html>
