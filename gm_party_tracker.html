@@ -885,7 +885,6 @@ const NUM_PARTIES  = 3;
 const NUM_SLOTS    = 6;
 const STORAGE_KEY  = 'spike_gm_tracker_v2';
 const COMBAT_KEY   = 'spike_gm_combat_v2';
-const SYNC_KEY     = 'spike_live_sync';
 
 const ATTRS = ['BODY','MIND','TECH','AWARENESS','RESOLVE'];
 const ATTR_ABBR = ['BOD','MND','TEC','AWR','RES'];
@@ -1491,17 +1490,25 @@ function updateVitalDOM(pIdx, sIdx, which, cur, max) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  LIVE SYNC — CROSS-TAB BRIDGE
+//  LIVE SYNC — BROADCASTCHANNEL BRIDGE
 // ═══════════════════════════════════════════════════════
 
-let _syncPillTimer = null;
+const syncChannel = typeof BroadcastChannel !== 'undefined'
+  ? new BroadcastChannel('spike_live_sync')
+  : null;
+
+let _syncPillTimer   = null;
+let _presenceTimer   = null;
+let _combatPresent   = false;
 
 function setSyncPill(state) {
   // state: 'idle' | 'live' | 'pulse'
   const pill = document.getElementById('sync-pill-tracker');
   if (!pill) return;
   pill.className = 'sync-pill' + (state !== 'idle' ? ' ' + state : '');
-  pill.textContent = state === 'pulse' ? 'SYNCED ←' : state === 'live' ? 'COMBAT LINKED' : 'NO COMBAT LINK';
+  pill.textContent = state === 'pulse' ? 'SYNCED ←'
+                   : state === 'live'  ? 'COMBAT LINKED'
+                   :                     'NO COMBAT LINK';
   if (state === 'pulse') {
     clearTimeout(_syncPillTimer);
     _syncPillTimer = setTimeout(() => setSyncPill('live'), 1500);
@@ -1510,17 +1517,13 @@ function setSyncPill(state) {
 
 // Broadcast outward: tracker → combat
 function broadcastSync(pIdx, sIdx) {
+  if (!syncChannel) return;
   const slot = getSlot(pIdx, sIdx);
   if (!slot) return;
   const spike = slot.sessionSpike !== undefined ? slot.sessionSpike : (parseInt(slot.charData.currentSpike) || 0);
   const hp    = slot.sessionHp    !== undefined ? slot.sessionHp    : (slot.charData.hpCurrent ?? 0);
   const comp  = slot.sessionComp  !== undefined ? slot.sessionComp  : (slot.charData.compCurrent ?? 0);
-  try {
-    localStorage.setItem(SYNC_KEY, JSON.stringify({
-      src: 'tracker', pi: pIdx, si: sIdx,
-      spike, hp, comp, ts: Date.now()
-    }));
-  } catch(e) {}
+  syncChannel.postMessage({ type: 'update', src: 'tracker', pi: pIdx, si: sIdx, spike, hp, comp });
 }
 
 // Flash a card on incoming remote update
@@ -1528,16 +1531,46 @@ function flashSyncCard(pIdx, sIdx) {
   const card = document.getElementById(`card-${pIdx}-${sIdx}`);
   if (!card) return;
   card.classList.remove('sync-flash');
-  void card.offsetWidth; // reflow to restart animation
+  void card.offsetWidth;
   card.classList.add('sync-flash');
 }
 
-// Listen for changes inbound from combat suite
-window.addEventListener('storage', e => {
-  if (e.key !== SYNC_KEY || !e.newValue) return;
-  try {
-    const msg = JSON.parse(e.newValue);
-    if (msg.src !== 'combat') return;
+// Heartbeat: ping the combat suite every 4s to detect presence
+function startPresenceHeartbeat() {
+  if (!syncChannel) return;
+  function ping() {
+    syncChannel.postMessage({ type: 'ping', src: 'tracker' });
+    // If no pong arrives within 5s, mark as not present
+    clearTimeout(_presenceTimer);
+    _presenceTimer = setTimeout(() => {
+      _combatPresent = false;
+      setSyncPill('idle');
+    }, 5000);
+  }
+  ping();
+  setInterval(ping, 4000);
+}
+
+// Handle all incoming messages
+if (syncChannel) {
+  syncChannel.onmessage = (e) => {
+    const msg = e.data;
+    if (!msg || !msg.type) return;
+
+    // Presence: reply to pings from combat, receive pongs back
+    if (msg.type === 'ping' && msg.src === 'combat') {
+      syncChannel.postMessage({ type: 'pong', src: 'tracker' });
+      return;
+    }
+    if (msg.type === 'pong' && msg.src === 'combat') {
+      _combatPresent = true;
+      clearTimeout(_presenceTimer);
+      setSyncPill('live');
+      return;
+    }
+
+    // Stat updates inbound from combat suite
+    if (msg.type !== 'update' || msg.src !== 'combat') return;
 
     const { pi, si } = msg;
     const slot = getSlot(pi, si);
@@ -1551,31 +1584,13 @@ window.addEventListener('storage', e => {
     if (!changed) return;
 
     saveToStorage();
-
-    // Update DOM live — no re-render needed
     if (msg.spike !== undefined) updateSpikeDOM(pi, si, msg.spike);
     if (msg.hp    !== undefined) updateVitalDOM(pi, si, 'hp',   msg.hp,   cd.hpMax   ?? 0);
     if (msg.comp  !== undefined) updateVitalDOM(pi, si, 'comp', msg.comp, cd.compMax ?? 0);
     updatePartyMeta(pi);
-
     flashSyncCard(pi, si);
     setSyncPill('pulse');
-  } catch(err) {}
-});
-
-// Poll for combat suite presence (sets the pill to 'live' when combat data exists)
-function checkCombatPresence() {
-  try {
-    const raw = localStorage.getItem(COMBAT_KEY);
-    if (raw) {
-      const d = JSON.parse(raw);
-      if (d && d.combatants && d.combatants.length > 0) {
-        setSyncPill('live');
-        return;
-      }
-    }
-  } catch(e) {}
-  setSyncPill('idle');
+  };
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1598,11 +1613,7 @@ function escHtml(str) {
 window.addEventListener('DOMContentLoaded', () => {
   loadFromStorage();
   renderAll();
-  checkCombatPresence();
-  // Refresh presence indicator whenever localStorage changes (catches combat opening/closing)
-  window.addEventListener('storage', e => {
-    if (e.key === COMBAT_KEY) checkCombatPresence();
-  });
+  startPresenceHeartbeat();
 });
 </script>
 </body>
