@@ -845,8 +845,39 @@ select.f-input { appearance: none; cursor: pointer; }
 }
 .cond-preset:hover { border-color: var(--amber-dim); color: var(--amber); }
 
-/* ── FOOTER ── */
-.footer {
+/* ── LIVE SYNC ── */
+.sync-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .16em;
+  padding: 3px 10px;
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  white-space: nowrap;
+  transition: border-color .4s, color .4s, background .4s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+}
+.sync-pill::before {
+  content: '◉';
+  font-size: 8px;
+  color: var(--border-hi);
+  transition: color .4s;
+}
+.sync-pill.live { border-color: var(--green-dim); color: var(--green); }
+.sync-pill.live::before { color: var(--green); }
+.sync-pill.pulse { border-color: var(--amber); color: var(--amber); background: rgba(184,120,32,.08); }
+.sync-pill.pulse::before { color: var(--amber); }
+
+@keyframes combat-sync-flash {
+  0%   { outline: 2px solid rgba(122,154,40,.7); background: rgba(122,154,40,.08); }
+  100% { outline: 2px solid transparent;         background: transparent; }
+}
+.sync-flash { animation: combat-sync-flash .7s ease-out forwards; }
+
+
   background: var(--surface);
   border-top: 1px solid var(--border);
   padding: 7px 18px;
@@ -896,6 +927,7 @@ select.f-input { appearance: none; cursor: pointer; }
   <button class="nav-tab" onclick="switchPage('roller')" id="ntab-roller">⬡ DICE ROLLER</button>
   <div class="nav-spacer"></div>
   <div class="nav-status" id="nav-status">ROUND <strong id="nav-round">—</strong> &nbsp;|&nbsp; TURN <strong id="nav-turn">—</strong></div>
+  <div class="sync-pill" id="sync-pill-combat">NO TRACKER LINK</div>
 </nav>
 
 <div class="app-body">
@@ -1306,6 +1338,7 @@ select.f-input { appearance: none; cursor: pointer; }
 const STORAGE_COMBAT   = 'spike_gm_combat_v2';
 const STORAGE_HOSTILE  = 'spike_gm_hostiles_v2';
 const TRACKER_KEY      = 'spike_gm_tracker_v2'; // party tracker storage key
+const SYNC_KEY         = 'spike_live_sync';      // cross-tab sync channel
 
 let combatants    = [];
 let hostileRoster = [];
@@ -1613,6 +1646,7 @@ function adjHp(id, delta) {
   if (c.hp === 0 && c.status === 'alive') c.status = 'down';
   saveState();
   liveUpdateHp(c);
+  broadcastSyncFromCombat(c);
 }
 
 function openHpAdj(id) {
@@ -1644,6 +1678,7 @@ function confirmHpAdj(mode) {
   saveState();
   renderInitList();
   closeModal('modal-hpadj');
+  broadcastSyncFromCombat(c);
 }
 
 function adjComp(id, delta) {
@@ -1658,6 +1693,7 @@ function adjComp(id, delta) {
     const el2 = document.getElementById('icomp-' + id);
     if (el2) el2.style.color = 'var(--red-bright)';
   }
+  broadcastSyncFromCombat(c);
 }
 
 function adjSpike(id, delta) {
@@ -1666,6 +1702,7 @@ function adjSpike(id, delta) {
   c.spike = Math.min(11, Math.max(0, (c.spike || 0) + delta));
   saveState();
   renderSpikeForCombatant(c);
+  broadcastSyncFromCombat(c);
 }
 
 function setSpike(id, val) {
@@ -1674,6 +1711,7 @@ function setSpike(id, val) {
   c.spike = Math.min(11, Math.max(0, val));
   saveState();
   renderSpikeForCombatant(c);
+  broadcastSyncFromCombat(c);
 }
 
 function liveUpdateHp(c) {
@@ -2337,6 +2375,103 @@ document.querySelectorAll('.modal-backdrop').forEach(m => {
 });
 
 // ═══════════════════════════════════════════════════════
+//  LIVE SYNC — CROSS-TAB BRIDGE
+// ═══════════════════════════════════════════════════════
+
+let _combatSyncPillTimer = null;
+
+function setCombatSyncPill(state) {
+  const pill = document.getElementById('sync-pill-combat');
+  if (!pill) return;
+  pill.className = 'sync-pill' + (state !== 'idle' ? ' ' + state : '');
+  pill.textContent = state === 'pulse' ? 'SYNCED ←' : state === 'live' ? 'TRACKER LINKED' : 'NO TRACKER LINK';
+  if (state === 'pulse') {
+    clearTimeout(_combatSyncPillTimer);
+    _combatSyncPillTimer = setTimeout(() => setCombatSyncPill('live'), 1500);
+  }
+}
+
+// Broadcast outward: combat → tracker
+function broadcastSyncFromCombat(c) {
+  if (!c || !c.trackerRef) return;
+  const [pi, si] = c.trackerRef.split('-').map(Number);
+  try {
+    localStorage.setItem(SYNC_KEY, JSON.stringify({
+      src: 'combat', pi, si,
+      spike: c.spike ?? 0, hp: c.hp, comp: c.comp,
+      ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
+// Flash an init row on incoming remote update
+function flashSyncRow(id) {
+  const row = document.getElementById('irow-' + id);
+  if (!row) return;
+  row.classList.remove('sync-flash');
+  void row.offsetWidth;
+  row.classList.add('sync-flash');
+}
+
+// Listen for changes inbound from party tracker
+window.addEventListener('storage', e => {
+  if (e.key !== SYNC_KEY || !e.newValue) return;
+  try {
+    const msg = JSON.parse(e.newValue);
+    if (msg.src !== 'tracker') return;
+
+    const ref = `${msg.pi}-${msg.si}`;
+    const c = combatants.find(x => x.trackerRef === ref);
+    if (!c) return;
+
+    let changed = false;
+    if (msg.spike !== undefined && c.spike !== msg.spike) { c.spike = msg.spike; changed = true; }
+    if (msg.hp    !== undefined && c.hp    !== msg.hp)    { c.hp    = msg.hp;    changed = true; }
+    if (msg.comp  !== undefined && c.comp  !== msg.comp)  { c.comp  = msg.comp;  changed = true; }
+    if (!changed) return;
+
+    saveState();
+
+    // Update DOM live without full re-render
+    liveUpdateHp(c);
+    const compEl = document.getElementById('icomp-' + c.id);
+    if (compEl) {
+      compEl.textContent = c.comp + '/' + c.compMax;
+      compEl.style.color = c.comp === 0 ? 'var(--red-bright)' : 'var(--text-hi)';
+    }
+    renderSpikeForCombatant(c);
+    // Refresh turn banner meta if this is the current combatant
+    if (encounterActive && combatants[currentTurnIdx] && combatants[currentTurnIdx].id === c.id) {
+      const sc = spikeColor(c.spike || 0);
+      const metaEl = document.getElementById('turn-banner-meta');
+      if (metaEl) metaEl.innerHTML =
+        `ROUND <strong>${roundNum}</strong> &nbsp;|&nbsp;
+         TYPE: <strong>${c.type.toUpperCase()}</strong> &nbsp;|&nbsp;
+         HP <strong>${c.hp}/${c.hpMax}</strong> &nbsp;|&nbsp;
+         SPIKE <strong style="color:${sc}">${c.spike||0} — ${spikeLabel(c.spike||0)}</strong>`;
+    }
+
+    flashSyncRow(c.id);
+    setCombatSyncPill('pulse');
+  } catch(err) {}
+});
+
+// Poll for party tracker presence
+function checkTrackerPresence() {
+  try {
+    const raw = localStorage.getItem(TRACKER_KEY);
+    if (raw) {
+      const d = JSON.parse(raw);
+      if (d && d.state) {
+        const hasOps = d.state.some(p => p && p.some(Boolean));
+        if (hasOps) { setCombatSyncPill('live'); return; }
+      }
+    }
+  } catch(e) {}
+  setCombatSyncPill('idle');
+}
+
+// ═══════════════════════════════════════════════════════
 //  UTILITY
 // ═══════════════════════════════════════════════════════
 
@@ -2379,6 +2514,12 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-start').style.display = 'none';
     document.getElementById('btn-next').style.display  = '';
   }
+
+  checkTrackerPresence();
+  // Refresh presence pill whenever tracker storage changes
+  window.addEventListener('storage', e => {
+    if (e.key === TRACKER_KEY) checkTrackerPresence();
+  });
 });
 </script>
 </body>
