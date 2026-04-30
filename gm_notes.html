@@ -201,6 +201,30 @@ footer {
   }
 }
 
+
+/* ── MOBILE NAV STICKY FIX ── */
+@media (max-width: 600px) {
+  /* Ensure nav is truly fixed to top on iOS */
+  nav,
+  .nav,
+  .page-tabs {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9000 !important;
+  }
+
+  /* Push body content below the nav so it never scrolls under it */
+  body {
+    padding-top: 0 !important;
+  }
+
+  /* Prevent content from appearing under iOS status bar */
+  html {
+    background: #0b0c09;
+  }
+}
+
 </style>
 </head>
 <body>
