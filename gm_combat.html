@@ -1379,6 +1379,13 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <span class="sec-line"></span>
         <span class="sec-count" id="hostile-count">// 0 SAVED</span>
       </div>
+      <div class="btn-row" style="margin-bottom:12px;">
+        <button class="btn green sm" onclick="saveRosterToFile()">↓ SAVE ROSTER</button>
+        <button class="btn sm" onclick="document.getElementById('rosterLoadInput').click()">↑ LOAD ROSTER</button>
+        <input type="file" id="rosterLoadInput" accept=".json" style="display:none" onchange="loadRosterFromFile(event)">
+        <button class="btn sm red" onclick="clearRoster()">✕ CLEAR ROSTER</button>
+        <span id="rosterStatus" style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.12em;color:var(--text-dim);margin-left:4px;"></span>
+      </div>
       <div class="hostile-grid" id="hostile-grid">
         <div style="font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--text-dim);padding:20px;border:1px dashed var(--border)">
           No hostiles saved. Build a stat block and save it.
@@ -2406,6 +2413,59 @@ function deleteHostile(id) {
   hostileRoster = hostileRoster.filter(h => h.id !== id);
   saveState();
   renderHostileRoster();
+}
+
+function setRosterStatus(msg, ok) {
+  const el = document.getElementById('rosterStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = ok ? 'var(--green)' : ok === false ? 'var(--amber)' : 'var(--text-dim)';
+}
+
+function saveRosterToFile() {
+  if (!hostileRoster.length) { setRosterStatus('ROSTER EMPTY', false); return; }
+  const blob = new Blob([JSON.stringify({ version: 1, hostiles: hostileRoster }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `SPIKE_Hostiles_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setRosterStatus('SAVED // ' + new Date().toLocaleTimeString(), true);
+}
+
+function loadRosterFromFile(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      const incoming = data.hostiles || (Array.isArray(data) ? data : null);
+      if (!incoming) { setRosterStatus('ERROR: INVALID FILE', false); return; }
+      // Merge — skip duplicates by name+tier
+      let added = 0;
+      incoming.forEach(h => {
+        const dupe = hostileRoster.some(x => x.name === h.name && x.tier === h.tier);
+        if (!dupe) { hostileRoster.push({ ...h, id: uid() }); added++; }
+      });
+      saveState();
+      renderHostileRoster();
+      setRosterStatus(`LOADED ${added} // ${file.name}`, true);
+    } catch(err) {
+      setRosterStatus('ERROR: INVALID FILE', false);
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+function clearRoster() {
+  if (!hostileRoster.length) return;
+  if (!confirm('Clear the entire hostile roster? This cannot be undone.')) return;
+  hostileRoster = [];
+  saveState();
+  renderHostileRoster();
+  setRosterStatus('ROSTER CLEARED', false);
 }
 
 function deployHostile() {
