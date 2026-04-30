@@ -486,34 +486,78 @@ select.f-input { appearance: none; cursor: pointer; }
 }
 .cond-add:hover { color: var(--red-bright); border-color: var(--red); }
 
-/* Reaction counter */
+/* Reaction tracker */
 .reaction-bar {
   background: var(--surface);
   border: 1px solid var(--border-hi);
   padding: 12px 18px;
+  margin-bottom: 14px;
+}
+.reaction-bar-head {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .2em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 14px;
+  gap: 10px;
+}
+.reaction-bar-head strong { color: var(--text-hi); }
+.reaction-roster {
+  display: flex;
   flex-wrap: wrap;
+  gap: 10px;
 }
-.reaction-label {
+.reaction-op {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+}
+.reaction-op-name {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 8px;
-  letter-spacing: .16em;
+  font-size: 8.5px;
+  letter-spacing: .1em;
   color: var(--text-dim);
+  white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.reaction-pips { display: flex; gap: 5px; }
+.reaction-pips { display: flex; gap: 4px; }
 .reaction-pip {
   width: 14px; height: 14px;
   border: 1px solid var(--green-dim);
   background: rgba(122,154,40,.25);
   cursor: pointer;
   transition: all .1s;
+  flex-shrink: 0;
 }
 .reaction-pip.used {
   background: var(--surface);
   border-color: var(--border);
+}
+.reaction-op-reset {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  line-height: 1;
+  white-space: nowrap;
+}
+.reaction-op-reset:hover { color: var(--green); border-color: var(--green-dim); }
+.reaction-empty {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+  font-style: italic;
 }
 .reaction-type {
   font-family: 'Share Tech Mono', monospace;
@@ -941,7 +985,7 @@ select.f-input { appearance: none; cursor: pointer; }
   <div class="enc-controls">
     <div class="enc-stat">ROUND <strong id="round-display">—</strong></div>
     <div class="enc-stat">ACTIVE <strong id="turn-display">—</strong></div>
-    <div class="enc-stat" id="reaction-stat">REACTIONS <strong id="reaction-display">2/2</strong></div>
+
     <button class="btn green lg" id="btn-start" onclick="startEncounter()">▶ START ENCOUNTER</button>
     <button class="btn amber lg" id="btn-next" style="display:none" onclick="nextTurn()">▶▶ NEXT TURN</button>
     <button class="btn sm" onclick="sortInit(true)" title="Re-sort by initiative">↕ SORT</button>
@@ -950,16 +994,17 @@ select.f-input { appearance: none; cursor: pointer; }
   </div>
 
   <!-- Reaction tracker -->
-  <div class="reaction-bar">
-    <span class="reaction-label">■ REACTIONS THIS ROUND:</span>
-    <div class="reaction-pips">
-      <div class="reaction-pip" id="rxn-0" onclick="toggleReaction(0)" title="Reaction slot 1"></div>
-      <div class="reaction-pip" id="rxn-1" onclick="toggleReaction(1)" title="Reaction slot 2"></div>
+  <div class="reaction-bar" id="reaction-bar">
+    <div class="reaction-bar-head">
+      ■ REACTIONS PER OPERATIVE — <strong>2 / LONG REST</strong>
+      &nbsp;·&nbsp;
+      <span class="reaction-type">Overwatch · Counterattack · Protect · Brace</span>
+      &nbsp;·&nbsp;
+      <button class="btn sm" onclick="resetAllReactions()" title="Reset all operative reactions (long rest)">↺ LONG REST — RESET ALL</button>
     </div>
-    <span class="reaction-type">PARTY LIMIT: 2/ROUND — Reset on Next Turn (new round)</span>
-    <span style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);margin-left:auto">
-      Overwatch · Counterattack · Protect · Brace
-    </span>
+    <div class="reaction-roster" id="reaction-roster">
+      <span class="reaction-empty">No operatives in tracker.</span>
+    </div>
   </div>
 
   <!-- Turn banner -->
@@ -1287,7 +1332,7 @@ select.f-input { appearance: none; cursor: pointer; }
     <div class="panel" style="margin-bottom:0;background:var(--surface)">
       <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.16em;color:var(--text-dim);margin-bottom:4px">CONDITION NOTES</div>
       <div style="font-size:12px;color:var(--text-dim);line-height:1.5">
-        <strong style="color:var(--text)">STUNNED</strong> — Skip next turn. Lose reactions.<br>
+        <strong style="color:var(--text)">STUNNED</strong> — Skip next turn. Cannot use Reactions until next turn.<br>
         <strong style="color:var(--text)">PRONE</strong> — Disadvantage on attacks; melee attackers gain Advantage.<br>
         <strong style="color:var(--text)">SUPPRESSED</strong> — Half movement. Disadvantage ranged. No dash.<br>
         <strong style="color:var(--text)">EXPOSED</strong> — Attackers +2 to hit. Armor reduced by 1.
@@ -1344,7 +1389,6 @@ let hostileRoster = [];
 let currentTurnIdx = -1;
 let roundNum       = 0;
 let encounterActive = false;
-let reactions       = [false, false]; // 2 reactions per round
 
 let selectedDie = 10;
 let rollLog = [];
@@ -1381,7 +1425,7 @@ function spikeLabel(n) {
 
 function saveState() {
   try {
-    localStorage.setItem(STORAGE_COMBAT,  JSON.stringify({ combatants, currentTurnIdx, roundNum, encounterActive, reactions }));
+    localStorage.setItem(STORAGE_COMBAT,  JSON.stringify({ combatants, currentTurnIdx, roundNum, encounterActive }));
     localStorage.setItem(STORAGE_HOSTILE, JSON.stringify(hostileRoster));
   } catch(e) {}
 }
@@ -1396,7 +1440,6 @@ function loadState() {
       currentTurnIdx  = d.currentTurnIdx  ?? -1;
       roundNum        = d.roundNum        ?? 0;
       encounterActive = d.encounterActive ?? false;
-      reactions       = d.reactions       || [false, false];
     }
     if (h) hostileRoster = JSON.parse(h) || [];
   } catch(e) {}
@@ -1481,6 +1524,7 @@ function importOperativeFromTracker(pi, si, cd, slot) {
     comp:        compCur,
     compMax:     compMax,
     spike:       spike,
+    reactions:   [false, false],
     status:      'alive',
     conditions:  [],
     notes:       '',
@@ -1506,31 +1550,61 @@ function switchPage(name) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  REACTIONS
+//  REACTIONS (per operative, 2 per long rest)
 // ═══════════════════════════════════════════════════════
 
-function toggleReaction(idx) {
-  reactions[idx] = !reactions[idx];
-  renderReactions();
+function toggleReaction(combatantId, idx) {
+  const c = combatants.find(x => x.id === combatantId);
+  if (!c) return;
+  if (!c.reactions) c.reactions = [false, false];
+  c.reactions[idx] = !c.reactions[idx];
   saveState();
+  renderReactionRoster();
 }
 
-function resetReactions() {
-  reactions = [false, false];
-  renderReactions();
+function resetAllReactions() {
+  combatants.forEach(c => { c.reactions = [false, false]; });
+  saveState();
+  renderReactionRoster();
 }
 
-function renderReactions() {
-  reactions.forEach((used, i) => {
-    const pip = document.getElementById('rxn-' + i);
-    if (pip) pip.classList.toggle('used', used);
-  });
-  const used = reactions.filter(Boolean).length;
-  const display = document.getElementById('reaction-display');
-  if (display) {
-    display.textContent = `${2 - used}/2`;
-    display.style.color = used >= 2 ? 'var(--red-bright)' : used === 1 ? 'var(--amber)' : 'var(--green)';
+function resetOneReaction(combatantId) {
+  const c = combatants.find(x => x.id === combatantId);
+  if (!c) return;
+  c.reactions = [false, false];
+  saveState();
+  renderReactionRoster();
+}
+
+function renderReactionRoster() {
+  const roster = document.getElementById('reaction-roster');
+  if (!roster) return;
+
+  // Only show operatives (not hostiles — they don't use the reaction pool mechanic)
+  const ops = combatants.filter(c => c.type === 'operative' && c.status !== 'dead');
+
+  if (!ops.length) {
+    roster.innerHTML = '<span class="reaction-empty">No operatives in tracker.</span>';
+    return;
   }
+
+  roster.innerHTML = ops.map(c => {
+    if (!c.reactions) c.reactions = [false, false];
+    const used = c.reactions.filter(Boolean).length;
+    const col = used >= 2 ? 'var(--red-bright)' : used === 1 ? 'var(--amber)' : 'var(--green)';
+    const pips = c.reactions.map((u, i) =>
+      `<div class="reaction-pip${u ? ' used' : ''}"
+        onclick="toggleReaction('${c.id}',${i})"
+        title="Reaction ${i+1} — click to toggle"></div>`
+    ).join('');
+    return `
+      <div class="reaction-op">
+        <div class="reaction-op-name" style="color:${col}">${escHtml(c.name)}</div>
+        <div class="reaction-pips">${pips}</div>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:${col};min-width:24px">${2-used}/2</span>
+        ${used > 0 ? `<span class="reaction-op-reset" onclick="resetOneReaction('${c.id}')" title="Reset this operative's reactions">↺</span>` : ''}
+      </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1575,6 +1649,7 @@ function addCombatant() {
     hp: Math.min(hp, hpMax), hpMax: Math.max(hpMax, 1),
     armor, comp, compMax,
     spike: 0,
+    reactions: [false, false],
     status: 'alive', conditions: [], notes: ''
   });
 
@@ -1615,11 +1690,10 @@ function clearEncounter() {
   currentTurnIdx = -1;
   roundNum = 0;
   encounterActive = false;
-  reactions = [false, false];
   saveState();
   renderInitList();
   updateRoundDisplay();
-  renderReactions();
+  renderReactionRoster();
   document.getElementById('btn-start').style.display = '';
   document.getElementById('btn-next').style.display  = 'none';
   loadPartyTracker();
@@ -1740,11 +1814,10 @@ function startEncounter() {
   encounterActive = true;
   currentTurnIdx  = 0;
   roundNum        = 1;
-  reactions       = [false, false];
   saveState();
   renderInitList();
   updateRoundDisplay();
-  renderReactions();
+  renderReactionRoster();
   document.getElementById('btn-start').style.display = 'none';
   document.getElementById('btn-next').style.display  = '';
 }
@@ -1759,10 +1832,9 @@ function nextTurn() {
     safety++;
   }
 
-  // New round?
+  // New round counter only — reactions persist until long rest
   if (next === 0 || next < currentTurnIdx) {
     roundNum++;
-    resetReactions(); // reset reactions at top of new round
   }
 
   currentTurnIdx = next;
@@ -1876,6 +1948,7 @@ function renderInitList() {
     document.getElementById('turn-banner').classList.remove('visible');
     document.getElementById('combatant-count').textContent = '// 0 COMBATANTS';
     updateRoundDisplay();
+    renderReactionRoster();
     return;
   }
 
@@ -1977,6 +2050,7 @@ function renderInitList() {
   }).join('');
 
   updateRoundDisplay();
+  renderReactionRoster();
   initDragDrop();
 }
 
@@ -2136,6 +2210,7 @@ function deployHostile() {
       armor: h.armor || 0,
       comp: h.comp || 5, compMax: h.comp || 5,
       spike: 0,
+      reactions: [false, false],
       status: 'alive', conditions: [],
       hostileRef: h.id
     });
@@ -2157,6 +2232,7 @@ function deployOne(id) {
     armor: h.armor || 0,
     comp: h.comp || 5, compMax: h.comp || 5,
     spike: 0,
+    reactions: [false, false],
     status: 'alive', conditions: [],
     hostileRef: h.id
   });
@@ -2515,7 +2591,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderHostileRoster();
   renderLog();
   updateRoundDisplay();
-  renderReactions();
+  renderReactionRoster();
 
   selectDie(10);
 

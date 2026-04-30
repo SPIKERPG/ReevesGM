@@ -754,6 +754,69 @@ footer {
   flex-shrink: 0;
 }
 
+/* ─── REACTIONS ─── */
+.tracker-reactions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 0 2px;
+  flex-shrink: 0;
+}
+.tracker-rxn-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6.5px;
+  letter-spacing: .14em;
+  color: var(--amber);
+  white-space: nowrap;
+}
+.tracker-rxn-pips {
+  display: flex;
+  gap: 4px;
+}
+.tracker-rxn-pip {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--amber);
+  background: rgba(184,120,32,.22);
+  cursor: pointer;
+  transition: all .1s;
+  flex-shrink: 0;
+  position: relative;
+}
+.tracker-rxn-pip::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--amber);
+  transition: opacity .1s;
+}
+.tracker-rxn-pip.used {
+  background: var(--surface);
+  border-color: var(--border-hi);
+}
+.tracker-rxn-pip.used::after { opacity: 0; }
+.tracker-rxn-pip:not(.used)::after { opacity: 1; }
+.tracker-rxn-pip:hover { opacity: .7; }
+.tracker-rxn-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 22px;
+}
+.tracker-rxn-reset {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6.5px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: 2px 5px;
+  cursor: pointer;
+  transition: all .1s;
+  white-space: nowrap;
+}
+.tracker-rxn-reset:hover { color: var(--amber); border-color: var(--amber); }
+
 /* ─── AWOKEN TAG ─── */
 .awoken-tag {
   font-family: 'Share Tech Mono', monospace;
@@ -1077,11 +1140,13 @@ function buildCharCardHTML(d, pIdx, sIdx) {
 
   // Use session overrides if present, else charData values
   const slot       = state[pIdx] && state[pIdx][sIdx];
-  const spike      = slot && slot.sessionSpike  !== undefined ? slot.sessionSpike  : (parseInt(d.currentSpike) || 0);
-  const hpCur      = slot && slot.sessionHp     !== undefined ? slot.sessionHp     : (d.hpCurrent ?? 0);
+  const spike      = slot && slot.sessionSpike      !== undefined ? slot.sessionSpike      : (parseInt(d.currentSpike) || 0);
+  const hpCur      = slot && slot.sessionHp         !== undefined ? slot.sessionHp         : (d.hpCurrent ?? 0);
   const hpMax      = d.hpMax   ?? 0;
-  const compCur    = slot && slot.sessionComp   !== undefined ? slot.sessionComp   : (d.compCurrent ?? 0);
+  const compCur    = slot && slot.sessionComp       !== undefined ? slot.sessionComp       : (d.compCurrent ?? 0);
   const compMax    = d.compMax ?? 0;
+  const reactions  = (slot && slot.sessionReactions) ? slot.sessionReactions
+                   : (d.reactionPips || [false, false]);
 
   const name      = inputs[0] || 'UNKNOWN';
   const callsign  = inputs[1] || '';
@@ -1227,6 +1292,20 @@ function buildCharCardHTML(d, pIdx, sIdx) {
       </div>
     </div>
 
+    <div class="tracker-reactions" id="rxn-${sid}">
+      <span class="tracker-rxn-label">REACT</span>
+      <div class="tracker-rxn-pips">
+        <div class="tracker-rxn-pip${reactions[0] ? ' used' : ''}"
+          onclick="toggleTrackerReaction(${pIdx},${sIdx},0)"
+          title="Reaction 1 — click to toggle"></div>
+        <div class="tracker-rxn-pip${reactions[1] ? ' used' : ''}"
+          onclick="toggleTrackerReaction(${pIdx},${sIdx},1)"
+          title="Reaction 2 — click to toggle"></div>
+      </div>
+      <span class="tracker-rxn-count" style="color:${reactions.filter(Boolean).length >= 2 ? 'var(--red-bright)' : reactions.filter(Boolean).length === 1 ? 'var(--amber)' : 'var(--amber)'}">${2 - reactions.filter(Boolean).length}/2</span>
+      <button class="tracker-rxn-reset" onclick="resetTrackerReactions(${pIdx},${sIdx})" title="Long rest — restore reactions">↺ LONG REST</button>
+    </div>
+
     <div style="flex-shrink:0">
       <div class="mini-lbl">ATTRIBUTES</div>
       <div class="attrs-grid">${attrsHtml}</div>
@@ -1313,10 +1392,11 @@ function loadFile(ev, pIdx, sIdx) {
       const existing = state[pIdx][sIdx];
       state[pIdx][sIdx] = {
         charData,
-        gmNotes:      existing ? (existing.gmNotes      || '') : '',
-        sessionSpike: existing ? existing.sessionSpike : undefined,
-        sessionHp:    existing ? existing.sessionHp    : undefined,
-        sessionComp:  existing ? existing.sessionComp  : undefined,
+        gmNotes:          existing ? (existing.gmNotes         || '') : '',
+        sessionSpike:     existing ? existing.sessionSpike     : undefined,
+        sessionHp:        existing ? existing.sessionHp        : undefined,
+        sessionComp:      existing ? existing.sessionComp      : undefined,
+        sessionReactions: existing ? existing.sessionReactions : undefined,
       };
       saveToStorage();
       // Re-render just this slot
@@ -1487,6 +1567,41 @@ function updateVitalDOM(pIdx, sIdx, which, cur, max) {
   const barEl = document.getElementById(`${which}bar-${sid}`);
   if (valEl) valEl.textContent = cur;
   if (barEl) { barEl.style.width = pct + '%'; barEl.style.background = col; }
+}
+
+function toggleTrackerReaction(pIdx, sIdx, idx) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  if (!slot.sessionReactions) {
+    slot.sessionReactions = (slot.charData.reactionPips || [false, false]).slice();
+  }
+  slot.sessionReactions[idx] = !slot.sessionReactions[idx];
+  saveToStorage();
+  updateReactionDOM(pIdx, sIdx, slot.sessionReactions);
+}
+
+function resetTrackerReactions(pIdx, sIdx) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  slot.sessionReactions = [false, false];
+  saveToStorage();
+  updateReactionDOM(pIdx, sIdx, slot.sessionReactions);
+}
+
+function updateReactionDOM(pIdx, sIdx, reactions) {
+  const sid = `${pIdx}-${sIdx}`;
+  const container = document.getElementById('rxn-' + sid);
+  if (!container) return;
+  const pips = container.querySelectorAll('.tracker-rxn-pip');
+  const countEl = container.querySelector('.tracker-rxn-count');
+  const resetBtn = container.querySelector('.tracker-rxn-reset');
+  const used = reactions.filter(Boolean).length;
+  pips.forEach((pip, i) => pip.classList.toggle('used', reactions[i]));
+  if (countEl) {
+    countEl.textContent = (2 - used) + '/2';
+    countEl.style.color = used >= 2 ? 'var(--red-bright)' : 'var(--amber)';
+  }
+  if (resetBtn) resetBtn.style.opacity = used > 0 ? '1' : '0.4';
 }
 
 // ═══════════════════════════════════════════════════════
