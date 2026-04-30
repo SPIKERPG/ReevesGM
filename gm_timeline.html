@@ -213,6 +213,26 @@ footer {
   .g2, .npc-grid, .loc-grid { grid-template-columns: 1fr; }
   .tl-date { min-width: 80px; font-size: 8px; }
 }
+
+/* ── MOBILE HEADER COLLAPSE ── */
+@media (max-width: 600px) {
+  /* Hide top band and main header on mobile — show nav only */
+  .top-band,
+  .header-band,
+  .header-main,
+  .main-header,
+  .header { display: none !important; }
+
+  /* Nav/page-tabs stick to very top */
+  nav,
+  .nav,
+  .page-tabs {
+    position: sticky;
+    top: 0 !important;
+    z-index: 600;
+  }
+}
+
 </style>
 </head>
 <body>

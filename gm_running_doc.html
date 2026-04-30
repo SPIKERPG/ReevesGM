@@ -196,6 +196,26 @@ footer {
   .g2, .g3, .behavior-grid, .enemy-grid { grid-template-columns: 1fr; }
   .spike-row-item { grid-template-columns: 40px 80px 1fr; }
 }
+
+/* ── MOBILE HEADER COLLAPSE ── */
+@media (max-width: 600px) {
+  /* Hide top band and main header on mobile — show nav only */
+  .top-band,
+  .header-band,
+  .header-main,
+  .main-header,
+  .header { display: none !important; }
+
+  /* Nav/page-tabs stick to very top */
+  nav,
+  .nav,
+  .page-tabs {
+    position: sticky;
+    top: 0 !important;
+    z-index: 600;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -260,9 +280,11 @@ footer {
           <tr><td>SPIKE Save at CONSUMED (11)</td><td class="td-hi">19</td></tr>
           <tr><td>COMPOSURE = 0 SPIKE Save</td><td class="td-hi">14</td></tr>
           <tr><td>Lower SPIKE (action, d20+MIND)</td><td class="td-hi">13</td></tr>
-          <tr><td>Assist SPIKED operative (d20+MIND)</td><td class="td-hi">14</td></tr>
+          <tr><td>Grounding (d20+MIND vs SPIKED)</td><td class="td-hi">14</td></tr>
           <tr><td>Resist flaw (d10+RESOLVE)</td><td class="td-hi">11</td></tr>
-
+          <tr><td>Breaking Point Roll (d10+RESOLVE)</td><td class="td-hi">12</td></tr>
+          <tr><td>Awoken assist vs SPIKED (d10+EMP)</td><td class="td-hi">11</td></tr>
+          <tr><td>Awoken SPIKE reduction (d20+EMP)</td><td class="td-hi">16</td></tr>
         </tbody>
       </table>
     </div>
@@ -287,7 +309,7 @@ footer {
   <div class="spike-row-item mbr">
     <div class="sl-num s0" style="background:var(--spike-0)">0</div>
     <div class="sl-label s0" style="background:var(--spike-0)">SERENE</div>
-    <div class="sl-body"><strong style="color:var(--text-hi)">+1 to logic and TECH rolls.</strong> Cannot critically fail SPIKE Saves.</div>
+    <div class="sl-body">Baseline. No mechanical effect.</div>
   </div>
   <div class="spike-row-item mbr">
     <div class="sl-num s12" style="background:var(--spike-0)">1–2</div>
@@ -317,7 +339,7 @@ footer {
   <div class="spike-row-item" style="margin-bottom:24px">
     <div class="sl-num s11" style="background:var(--spike-11)">11</div>
     <div class="sl-label s11" style="background:var(--spike-11)">CONSUMED</div>
-    <div class="sl-body"><strong style="color:var(--text-hi)">1d6 True Damage at start of each turn</strong> until 0 HP, then 1d4 RESOLVE damage per turn until 0. Death follows. End-of-turn save: d20+RESOLVE vs TN 19. Nat 1 = damage rolls at Advantage.</div>
+    <div class="sl-body"><strong style="color:var(--text-hi)">1d6 True Damage at start of each turn</strong> until 0 HP, then 1d4 RESOLVE damage per turn. Death follows. End-of-turn save: d20+RESOLVE vs TN 19. Nat 1 = damage advantage.</div>
   </div>
 
   <div class="g3">
@@ -329,9 +351,13 @@ footer {
         <li><strong>Action (once/encounter):</strong> d20+MIND vs TN 13. Advantage if helped by PC at SPIKE ≤4.</li>
       </ul>
     </div>
-    <div class="panel red">
-      <div class="panel-title red">SPIKE RESONANCE</div>
+    <div class="panel amber">
+      <div class="panel-title amber">SPIKE RESONANCE</div>
       <p>When two characters' SPIKE levels differ by <strong>≥4</strong>, social scenes become unstable. Apply tension, misread cues, or prompt saves as needed.</p>
+    </div>
+    <div class="panel red">
+      <div class="panel-title red">BREAKING POINT (DR onwards)</div>
+      <p>At SPIKE 10 for the 2nd+ time: d10+RESOLVE vs TN 12. <strong>Success:</strong> AWOKEN, SPIKE drops to 4. <strong>Failure:</strong> SPIKE = 9, gain Emotional Flaw. Cannot retry until flaw is addressed.</p>
     </div>
   </div>
 
@@ -345,7 +371,17 @@ footer {
         <li><strong>Critical Failure:</strong> Both make RESOLVE save vs TN 12. SPIKED PC gets Disadvantage on next save.</li>
       </ul>
     </div>
-  
+    <div class="panel">
+      <div class="panel-title">AWAKENED GROUNDING</div>
+      <p>Roll d20+EMPATHY vs TN 16.</p>
+      <ul>
+        <li><strong>Success:</strong> Target SPIKE –1</li>
+        <li><strong>Critical Success:</strong> +1d4 to reduction; Awoken PC's EMPATHY +1</li>
+        <li><strong>Failure:</strong> No effect</li>
+        <li><strong>Critical Failure:</strong> Awoken PC gains +1d4 SPIKE</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <!-- ════ 03. BEHAVIOR TABLE ════ -->
@@ -616,7 +652,7 @@ footer {
 
   <div class="panel">
     <div class="panel-title">SPIKE PRESSURE ENEMIES</div>
-    <p>Some enemies should attack SPIKE instead of HP. On hit: +1 SPIKE. Aura: SPIKE Save each turn. Death effect: nearby PCs +1 SPIKE. Most enemies do <em>not</em> use COMPOSURE — reserve it for psychological threats and bosses. COMPOSURE 5–10; at 0, enemy becomes erratic or escalates.</p>
+    <p>Some enemies should attack SPIKE instead of HP. On hit: +1 SPIKE. Aura: SPIKE Save each turn. Death effect: nearby PCs +1 SPIKE. Most enemies do <em>not</em> use COMPOSURE — reserve it for Awoken enemies, psychological threats, and bosses. COMPOSURE 5–10; at 0, enemy becomes erratic or escalates.</p>
     <p style="margin-bottom:0"><strong>Play enemies thematically, not optimally.</strong> Keep turns under 10 seconds. Traits create identity. If you forget a rule, default to: attack roll + damage.</p>
   </div>
 </section>
