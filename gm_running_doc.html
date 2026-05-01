@@ -463,20 +463,25 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       </table>
     </div>
     <div>
-      <table class="ref-table">
-        <thead><tr><th>SPECIFIC ROLL</th><th>TN</th></tr></thead>
+      <table class="ref-table" style="margin-bottom:10px;">
+        <thead><tr><th colspan="2">d10 ROLLS</th></tr><tr><th>SPECIFIC ROLL</th><th>TN</th></tr></thead>
         <tbody>
           <tr><td>Combat attack (standard)</td><td class="td-hi">9</td></tr>
           <tr><td>Attack (cover)</td><td class="td-hi">11</td></tr>
           <tr><td>Attack (heavy cover)</td><td class="td-hi">13</td></tr>
-          <tr><td>SPIKE Save at SPIKED (10)</td><td class="td-hi">17</td></tr>
-          <tr><td>SPIKE Save at CONSUMED (11)</td><td class="td-hi">19</td></tr>
+          <tr><td>Resist flaw (d10+RESOLVE)</td><td class="td-hi">9</td></tr>
+          <tr><td>Breaking Point Roll (d10+RESOLVE)</td><td class="td-hi">12</td></tr>
+          <tr><td>Awoken assist vs SPIKED (d10+EMP)</td><td class="td-hi">11</td></tr>
+        </tbody>
+      </table>
+      <table class="ref-table">
+        <thead><tr><th colspan="2">d20 ROLLS</th></tr><tr><th>SPECIFIC ROLL</th><th>TN</th></tr></thead>
+        <tbody>
+          <tr><td>SPIKE Save at SPIKED (10)</td><td class="td-hi">16</td></tr>
+          <tr><td>SPIKE Save at CONSUMED (11)</td><td class="td-hi">18</td></tr>
           <tr><td>COMPOSURE = 0 SPIKE Save</td><td class="td-hi">14</td></tr>
           <tr><td>Lower SPIKE (action, d20+MIND)</td><td class="td-hi">13</td></tr>
           <tr><td>Grounding (d20+MIND vs SPIKED)</td><td class="td-hi">14</td></tr>
-          <tr><td>Resist flaw (d10+RESOLVE)</td><td class="td-hi">11</td></tr>
-          <tr><td>Breaking Point Roll (d10+RESOLVE)</td><td class="td-hi">12</td></tr>
-          <tr><td>Awoken assist vs SPIKED (d10+EMP)</td><td class="td-hi">11</td></tr>
           <tr><td>Awoken SPIKE reduction (d20+EMP)</td><td class="td-hi">16</td></tr>
         </tbody>
       </table>
@@ -527,12 +532,12 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   <div class="spike-row-item mbr">
     <div class="sl-num s10" style="background:var(--spike-10)">10</div>
     <div class="sl-label s10" style="background:var(--spike-10)">SPIKED</div>
-    <div class="sl-body"><strong style="color:var(--text-hi)">Loss of character control.</strong> Roll d20 vs Behavior Table at start of turn. At end of each turn: d20+RESOLVE vs TN 17. Nat 20 = SPIKE –2. Nat 1 = SPIKE +1.</div>
+    <div class="sl-body"><strong style="color:var(--text-hi)">Loss of character control.</strong> Roll d20 vs Behavior Table at start of turn. At end of each turn: d20+RESOLVE vs TN 16. Nat 20 = SPIKE –2. Nat 1 = SPIKE +1.</div>
   </div>
   <div class="spike-row-item" style="margin-bottom:24px">
     <div class="sl-num s11" style="background:var(--spike-11)">11</div>
     <div class="sl-label s11" style="background:var(--spike-11)">CONSUMED</div>
-    <div class="sl-body"><strong style="color:var(--text-hi)">1d6 True Damage at start of each turn</strong> until 0 HP, then 1d4 RESOLVE damage per turn. Death follows. End-of-turn save: d20+RESOLVE vs TN 19. Nat 1 = damage advantage.</div>
+    <div class="sl-body"><strong style="color:var(--text-hi)">1d6 True Damage at start of each turn</strong> until 0 HP, then 1d4 RESOLVE damage per turn. Death follows. End-of-turn save: d20+RESOLVE vs TN 18. Nat 1 = damage advantage.</div>
   </div>
 
   <div class="g3">
@@ -979,7 +984,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <p>When a flaw triggers: <em>"This hits your flaw — how do you react?"</em></p>
       <ul>
         <li><strong>Lean In:</strong> Act according to flaw → +1 to roll OR +1 COMPOSURE</li>
-        <li><strong>Resist:</strong> d10+RESOLVE vs TN 11 → Fail: –1 roll OR +1 SPIKE</li>
+        <li><strong>Resist:</strong> d10+RESOLVE vs TN 9 → Fail: –1 roll OR +1 SPIKE</li>
       </ul>
       <p style="margin-bottom:0">If a player consistently ignores a flaw: increase SPIKE or apply Disadvantage.</p>
     </div>

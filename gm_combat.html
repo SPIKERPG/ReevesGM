@@ -1473,12 +1473,12 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
           <button class="quick-btn d10" onclick="quickRoll('Core (Extreme)','1d10',0,13)">Core Roll — TN 13</button>
           <button class="quick-btn d20" onclick="quickRoll('SPIKE Save (Shaken)','1d20',0,9)">SPIKE Save TN 9</button>
           <button class="quick-btn d20" onclick="quickRoll('SPIKE Save (Composure 0)','1d20',0,14)">SPIKE Save TN 14</button>
-          <button class="quick-btn d20" onclick="quickRoll('SPIKE Save (Spiked)','1d20',0,17)">SPIKE Save TN 17</button>
-          <button class="quick-btn d20" onclick="quickRoll('SPIKE Save (Consumed)','1d20',0,19)">SPIKE Save TN 19</button>
+          <button class="quick-btn d20" onclick="quickRoll('SPIKE Save (Spiked)','1d20',0,16)">SPIKE Save TN 16</button>
+          <button class="quick-btn d20" onclick="quickRoll('SPIKE Save (Consumed)','1d20',0,18)">SPIKE Save TN 18</button>
           <button class="quick-btn d20" onclick="quickRoll('Behavior Table','1d20',0,0)">Behavior Table — d20</button>
           <button class="quick-btn d20" onclick="quickRoll('Grounding','1d20',0,13)">Grounding TN 13</button>
           <button class="quick-btn d20" onclick="quickRoll('Assist Spiked','1d20',0,14)">Assist SPIKED TN 14</button>
-          <button class="quick-btn d20" onclick="quickRoll('Flaw Resist','1d10',0,11)">Flaw Resist TN 11</button>
+          <button class="quick-btn d20" onclick="quickRoll('Flaw Resist','1d10',0,9)">Flaw Resist TN 9</button>
           <button class="quick-btn dmg" onclick="quickRoll('True Damage','1d6',0,0)">1d6 True Damage</button>
           <button class="quick-btn dmg" onclick="quickRoll('Light Weapon','1d10',0,0)">1d10 Light Wpn</button>
           <button class="quick-btn dmg" onclick="quickRoll('Standard Weapon','2d10',0,0)">2d10 Standard Wpn</button>
@@ -1582,6 +1582,41 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <button class="btn red" onclick="confirmHpAdj('damage')">DAMAGE</button>
       <button class="btn green" onclick="confirmHpAdj('heal')">HEAL</button>
       <button class="btn" onclick="closeModal('modal-hpadj')">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT HOSTILE MODAL ════ -->
+<div class="modal-backdrop" id="modal-edit-hostile">
+  <div class="modal" style="max-width:520px;width:95vw;">
+    <div class="modal-title">
+      EDIT HOSTILE
+      <span class="modal-close" onclick="closeModal('modal-edit-hostile')">✕ CLOSE</span>
+    </div>
+    <input type="hidden" id="eh-id">
+    <div class="f-row"><label class="f-label">NAME</label><input class="f-input" id="eh-name" placeholder="Hostile name"></div>
+    <div class="f-row"><label class="f-label">CATEGORY / TIER</label><input class="f-input" id="eh-tier" placeholder="e.g. STANDARD THREAT / TIER 2"></div>
+    <div class="panel-label" style="margin:10px 0 6px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--red-bright);">■ ATTRIBUTES</div>
+    <div class="f-group5" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:9px;">
+      <div><label class="f-label">BODY</label><input class="f-input mono sm" id="eh-body" type="number" min="0" max="5"></div>
+      <div><label class="f-label">MIND</label><input class="f-input mono sm" id="eh-mind" type="number" min="0" max="5"></div>
+      <div><label class="f-label">TECH</label><input class="f-input mono sm" id="eh-tech" type="number" min="0" max="5"></div>
+      <div><label class="f-label">AWARE</label><input class="f-input mono sm" id="eh-aware" type="number" min="0" max="5"></div>
+      <div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="eh-resolve" type="number" min="0" max="5"></div>
+    </div>
+    <div class="panel-label" style="margin:0 0 6px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--red-bright);">■ VITALS</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:9px;">
+      <div><label class="f-label">HP</label><input class="f-input mono sm" id="eh-hp" type="number"></div>
+      <div><label class="f-label">COMPOSURE</label><input class="f-input mono sm" id="eh-comp" type="number"></div>
+      <div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="eh-armor" type="number"></div>
+    </div>
+    <div class="panel-label" style="margin:0 0 6px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--red-bright);">■ ATTACKS</div>
+    <div id="eh-attacks-builder"></div>
+    <button class="btn sm" onclick="addEhAtkRow()" style="margin-bottom:10px;">+ ATTACK</button>
+    <div class="f-row"><label class="f-label">GM NOTES / SPECIAL ABILITIES</label><textarea class="f-input" id="eh-notes" rows="2" style="resize:vertical"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn green" onclick="confirmEditHostile()">✓ SAVE CHANGES</button>
+      <button class="btn" onclick="closeModal('modal-edit-hostile')">CANCEL</button>
     </div>
   </div>
 </div>
@@ -2415,6 +2450,97 @@ function deleteHostile(id) {
   renderHostileRoster();
 }
 
+function openEditHostile(id) {
+  const h = hostileRoster.find(x => x.id === id);
+  if (!h) return;
+
+  document.getElementById('eh-id').value      = id;
+  document.getElementById('eh-name').value    = h.name   || '';
+  document.getElementById('eh-tier').value    = h.tier   || '';
+  document.getElementById('eh-body').value    = h.body   ?? 1;
+  document.getElementById('eh-mind').value    = h.mind   ?? 1;
+  document.getElementById('eh-tech').value    = h.tech   ?? 1;
+  document.getElementById('eh-aware').value   = h.aware  ?? 1;
+  document.getElementById('eh-resolve').value = h.resolve ?? 1;
+  document.getElementById('eh-hp').value      = h.hp     ?? 10;
+  document.getElementById('eh-comp').value    = h.comp   ?? 5;
+  document.getElementById('eh-armor').value   = h.armor  ?? 0;
+  document.getElementById('eh-notes').value   = h.notes  || '';
+
+  // Build attack rows
+  const builder = document.getElementById('eh-attacks-builder');
+  builder.innerHTML = '';
+  const attacks = (h.attacks && h.attacks.length) ? h.attacks : [{ name: '', dice: '1d10', bonus: '0' }];
+  attacks.forEach(a => {
+    const row = document.createElement('div');
+    row.className = 'attack-build-row';
+    row.innerHTML = `
+      <div><label class="f-label">NAME</label><input class="f-input sm" value="${escHtml(a.name || '')}"></div>
+      <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" value="${escHtml(a.dice || '1d10')}"></div>
+      <div><label class="f-label">BONUS</label><input class="f-input sm mono" value="${escHtml(a.bonus || '0')}"></div>
+      <div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">✕</button></div>`;
+    builder.appendChild(row);
+  });
+
+  openModal('modal-edit-hostile');
+}
+
+function addEhAtkRow() {
+  const row = document.createElement('div');
+  row.className = 'attack-build-row';
+  row.innerHTML = `
+    <div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div>
+    <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" placeholder="1d10"></div>
+    <div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div>
+    <div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">✕</button></div>`;
+  document.getElementById('eh-attacks-builder').appendChild(row);
+}
+
+function removeEhAtkRow(btn) {
+  const rows = document.querySelectorAll('#eh-attacks-builder .attack-build-row');
+  if (rows.length <= 1) return;
+  btn.closest('.attack-build-row').remove();
+}
+
+function confirmEditHostile() {
+  const id = document.getElementById('eh-id').value;
+  const h  = hostileRoster.find(x => x.id === id);
+  if (!h) { closeModal('modal-edit-hostile'); return; }
+
+  const name = document.getElementById('eh-name').value.trim();
+  if (!name) { document.getElementById('eh-name').focus(); return; }
+
+  const attacks = [];
+  document.querySelectorAll('#eh-attacks-builder .attack-build-row').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const aName  = inputs[0]?.value.trim();
+    const aDice  = inputs[1]?.value.trim();
+    const aBonus = inputs[2]?.value.trim();
+    if (aName || aDice) attacks.push({ name: aName || '—', dice: aDice || '1d10', bonus: aBonus || '0' });
+  });
+
+  // Update in place
+  Object.assign(h, {
+    name,
+    tier:    document.getElementById('eh-tier').value.trim(),
+    body:    parseInt(document.getElementById('eh-body').value)    || 1,
+    mind:    parseInt(document.getElementById('eh-mind').value)    || 1,
+    tech:    parseInt(document.getElementById('eh-tech').value)    || 1,
+    aware:   parseInt(document.getElementById('eh-aware').value)   || 1,
+    resolve: parseInt(document.getElementById('eh-resolve').value) || 1,
+    hp:      parseInt(document.getElementById('eh-hp').value)      || 10,
+    comp:    parseInt(document.getElementById('eh-comp').value)    || 5,
+    armor:   parseInt(document.getElementById('eh-armor').value)   || 0,
+    attacks,
+    notes: document.getElementById('eh-notes').value.trim(),
+  });
+
+  saveState();
+  renderHostileRoster();
+  closeModal('modal-edit-hostile');
+  setRosterStatus('SAVED // ' + h.name, true);
+}
+
 function setRosterStatus(msg, ok) {
   const el = document.getElementById('rosterStatus');
   if (!el) return;
@@ -2531,6 +2657,7 @@ function renderHostileRoster() {
         <div style="display:flex;gap:5px;flex-direction:column;align-items:flex-end">
           <div style="display:flex;gap:4px">
             <button class="btn sm green" onclick="deployOne('${h.id}')">▶ DEPLOY</button>
+            <button class="btn sm"       onclick="openEditHostile('${h.id}')">✎ EDIT</button>
             <button class="btn sm red"   onclick="deleteHostile('${h.id}')">✕</button>
           </div>
         </div>
