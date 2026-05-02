@@ -848,6 +848,274 @@ select.f-input { appearance: none; cursor: pointer; }
 .atk-build-row { display: grid; grid-template-columns: 2fr 1fr 0.7fr 32px; gap: 6px; align-items: end; margin-bottom: 6px; }
 
 /* ══════════════════════════
+   ACTION PANEL (expanded per card)
+══════════════════════════ */
+.action-panel {
+  border-top: 1px solid var(--border-hi);
+  background: var(--surface3);
+  padding: 10px 12px;
+  display: none;
+}
+.action-panel.open { display: block; }
+.action-panel-head {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .2em;
+  color: var(--amber);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.action-phase-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.action-phase {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--border-hi);
+  padding: 8px 10px;
+}
+.action-phase.action-slot { border-top-color: var(--red); }
+.action-phase.minor-slot  { border-top-color: var(--amber-dim); }
+.ap-phase-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .18em;
+  margin-bottom: 6px;
+}
+.action-slot .ap-phase-label { color: var(--red-bright); }
+.minor-slot  .ap-phase-label { color: var(--amber); }
+.ap-btns { display: flex; flex-wrap: wrap; gap: 4px; }
+.ap-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  padding: 5px 9px;
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+  min-height: 28px;
+}
+.ap-btn:hover { border-color: var(--red-bright); color: var(--text-hi); }
+.ap-btn.selected { background: rgba(138,32,32,.2); border-color: var(--red-bright); color: var(--red-bright); }
+.ap-btn.minor:hover { border-color: var(--amber); color: var(--amber); }
+.ap-btn.minor.selected { background: rgba(184,120,32,.15); border-color: var(--amber); color: var(--amber); }
+.ap-btn.aimed-active { background: rgba(122,154,40,.15); border-color: var(--green-dim); color: var(--green); }
+.ap-btn.aimed-locked { opacity: .38; cursor: not-allowed; }
+/* Attack selector within action panel */
+.ap-attack-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+.ap-atk-btn {
+  background: var(--surface2);
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+}
+.ap-atk-btn:hover { background: rgba(184,120,32,.2); border-color: var(--amber); }
+.ap-atk-btn.selected { background: rgba(184,120,32,.25); border-color: var(--amber); color: var(--text-hi); }
+/* Attack execution strip */
+.ap-exec-strip {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--red-bright);
+  padding: 10px 12px;
+  margin-top: 8px;
+  display: none;
+}
+.ap-exec-strip.open { display: block; }
+.ap-exec-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .18em;
+  color: var(--red-bright);
+  margin-bottom: 8px;
+}
+.ap-exec-row {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.ap-exec-field { display: flex; flex-direction: column; gap: 3px; }
+.ap-exec-field label { font-family: 'Share Tech Mono', monospace; font-size: 7px; letter-spacing: .12em; color: var(--text-dim); }
+.ap-exec-field input, .ap-exec-field select {
+  background: var(--surface2); border: 1px solid var(--border-hi);
+  color: var(--text-hi); font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; padding: 5px 8px; outline: none; min-height: 32px;
+  transition: border-color .12s;
+}
+.ap-exec-field input:focus, .ap-exec-field select:focus { border-color: var(--amber); }
+.ap-result-line {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  border: 1px solid var(--border-hi);
+  background: var(--surface2);
+  color: var(--text-dim);
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ap-result-hit  { color: var(--red-bright); font-weight: 700; }
+.ap-result-miss { color: var(--text-dim); }
+.ap-result-dmg  { color: var(--amber); font-weight: 700; font-size: 14px; }
+
+/* ══════════════════════════
+   REACTION PANEL (per card)
+══════════════════════════ */
+.rxn-panel {
+  border-top: 1px solid var(--border);
+  background: rgba(184,120,32,.04);
+  padding: 8px 12px;
+  display: none;
+}
+.rxn-panel.open { display: block; }
+.rxn-panel-head {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .18em;
+  color: var(--amber);
+  margin-bottom: 6px;
+}
+.rxn-btns-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.rxn-card-btn {
+  background: var(--surface2);
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+  min-height: 28px;
+}
+.rxn-card-btn:hover { background: rgba(184,120,32,.2); border-color: var(--amber); }
+.rxn-card-btn.used { opacity: .35; cursor: not-allowed; }
+.rxn-card-btn.locked { opacity: .28; cursor: not-allowed; border-color: var(--border-hi); color: var(--text-dim); }
+.rxn-card-btn.locked:hover { background: transparent; border-color: var(--border-hi); color: var(--text-dim); }
+.rxn-exec-strip {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--amber);
+  padding: 10px 12px;
+  margin-top: 8px;
+  display: none;
+}
+.rxn-exec-strip.open { display: block; }
+
+/* ══════════════════════════
+   EQUIPMENT CHIPS on card
+══════════════════════════ */
+.equip-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 0 2px;
+  align-items: center;
+  min-height: 22px;
+}
+.equip-chip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .08em;
+  padding: 2px 7px;
+  background: rgba(40,120,160,.08);
+  border: 1px solid var(--blue-dim);
+  color: #5ab0e0;
+  white-space: nowrap;
+}
+.equip-add {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 1px 5px;
+  border: 1px dashed var(--border);
+  line-height: 1;
+  transition: all .1s;
+}
+.equip-add:hover { color: #5ab0e0; border-color: var(--blue-dim); }
+
+/* Turn action toggle btn on card */
+.card-toggle-action {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  padding: 5px 8px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+}
+.card-toggle-action:hover { border-color: var(--amber); color: var(--amber); }
+.card-toggle-action.open { border-color: var(--amber); color: var(--amber); background: rgba(184,120,32,.1); }
+.card-toggle-rxn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  padding: 5px 8px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+}
+.card-toggle-rxn:hover { border-color: var(--amber-dim); color: var(--amber); }
+.card-toggle-rxn.open { border-color: var(--amber-dim); color: var(--amber); background: rgba(184,120,32,.08); }
+/* aimed tag */
+.aimed-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .16em;
+  color: var(--green);
+  border: 1px solid var(--green-dim);
+  padding: 1px 7px;
+  background: rgba(122,154,40,.1);
+  margin-left: 4px;
+}
+/* Card bottom strip for action/rxn toggles */
+.card-bottom-strip {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 6px 0 2px;
+  flex-wrap: wrap;
+}
+
+/* ══════════════════════════
    DICE ROLLER — redesigned
 ══════════════════════════ */
 .roller-layout { display: grid; grid-template-columns: 380px 1fr; gap: 16px; }
@@ -1499,6 +1767,102 @@ select.f-input { appearance: none; cursor: pointer; }
   </div>
 </div>
 
+<!-- Equipment / Loadout Modal -->
+<div class="modal-backdrop" id="modal-equipment">
+  <div class="modal" style="max-width:560px;width:95vw">
+    <div class="modal-title">MANAGE LOADOUT <span class="modal-close" onclick="closeModal('modal-equipment')">✕ CLOSE</span></div>
+    <input type="hidden" id="eq-target-id">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);margin-bottom:12px" id="eq-target-name"></div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:8px">■ ATTACKS / ABILITIES / EQUIPMENT</div>
+    <div id="eq-items-list" style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px"></div>
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:3px solid #2878a0;padding:12px;margin-bottom:10px">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:8px">■ ADD ITEM</div>
+      <div class="f-grid" style="grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+        <div><label class="f-label">NAME</label><input class="f-input" id="eq-new-name" placeholder="e.g. Assault Rifle"></div>
+        <div><label class="f-label">DAMAGE</label><input class="f-input mono" id="eq-new-dice" placeholder="2d10"></div>
+        <div><label class="f-label">ATK BONUS</label><input class="f-input mono" id="eq-new-bonus" type="number" value="0"></div>
+        <div><label class="f-label">RANGE</label>
+          <select class="f-input mono" id="eq-new-range">
+            <option value="close">CLOSE</option>
+            <option value="near">NEAR</option>
+            <option value="far" selected>FAR</option>
+            <option value="out">OUT</option>
+            <option value="any">ANY</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <div><label class="f-label">SLOT TYPE</label>
+          <select class="f-input mono" id="eq-new-type">
+            <option value="action">ACTION</option>
+            <option value="minor">MINOR ACTION</option>
+            <option value="passive">PASSIVE / ABILITY</option>
+          </select>
+        </div>
+        <div><label class="f-label">NOTES (OPTIONAL)</label><input class="f-input" id="eq-new-notes" placeholder="e.g. +1 at CLOSE range"></div>
+      </div>
+      <button class="btn green" onclick="addEquipmentItem()">+ ADD TO LOADOUT</button>
+    </div>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeModal('modal-equipment')">DONE</button>
+    </div>
+  </div>
+</div>
+
+<!-- Action Execute Modal (fire a specific attack/action with target+roll) -->
+<div class="modal-backdrop" id="modal-action-exec">
+  <div class="modal" style="max-width:500px;width:95vw">
+    <div class="modal-title" id="aex-title">EXECUTE ACTION <span class="modal-close" onclick="closeModal('modal-action-exec')">✕ CLOSE</span></div>
+    <input type="hidden" id="aex-attacker-id">
+    <input type="hidden" id="aex-item-name">
+    <input type="hidden" id="aex-item-dice">
+    <input type="hidden" id="aex-item-bonus">
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:3px solid var(--amber);padding:12px;margin-bottom:12px">
+      <div id="aex-item-info" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--amber);margin-bottom:10px"></div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.16em;color:var(--text-dim);margin-bottom:6px">■ SELECT TARGET</div>
+      <div id="aex-target-list" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px"></div>
+      <input type="hidden" id="aex-target-id">
+      <div class="f-grid" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+        <div>
+          <label class="f-label">ATTACK ROLL (d10)</label>
+          <div style="display:flex;gap:5px">
+            <input class="f-input mono" id="aex-roll" type="number" placeholder="Roll...">
+            <button class="btn sm amber" onclick="aexAutoRoll()" title="Roll d10 + bonus">⬡</button>
+          </div>
+        </div>
+        <div><label class="f-label">TN</label><input class="f-input mono" id="aex-tn" type="number" value="9"></div>
+        <div><label class="f-label">ADV/DISADV</label>
+          <select class="f-input mono" id="aex-mode">
+            <option value="normal">Normal</option>
+            <option value="advantage">Advantage</option>
+            <option value="disadvantage">Disadv.</option>
+          </select>
+        </div>
+      </div>
+      <div id="aex-hit-result" style="display:none;font-family:'Share Tech Mono',monospace;font-size:10px;padding:5px 10px;margin-bottom:8px;border:1px solid var(--border-hi)"></div>
+      <div class="f-grid" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px" id="aex-dmg-section">
+        <div>
+          <label class="f-label">DAMAGE ROLL</label>
+          <div style="display:flex;gap:5px">
+            <input class="f-input mono" id="aex-dmg" type="number" placeholder="Dmg...">
+            <button class="btn sm red" onclick="aexRollDamage()" title="Roll damage dice">⬡</button>
+          </div>
+        </div>
+        <div><label class="f-label">DMG MOD</label><input class="f-input mono" id="aex-dmgmod" type="number" value="0"></div>
+        <div style="display:flex;align-items:flex-end">
+          <label style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);display:flex;align-items:center;gap:5px;cursor:pointer;padding-bottom:8px"><input type="checkbox" id="aex-use-armor" checked> Apply target armor</label>
+        </div>
+      </div>
+    </div>
+    <div id="aex-outcome" style="background:var(--surface2);border:1px solid var(--border-hi);padding:10px 14px;margin-bottom:12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);min-height:36px"></div>
+    <div class="modal-btns">
+      <button class="btn amber" onclick="aexCheckHit()">CHECK HIT</button>
+      <button class="btn red" id="aex-apply-dmg-btn" style="display:none" onclick="aexApplyDamage()">APPLY DAMAGE</button>
+      <button class="btn" onclick="closeModal('modal-action-exec')">CANCEL</button>
+    </div>
+  </div>
+</div>
+
 <div class="footer">
   <span>UGD // SPIKE: THE REEVES TRIALS // COMBAT SUITE GM-05</span>
   <span>■ GM EYES ONLY // CLEARANCE ALPHA ■</span>
@@ -1600,7 +1964,7 @@ function importOperativeFromTracker(pi, si, cd, slot) {
   const compMax = cd.compMax  ?? (5  + (av[4]||0));
   const spike   = slot.sessionSpike !== undefined ? slot.sessionSpike : (parseInt(cd.currentSpike)||0);
   const init    = rollD10() + (av[3]||0);
-  combatants.push({ id: uid(), name: (cd.inputs&&cd.inputs[0])||'OPERATIVE', type: 'operative', init, initBonus: av[3]||0, hp: hpCur, hpMax, armor: 0, comp: compCur, compMax, spike, reactions: [false,false], status: 'alive', conditions: [], notes: '', trackerRef: `${pi}-${si}`, attrVals: av });
+  combatants.push({ id: uid(), name: (cd.inputs&&cd.inputs[0])||'OPERATIVE', type: 'operative', init, initBonus: av[3]||0, hp: hpCur, hpMax, armor: 0, comp: compCur, compMax, spike, reactions: [false,false], status: 'alive', conditions: [], notes: '', trackerRef: `${pi}-${si}`, attrVals: av, equipment: [], aimed: false, actionOpen: false, rxnOpen: false });
   if (encounterActive) sortInit(false);
   saveState(); renderInitList(); loadPartyTracker();
 }
@@ -1680,7 +2044,7 @@ function addCombatant() {
   const armor     = parseInt(document.getElementById('add-armor').value)     || 0;
   const comp      = parseInt(document.getElementById('add-comp').value)      || 5;
   const compMax   = parseInt(document.getElementById('add-compmax').value)   || comp;
-  combatants.push({ id: uid(), name, type: addType, init, initBonus, hp: Math.min(hp,hpMax), hpMax: Math.max(hpMax,1), armor, comp, compMax, spike: 0, reactions:[false,false], status:'alive', conditions:[], notes:'' });
+  combatants.push({ id: uid(), name, type: addType, init, initBonus, hp: Math.min(hp,hpMax), hpMax: Math.max(hpMax,1), armor, comp, compMax, spike: 0, reactions:[false,false], status:'alive', conditions:[], notes:'', equipment:[], aimed:false, actionOpen:false, rxnOpen:false });
   ['add-name','add-init','add-hp','add-hpmax','add-armor','add-comp','add-compmax','add-initbonus'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('add-initbonus').value='0';
   if (encounterActive) sortInit(false);
@@ -1788,6 +2152,12 @@ function startEncounter() {
 }
 function nextTurn() {
   if (!encounterActive || !combatants.length) return;
+  // Clear aimed flag and open panels on combatant whose turn just ended
+  if (currentTurnIdx >= 0 && combatants[currentTurnIdx]) {
+    combatants[currentTurnIdx].aimed = false;
+    combatants[currentTurnIdx].actionOpen = false;
+    combatants[currentTurnIdx].rxnOpen = false;
+  }
   let next=(currentTurnIdx+1)%combatants.length;
   let safety=0;
   while(combatants[next].status==='dead' && safety<combatants.length) { next=(next+1)%combatants.length; safety++; }
@@ -1841,7 +2211,414 @@ function buildConditionsHTML(c) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  SPIKE PIPS HTML
+//  EQUIPMENT / LOADOUT
+// ═══════════════════════════════════════════════════════
+function openEquipmentModal(id) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  if(!c.equipment)c.equipment=[];
+  document.getElementById('eq-target-id').value=id;
+  document.getElementById('eq-target-name').textContent=c.name+' — LOADOUT';
+  document.getElementById('eq-new-name').value='';
+  document.getElementById('eq-new-dice').value='';
+  document.getElementById('eq-new-bonus').value='0';
+  document.getElementById('eq-new-range').value='far';
+  document.getElementById('eq-new-type').value='action';
+  document.getElementById('eq-new-notes').value='';
+  renderEquipmentList(c);
+  openModal('modal-equipment');
+}
+function renderEquipmentList(c) {
+  const list=document.getElementById('eq-items-list');
+  if(!c.equipment||!c.equipment.length){list.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:8px">No items. Add attacks or abilities below.</div>';return;}
+  list.innerHTML=c.equipment.map((item,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-hi);padding:7px 10px">
+      <div style="flex:1;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-hi)">${esc(item.name)}</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--amber)">${item.dice||'—'}${item.bonus&&item.bonus!=0?(item.bonus>0?` +${item.bonus}`:` ${item.bonus}`):''}</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim)">${(item.range||'').toUpperCase()} / ${(item.type||'action').toUpperCase()}</div>
+      ${item.notes?`<div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);font-style:italic">${esc(item.notes)}</div>`:''}
+      <button class="btn sm red" onclick="removeEquipItem('${c.id}',${i})" style="flex-shrink:0">✕</button>
+    </div>`).join('');
+}
+function addEquipmentItem() {
+  const id=document.getElementById('eq-target-id').value;
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  const name=document.getElementById('eq-new-name').value.trim(); if(!name)return;
+  if(!c.equipment)c.equipment=[];
+  c.equipment.push({
+    name,
+    dice: document.getElementById('eq-new-dice').value.trim()||'',
+    bonus: parseInt(document.getElementById('eq-new-bonus').value)||0,
+    range: document.getElementById('eq-new-range').value,
+    type:  document.getElementById('eq-new-type').value,
+    notes: document.getElementById('eq-new-notes').value.trim()
+  });
+  document.getElementById('eq-new-name').value='';
+  document.getElementById('eq-new-dice').value='';
+  document.getElementById('eq-new-bonus').value='0';
+  document.getElementById('eq-new-notes').value='';
+  saveState(); renderEquipmentList(c);
+  // Update equipment strip on card
+  const strip=document.getElementById('iequip-'+id);
+  if(strip) strip.innerHTML=buildEquipmentHTML(c);
+  // Refresh action panel if open
+  if(c.actionOpen){const ap=document.getElementById('iaction-'+id);if(ap)ap.innerHTML=buildActionPanelHTML(c);}
+}
+function removeEquipItem(id,idx) {
+  const c=combatants.find(x=>x.id===id); if(!c||!c.equipment) return;
+  c.equipment.splice(idx,1);
+  saveState(); renderEquipmentList(c);
+  const strip=document.getElementById('iequip-'+id);
+  if(strip) strip.innerHTML=buildEquipmentHTML(c);
+  if(c.actionOpen){const ap=document.getElementById('iaction-'+id);if(ap)ap.innerHTML=buildActionPanelHTML(c);}
+}
+function buildEquipmentHTML(c) {
+  if(!c.equipment||!c.equipment.length) {
+    return `<span class="equip-add" onclick="openEquipmentModal('${c.id}')" title="Add attacks/equipment">+ Add Loadout</span>`;
+  }
+  const chips=c.equipment.map(item=>`<span class="equip-chip" title="${esc(item.notes||'')} ${item.range||''}">${esc(item.name)}${item.dice?` [${item.dice}]`:''}</span>`).join('');
+  return chips+`<span class="equip-add" onclick="openEquipmentModal('${c.id}')" title="Manage loadout">+</span>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  ACTION PANEL HTML BUILDER
+// ═══════════════════════════════════════════════════════
+function buildActionPanelHTML(c) {
+  // Actions: Attack, Assist, Skill, Grounding, Technical action
+  // Minor: Move, Draw weapon, Aim (enables Overwatch), Quick item, custom
+  const actionItems = c.equipment ? c.equipment.filter(i=>i.type==='action') : [];
+  const minorItems  = c.equipment ? c.equipment.filter(i=>i.type==='minor') : [];
+  const passiveItems= c.equipment ? c.equipment.filter(i=>i.type==='passive') : [];
+
+  const stdActions = ['ATTACK','ASSIST','SKILL CHECK','GROUNDING','TECHNICAL'];
+  const stdMinors  = ['MOVE 1 ZONE','DRAW WEAPON','AIM (ENABLES OVERWATCH)','QUICK INTERACT'];
+
+  const actionBtns = stdActions.map(a=>`<button class="ap-btn" onclick="selectAction('${c.id}','${a}')" title="${a}">${a}</button>`).join('')
+    + actionItems.map(i=>`<button class="ap-btn ap-atk-btn" onclick="launchEquipAction('${c.id}','${esc(i.name)}')" title="${esc(i.dice||'')} ${esc(i.notes||'')}">${esc(i.name)}</button>`).join('');
+
+  const minorBtns = stdMinors.map(a=>{
+    const isAim = a.includes('AIM');
+    const cls = isAim ? (c.aimed?'ap-btn minor aimed-active':'ap-btn minor') : 'ap-btn minor';
+    return `<button class="${cls}" onclick="selectMinor('${c.id}','${a}')" title="${a}">${isAim?(c.aimed?'◉ AIMED (ACTIVE)':a):a}</button>`;
+  }).join('')
+    + minorItems.map(i=>`<button class="ap-btn minor ap-atk-btn" onclick="launchEquipAction('${c.id}','${esc(i.name)}')" title="${esc(i.notes||'')}">${esc(i.name)}</button>`).join('');
+
+  const passiveSection = passiveItems.length ? `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border)"><div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.14em;color:var(--blue-dim);margin-bottom:4px">PASSIVE / ABILITIES</div><div style="display:flex;flex-wrap:wrap;gap:4px;">${passiveItems.map(i=>`<span style="font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 7px;border:1px solid var(--blue-dim);color:#5ab0e0">${esc(i.name)}</span>`).join('')}</div></div>`:'' ;
+
+  return `
+    <div class="action-panel-head">
+      <span>■ TURN ACTIONS — ${esc(c.name)}</span>
+      <button class="btn sm" onclick="toggleActionPanel('${c.id}')">✕ CLOSE</button>
+    </div>
+    <div class="action-phase-row">
+      <div class="action-phase action-slot">
+        <div class="ap-phase-label">■ ACTION</div>
+        <div class="ap-btns">${actionBtns}</div>
+      </div>
+      <div class="action-phase minor-slot">
+        <div class="ap-phase-label">■ MINOR ACTION</div>
+        <div class="ap-btns">${minorBtns}</div>
+      </div>
+    </div>
+    ${passiveSection}
+    <div id="ap-exec-${c.id}" class="ap-exec-strip"></div>`;
+}
+
+function toggleActionPanel(id) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  c.actionOpen=!c.actionOpen;
+  saveState();
+  const el=document.getElementById('iaction-'+id);
+  const btn=document.querySelector(`#irow-${id} .card-toggle-action`);
+  if(el){el.classList.toggle('open',c.actionOpen);if(c.actionOpen)el.innerHTML=buildActionPanelHTML(c);}
+  if(btn)btn.classList.toggle('open',c.actionOpen);
+}
+
+function selectAction(id, actionName) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  const strip=document.getElementById('ap-exec-'+id); if(!strip) return;
+  // Build target list for attack actions
+  const targets=combatants.filter(x=>x.id!==id&&x.status!=='dead');
+  const targetOpts=targets.map(t=>`<option value="${t.id}">${esc(t.name)} (HP:${t.hp})</option>`).join('');
+  const needsTarget=['ATTACK'].includes(actionName);
+  strip.className='ap-exec-strip open';
+  strip.innerHTML=`
+    <div class="ap-exec-label">■ ${esc(actionName)}</div>
+    <div class="ap-exec-row">
+      ${needsTarget?`<div class="ap-exec-field" style="flex:1"><label>TARGET</label><select id="astrip-target-${id}">${targetOpts}</select></div>`:''}
+      <div class="ap-exec-field"><label>ROLL (d10)</label><input id="astrip-roll-${id}" type="number" placeholder="Roll..."></div>
+      <div class="ap-exec-field"><label>TN</label><input id="astrip-tn-${id}" type="number" value="9" style="width:60px"></div>
+      <button class="btn amber sm" onclick="stripCheckHit('${id}',${needsTarget})">CHECK</button>
+      <button class="btn sm" onclick="document.getElementById('ap-exec-${id}').className='ap-exec-strip'">✕</button>
+    </div>
+    <div class="ap-result-line" id="astrip-result-${id}"></div>`;
+}
+
+function selectMinor(id, minorName) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  if(minorName.includes('AIM')) {
+    c.aimed=!c.aimed;
+    saveState();
+    // Refresh action panel
+    const ap=document.getElementById('iaction-'+id);
+    const apEl=document.getElementById('iaction-'+id);
+    if(apEl&&c.actionOpen) apEl.innerHTML=buildActionPanelHTML(c);
+    // Update aimed tag on card
+    const bottomStrip=document.querySelector(`#irow-${id} .card-bottom-strip`);
+    if(bottomStrip){
+      const existing=bottomStrip.querySelector('.aimed-tag');
+      if(c.aimed&&!existing){const t=document.createElement('span');t.className='aimed-tag';t.textContent='◉ AIMED';bottomStrip.appendChild(t);}
+      else if(!c.aimed&&existing){existing.remove();}
+    }
+    // Update rxn panel overwatch button
+    const rxnEl=document.getElementById('irxn-'+id);
+    if(rxnEl&&c.rxnOpen)rxnEl.innerHTML=buildRxnPanelHTML(c);
+    return;
+  }
+  const strip=document.getElementById('ap-exec-'+id); if(!strip) return;
+  strip.className='ap-exec-strip open';
+  strip.innerHTML=`<div class="ap-exec-label">■ ${esc(minorName)} — Logged</div>`;
+  setTimeout(()=>{strip.className='ap-exec-strip';},2000);
+}
+
+function launchEquipAction(id, itemName) {
+  const c=combatants.find(x=>x.id===id); if(!c||!c.equipment) return;
+  const item=c.equipment.find(i=>i.name===itemName); if(!item) return;
+  openActionExecModal(id, item);
+}
+
+function stripCheckHit(id, needsTarget) {
+  const roll=parseInt(document.getElementById('astrip-roll-'+id)?.value)||0;
+  const tn=parseInt(document.getElementById('astrip-tn-'+id)?.value)||9;
+  const result=document.getElementById('astrip-result-'+id); if(!result) return;
+  const hit=roll>=tn;
+  result.innerHTML=`<span class="${hit?'ap-result-hit':'ap-result-miss'}">${hit?'✓ HIT':'✕ MISS'}</span> — Roll ${roll} vs TN ${tn}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  ACTION EXEC MODAL
+// ═══════════════════════════════════════════════════════
+let aexLastRollResult = null;
+
+function openActionExecModal(id, item) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  aexLastRollResult=null;
+  document.getElementById('aex-attacker-id').value=id;
+  document.getElementById('aex-item-name').value=item.name;
+  document.getElementById('aex-item-dice').value=item.dice||'';
+  document.getElementById('aex-item-bonus').value=item.bonus||0;
+  document.getElementById('aex-title').innerHTML=`${esc(item.name.toUpperCase())} <span class="modal-close" onclick="closeModal('modal-action-exec')">✕ CLOSE</span>`;
+  document.getElementById('aex-item-info').textContent=`${item.name} // ${item.dice||'—'} dmg // Bonus +${item.bonus||0} // ${(item.range||'any').toUpperCase()} range`;
+  document.getElementById('aex-roll').value='';
+  document.getElementById('aex-dmg').value='';
+  document.getElementById('aex-dmgmod').value='0';
+  document.getElementById('aex-tn').value='9';
+  document.getElementById('aex-mode').value='normal';
+  document.getElementById('aex-use-armor').checked=true;
+  document.getElementById('aex-hit-result').style.display='none';
+  document.getElementById('aex-apply-dmg-btn').style.display='none';
+  document.getElementById('aex-outcome').textContent='Select target and roll to check hit.';
+  // Build target list
+  const targets=combatants.filter(x=>x.id!==id&&x.status!=='dead');
+  const tlist=document.getElementById('aex-target-list');
+  tlist.innerHTML=targets.map(t=>`<button class="btn sm" id="aex-tbtn-${t.id}" onclick="selectAexTarget('${t.id}')">${esc(t.name)} HP:${t.hp}/${t.hpMax} ARM:${t.armor||0}</button>`).join('');
+  if(targets.length)selectAexTarget(targets[0].id);
+  openModal('modal-action-exec');
+}
+function selectAexTarget(tid) {
+  document.getElementById('aex-target-id').value=tid;
+  document.querySelectorAll('[id^="aex-tbtn-"]').forEach(b=>b.classList.remove('amber'));
+  const btn=document.getElementById('aex-tbtn-'+tid);
+  if(btn)btn.classList.add('amber');
+}
+function aexAutoRoll() {
+  const bonus=parseInt(document.getElementById('aex-item-bonus').value)||0;
+  const mode=document.getElementById('aex-mode').value;
+  let roll;
+  if(mode==='advantage'){roll=Math.max(rollD10(),rollD10());}
+  else if(mode==='disadvantage'){roll=Math.min(rollD10(),rollD10());}
+  else{roll=rollD10();}
+  document.getElementById('aex-roll').value=roll+bonus;
+}
+function aexCheckHit() {
+  const roll=parseInt(document.getElementById('aex-roll').value);
+  if(isNaN(roll)){document.getElementById('aex-outcome').textContent='Enter an attack roll first.';return;}
+  const tn=parseInt(document.getElementById('aex-tn').value)||9;
+  const hit=roll>=tn;
+  const isCrit=(roll-( parseInt(document.getElementById('aex-item-bonus').value)||0))===10;
+  const hitEl=document.getElementById('aex-hit-result');
+  hitEl.style.display='block';
+  hitEl.style.background=hit?'rgba(138,32,32,.12)':'rgba(0,0,0,.2)';
+  hitEl.style.color=hit?'var(--red-bright)':'var(--text-dim)';
+  hitEl.style.border=`1px solid ${hit?'var(--red)':'var(--border-hi)'}`;
+  hitEl.textContent=hit?(isCrit?`★ CRITICAL HIT — Roll ${roll} vs TN ${tn} (+2 dmg or narrative bonus)`:`✓ HIT — Roll ${roll} vs TN ${tn}`):`✕ MISS — Roll ${roll} vs TN ${tn}`;
+  document.getElementById('aex-apply-dmg-btn').style.display=hit?'':'none';
+  document.getElementById('aex-outcome').textContent=hit?'Hit confirmed. Roll or enter damage below.':'Miss. No damage applied.';
+  aexLastRollResult={hit,roll,tn,crit:isCrit};
+}
+function aexRollDamage() {
+  const dice=document.getElementById('aex-item-dice').value||'1d10';
+  const mod=parseInt(document.getElementById('aex-dmgmod').value)||0;
+  const crit=aexLastRollResult&&aexLastRollResult.crit;
+  const result=rollDiceStr(dice);
+  let total=result.total+(crit?2:0)+mod;
+  document.getElementById('aex-dmg').value=total;
+}
+function aexApplyDamage() {
+  const targetId=document.getElementById('aex-target-id').value;
+  const rawDmg=parseInt(document.getElementById('aex-dmg').value);
+  if(!targetId){document.getElementById('aex-outcome').textContent='No target selected.';return;}
+  if(isNaN(rawDmg)){document.getElementById('aex-outcome').textContent='Enter damage amount.';return;}
+  const useArmor=document.getElementById('aex-use-armor').checked;
+  const tc=combatants.find(x=>x.id===targetId);
+  if(!tc){document.getElementById('aex-outcome').textContent='Target not found.';return;}
+  const armor=useArmor?(tc.armor||0):0;
+  const finalDmg=Math.max(0,rawDmg-armor);
+  tc.hp=Math.max(0,tc.hp-finalDmg);
+  if(tc.hp===0&&tc.status==='alive')tc.status='down';
+  saveState(); liveUpdateHp(tc); broadcastSyncFromCombat(tc);
+  const attackerName=(combatants.find(x=>x.id===document.getElementById('aex-attacker-id').value)||{name:'?'}).name;
+  document.getElementById('aex-outcome').innerHTML=`<span style="color:var(--red-bright);font-weight:700">DAMAGE APPLIED</span> — ${attackerName} → ${tc.name}: ${finalDmg} dmg (${rawDmg} - ${armor} armor) → HP now ${tc.hp}/${tc.hpMax}`;
+  document.getElementById('aex-apply-dmg-btn').style.display='none';
+  // log to roll log
+  addToLog({expr:document.getElementById('aex-item-dice').value||'dmg',label:`${attackerName} → ${tc.name}`,rolls:[rawDmg],sides:10,total:rawDmg,tn:0,timestamp:now()});
+}
+
+// ═══════════════════════════════════════════════════════
+//  REACTION PANEL HTML BUILDER
+// ═══════════════════════════════════════════════════════
+function buildRxnPanelHTML(c) {
+  if(!c.reactions)c.reactions=[false,false];
+  const used=c.reactions.filter(Boolean).length;
+  const remaining=2-used;
+  const rxnDefs=[
+    {name:'OVERWATCH', key:'overwatch', desc:'Fire when enemy enters LoS. Requires AIM on prev minor.', requiresAimed:true},
+    {name:'COUNTERATTACK', key:'counter', desc:'Immediate return strike if attacked in CLOSE combat.', requiresAimed:false},
+    {name:'PROTECT', key:'protect', desc:'Take a hit meant for an adjacent ally.', requiresAimed:false},
+    {name:'BRACE', key:'brace', desc:'Reduce incoming damage by 2.', requiresAimed:false},
+  ];
+  const btnHtml=rxnDefs.map(r=>{
+    const isLocked=r.requiresAimed&&!c.aimed;
+    const isUsed=remaining<=0;
+    const cls=`rxn-card-btn${isUsed?' used':isLocked?' locked':''}`;
+    const onclk = (isUsed||isLocked) ? '' : `onclick="triggerReaction('${c.id}','${r.key}','${esc(r.name)}')"`;
+    const ttip  = isUsed ? 'title="No reactions remaining"' : isLocked ? 'title="Requires AIM as minor action first"' : '';
+    return `<button class="${cls}" ${onclk} ${ttip}>${r.name}${isLocked?' 🔒':''}</button>`;
+  }).join('');
+
+  return `
+    <div class="rxn-panel-head">■ REACTIONS (${remaining}/2 remaining) — ${esc(c.name)}</div>
+    <div class="rxn-btns-row">${btnHtml}</div>
+    <div id="rxn-exec-${c.id}" class="rxn-exec-strip"></div>`;
+}
+
+function toggleRxnPanel(id) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  c.rxnOpen=!c.rxnOpen;
+  saveState();
+  const el=document.getElementById('irxn-'+id);
+  const btn=document.querySelector(`#irow-${id} .card-toggle-rxn`);
+  if(el){el.classList.toggle('open',c.rxnOpen);if(c.rxnOpen)el.innerHTML=buildRxnPanelHTML(c);}
+  if(btn)btn.classList.toggle('open',c.rxnOpen);
+}
+
+function triggerReaction(id, rxnKey, rxnName) {
+  const c=combatants.find(x=>x.id===id); if(!c) return;
+  if(!c.reactions)c.reactions=[false,false];
+  const used=c.reactions.filter(Boolean).length;
+  if(used>=2){alert('No reactions remaining.');return;}
+  // Mark one reaction used
+  const idx=c.reactions.findIndex(r=>!r);
+  if(idx!==-1)c.reactions[idx]=true;
+  saveState();
+
+  // Build reaction execution panel
+  const strip=document.getElementById('rxn-exec-'+id); if(!strip) return;
+  const targets=combatants.filter(x=>x.id!==id&&x.status!=='dead');
+  const targetBtns=targets.map(t=>`<button class="btn sm" id="rxntgt-${t.id}" onclick="selectRxnTarget('${id}','${t.id}')">${esc(t.name)} HP:${t.hp}</button>`).join('');
+
+  let extraFields='';
+  if(rxnKey==='overwatch'||rxnKey==='counter'){
+    // Get attacks on this combatant
+    const eq=c.equipment?c.equipment.filter(i=>i.type==='action'&&i.dice):[];
+    const atkSelect=eq.length?`<div class="ap-exec-field"><label>WEAPON</label><select id="rxn-wpn-${id}" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 6px;min-height:28px;outline:none">${eq.map(i=>`<option value="${esc(i.name)}">${esc(i.name)} (${i.dice})</option>`).join('')}</select></div>`
+      :`<div class="ap-exec-field"><label>DMG DICE</label><input id="rxn-dice-${id}" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:12px;padding:4px 6px;width:80px;outline:none" placeholder="1d10"></div>`;
+    extraFields=`
+      <div class="ap-exec-field"><label>ATTACK ROLL (d10)</label><div style="display:flex;gap:4px"><input id="rxn-roll-${id}" type="number" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:12px;padding:4px 6px;width:70px;outline:none" placeholder="Roll"><button class="btn sm amber" onclick="rxnAutoRoll('${id}')">⬡</button></div></div>
+      <div class="ap-exec-field"><label>TN</label><input id="rxn-tn-${id}" type="number" value="9" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:12px;padding:4px 6px;width:60px;outline:none"></div>
+      ${atkSelect}`;
+  } else if(rxnKey==='brace'){
+    extraFields=`<div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--green);padding:4px 0">✓ Bracing: –2 to incoming damage this hit.</div>`;
+  } else if(rxnKey==='protect'){
+    extraFields=`<div class="ap-exec-field" style="flex:1"><label>ALLY TO PROTECT</label><div style="display:flex;flex-wrap:wrap;gap:4px">${targetBtns}</div></div>`;
+  }
+
+  strip.className='rxn-exec-strip open';
+  strip.innerHTML=`
+    <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.16em;color:var(--amber);margin-bottom:8px">■ REACTION: ${esc(rxnName)}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;margin-bottom:8px">
+      ${rxnKey!=='protect'?`<div class="ap-exec-field" style="flex:1"><label>TARGET</label><div style="display:flex;flex-wrap:wrap;gap:4px" id="rxntgt-row-${id}">${targetBtns}</div></div>`:''}
+      ${extraFields}
+      ${(rxnKey==='overwatch'||rxnKey==='counter')?`<button class="btn amber sm" onclick="rxnCheckHit('${id}','${rxnKey}')">CHECK HIT</button>`:''}
+    </div>
+    <div class="ap-result-line" id="rxn-result-${id}"></div>`;
+
+  if(targets.length&&rxnKey!=='protect')selectRxnTarget(id,targets[0].id);
+  // Refresh reaction panel buttons
+  const rxnEl=document.getElementById('irxn-'+id);
+  const head=rxnEl.querySelector('.rxn-panel-head');
+  const remaining2=2-c.reactions.filter(Boolean).length;
+  if(head)head.textContent=`■ REACTIONS (${remaining2}/2 remaining) — ${c.name}`;
+  renderReactionRoster();
+}
+
+function selectRxnTarget(actorId,targetId) {
+  document.querySelectorAll(`[id^="rxntgt-"]`).forEach(b=>{if(b.id.startsWith('rxntgt-')&&!b.id.includes('row'))b.classList.remove('amber');});
+  const btn=document.getElementById('rxntgt-'+targetId);
+  if(btn)btn.classList.add('amber');
+  document.getElementById('rxntgt-'+actorId+'_sel') && (document.getElementById('rxntgt-'+actorId+'_sel').value=targetId);
+  // store selection
+  const strip=document.getElementById('rxn-exec-'+actorId);
+  if(strip)strip.dataset.targetId=targetId;
+}
+
+function rxnAutoRoll(id) {
+  const el=document.getElementById('rxn-roll-'+id); if(!el) return;
+  el.value=rollD10();
+}
+
+function rxnCheckHit(actorId, rxnKey) {
+  const roll=parseInt(document.getElementById('rxn-roll-'+actorId)?.value);
+  const tn=parseInt(document.getElementById('rxn-tn-'+actorId)?.value)||9;
+  const strip=document.getElementById('rxn-exec-'+actorId);
+  const result=document.getElementById('rxn-result-'+actorId); if(!result) return;
+  if(isNaN(roll)){result.innerHTML='<span style="color:var(--text-dim)">Enter a roll value.</span>';return;}
+  const hit=roll>=tn;
+  const isCrit=roll===10;
+  result.innerHTML=`<span class="${hit?'ap-result-hit':'ap-result-miss'}">${hit?(isCrit?`★ CRIT HIT`:`✓ HIT`):`✕ MISS`}</span> Roll ${roll} vs TN ${tn}`;
+  if(hit&&strip){
+    // Determine dice from weapon select or direct input
+    let dice='1d10';
+    const wpnSel=document.getElementById('rxn-wpn-'+actorId);
+    const diceFld=document.getElementById('rxn-dice-'+actorId);
+    if(wpnSel){const c=combatants.find(x=>x.id===actorId);const item=c&&c.equipment&&c.equipment.find(i=>i.name===wpnSel.value);if(item&&item.dice)dice=item.dice;}
+    else if(diceFld&&diceFld.value)dice=diceFld.value;
+    const dmgResult=rollDiceStr(dice);
+    const finalDmg=dmgResult.total+(isCrit?2:0);
+    const targetId=strip.dataset.targetId;
+    const tc=targetId&&combatants.find(x=>x.id===targetId);
+    if(tc){
+      const armor=tc.armor||0;
+      const applied=Math.max(0,finalDmg-armor);
+      tc.hp=Math.max(0,tc.hp-applied);
+      if(tc.hp===0&&tc.status==='alive')tc.status='down';
+      saveState(); liveUpdateHp(tc); broadcastSyncFromCombat(tc);
+      result.innerHTML+=` <span class="ap-result-dmg">→ ${finalDmg} dmg (${applied} after armor)</span> → ${tc.name} HP: ${tc.hp}/${tc.hpMax}`;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  NEXT TURN — clear aimed flag at start of each turn
 // ═══════════════════════════════════════════════════════
 function buildSpikePipsHTML(c) {
   const spike=c.spike||0;
@@ -1961,17 +2738,38 @@ function renderInitList() {
         </div>
 
         <!-- Status + conditions -->
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
           <div class="status-badge ${c.status}" id="istatus-${c.id}" onclick="cycleStatus('${c.id}')" title="Click to cycle status">${c.status.toUpperCase()}</div>
           <div class="card-conditions" id="iconds-${c.id}">${buildConditionsHTML(c)}</div>
         </div>
+
+        <!-- Equipment strip -->
+        <div class="equip-strip" id="iequip-${c.id}">
+          ${buildEquipmentHTML(c)}
+        </div>
+
+        <!-- Card bottom strip: action/reaction toggles + aimed tag -->
+        <div class="card-bottom-strip">
+          <button class="card-toggle-action${c.actionOpen?' open':''}" onclick="toggleActionPanel('${c.id}')" title="Open action panel">⚔ ACTIONS</button>
+          <button class="card-toggle-rxn${c.rxnOpen?' open':''}" onclick="toggleRxnPanel('${c.id}')" title="Open reaction panel">↺ REACTIONS ${(c.reactions&&c.reactions.filter(Boolean).length>=2)?'<span style=\'color:var(--red-bright)\'>0/2</span>':''}</button>
+          ${c.aimed?`<span class="aimed-tag">◉ AIMED</span>`:''}
+        </div>
       </div>
 
-      <!-- Actions panel -->
+      <!-- Right side: equip + remove -->
       <div class="card-actions">
-        ${hasAtk?`<button class="btn sm amber" onclick="openAttackPanel('${c.id}')" title="Quick attack roll">⬡ ATK</button>`:'<div></div>'}
+        <button class="btn sm blue" onclick="openEquipmentModal('${c.id}')" title="Manage loadout / attacks">⬡ KIT</button>
         <button class="btn sm red" onclick="removeCombatant('${c.id}')" title="Remove from tracker">✕</button>
       </div>
+
+    </div>
+    <!-- Action Panel -->
+    <div class="action-panel${c.actionOpen?' open':''}" id="iaction-${c.id}">
+      ${buildActionPanelHTML(c)}
+    </div>
+    <!-- Reaction Panel -->
+    <div class="rxn-panel${c.rxnOpen?' open':''}" id="irxn-${c.id}">
+      ${buildRxnPanelHTML(c)}
     </div>`;
   }).join('');
 
@@ -2090,13 +2888,13 @@ function loadRosterFromFile(evt) {
 function clearRoster() { if(!hostileRoster.length)return; if(!confirm('Clear the entire hostile roster?'))return; hostileRoster=[]; saveState(); renderHostileRoster(); setRosterStatus('ROSTER CLEARED',false); }
 function deployHostile() {
   if(!hostileRoster.length){alert('No hostiles in roster.');return;}
-  hostileRoster.forEach(h=>{ const init=rollD10()+(h.aware||0); combatants.push({id:uid(),name:h.name,type:'hostile',init,initBonus:h.aware||0,hp:h.hp,hpMax:h.hp,armor:h.armor||0,comp:h.comp||5,compMax:h.comp||5,spike:0,reactions:[false,false],status:'alive',conditions:[],hostileRef:h.id}); });
+  hostileRoster.forEach(h=>{ const init=rollD10()+(h.aware||0); combatants.push({id:uid(),name:h.name,type:'hostile',init,initBonus:h.aware||0,hp:h.hp,hpMax:h.hp,armor:h.armor||0,comp:h.comp||5,compMax:h.comp||5,spike:0,reactions:[false,false],status:'alive',conditions:[],hostileRef:h.id,equipment:[],aimed:false,actionOpen:false,rxnOpen:false}); });
   saveState(); switchPage('initiative'); if(encounterActive)sortInit(false); renderInitList();
 }
 function deployOne(id) {
   const h=hostileRoster.find(x=>x.id===id); if(!h) return;
   const init=rollD10()+(h.aware||0);
-  combatants.push({id:uid(),name:h.name,type:'hostile',init,initBonus:h.aware||0,hp:h.hp,hpMax:h.hp,armor:h.armor||0,comp:h.comp||5,compMax:h.comp||5,spike:0,reactions:[false,false],status:'alive',conditions:[],hostileRef:h.id});
+  combatants.push({id:uid(),name:h.name,type:'hostile',init,initBonus:h.aware||0,hp:h.hp,hpMax:h.hp,armor:h.armor||0,comp:h.comp||5,compMax:h.comp||5,spike:0,reactions:[false,false],status:'alive',conditions:[],hostileRef:h.id,equipment:[],aimed:false,actionOpen:false,rxnOpen:false});
   saveState(); switchPage('initiative'); if(encounterActive)sortInit(false); renderInitList();
 }
 function renderHostileRoster() {
