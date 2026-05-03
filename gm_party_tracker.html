@@ -1045,6 +1045,284 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   }
 }
 
+
+/* ─── LOADOUT / EQUIPMENT ─── */
+.loadout-section {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.loadout-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.loadout-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .08em;
+  padding: 2px 7px;
+  background: rgba(40,100,160,.08);
+  border: 1px solid #1a3050;
+  color: #5ab0e0;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .1s;
+}
+.loadout-item:hover { background: rgba(40,100,160,.18); border-color: #2878a0; }
+.loadout-add-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 1px 6px;
+  border: 1px dashed var(--border);
+  line-height: 1.4;
+  transition: all .1s;
+  background: transparent;
+}
+.loadout-add-btn:hover { color: #5ab0e0; border-color: #1a3050; }
+
+/* ─── AIMED STATE ─── */
+.aimed-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+}
+.aimed-toggle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .14em;
+  padding: 2px 8px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .12s;
+}
+.aimed-toggle:hover { border-color: var(--green-dim); color: var(--green); }
+.aimed-toggle.active { border-color: var(--green); color: var(--green); background: rgba(122,154,40,.12); }
+.aimed-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+}
+
+/* ─── EXPANDED REACTION PANEL ─── */
+.rxn-expanded {
+  background: rgba(184,120,32,.04);
+  border-top: 1px solid var(--border);
+  padding: 6px 8px;
+  flex-shrink: 0;
+}
+.rxn-exp-head {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .16em;
+  color: var(--amber);
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rxn-exp-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 5px;
+}
+.rxn-exp-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .08em;
+  padding: 4px 8px;
+  border: 1px solid var(--amber-dim);
+  background: rgba(184,120,32,.08);
+  color: var(--amber);
+  cursor: pointer;
+  transition: all .1s;
+  white-space: nowrap;
+}
+.rxn-exp-btn:hover { background: rgba(184,120,32,.2); }
+.rxn-exp-btn.locked { opacity: .3; cursor: not-allowed; border-color: var(--border); color: var(--text-dim); }
+.rxn-exp-btn.locked:hover { background: transparent; }
+.rxn-exp-btn.used { opacity: .3; cursor: not-allowed; }
+
+/* ─── INLINE EXEC STRIP ─── */
+.inline-exec {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-left: 2px solid var(--red-bright);
+  padding: 7px 8px;
+  margin-top: 5px;
+  display: none;
+}
+.inline-exec.open { display: block; }
+.exec-head {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .14em;
+  color: var(--red-bright);
+  margin-bottom: 6px;
+}
+.exec-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: flex-end;
+  margin-bottom: 5px;
+}
+.exec-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.exec-field label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6.5px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+}
+.exec-field input, .exec-field select {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  color: var(--text-hi);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  padding: 3px 6px;
+  outline: none;
+  min-height: 26px;
+}
+.exec-field input:focus, .exec-field select:focus { border-color: var(--amber); }
+.exec-mini-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  padding: 3px 7px;
+  cursor: pointer;
+  min-height: 26px;
+  transition: all .1s;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+.exec-mini-btn:hover { border-color: var(--amber); color: var(--amber); }
+.exec-mini-btn.red:hover { border-color: var(--red-bright); color: var(--red-bright); }
+.exec-result {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  padding: 4px 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  min-height: 24px;
+  line-height: 1.4;
+}
+.exec-hit  { color: var(--red-bright); font-weight: 700; }
+.exec-miss { color: var(--text-dim); }
+.exec-dmg  { color: var(--amber); font-weight: 700; }
+
+/* ─── LOADOUT MODAL (in-page overlay) ─── */
+.loadout-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.loadout-modal-backdrop.open { display: flex; }
+.loadout-modal {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  border-top: 2px solid #2878a0;
+  padding: 20px 22px;
+  width: 520px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.lm-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: .2em;
+  color: var(--text-hi);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-hi);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lm-close {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  transition: all .1s;
+}
+.lm-close:hover { color: var(--red-bright); border-color: var(--red); }
+.lm-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  color: var(--text-hi);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  padding: 6px 8px;
+  outline: none;
+  min-height: 32px;
+  transition: border-color .12s;
+}
+.lm-input:focus { border-color: #2878a0; }
+.lm-input.mono { font-family: 'Share Tech Mono', monospace; font-size: 12px; }
+select.lm-input { appearance: none; cursor: pointer; }
+.lm-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .18em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 3px;
+}
+.lm-grid { display: grid; gap: 8px; margin-bottom: 10px; }
+.lm-grid.c4 { grid-template-columns: 2fr 1fr 1fr 1fr; }
+.lm-grid.c2 { grid-template-columns: 1fr 1fr; }
+.lm-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .14em;
+  padding: 7px 14px;
+  border: 1px solid var(--border-hi);
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .12s;
+  min-height: 32px;
+}
+.lm-btn:hover { border-color: #2878a0; color: #5ab0e0; }
+.lm-btn.add  { border-color: var(--green-dim); color: var(--green); }
+.lm-btn.add:hover { background: rgba(122,154,40,.12); }
+.lm-btn.del  { border-color: var(--red); color: var(--red-bright); padding: 5px 8px; }
+.lm-btn.del:hover { background: rgba(138,32,32,.15); }
+.lm-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  padding: 6px 8px;
+  margin-bottom: 4px;
+}
+.lm-item-name { flex: 1; font-size: 12px; color: var(--text-hi); }
+.lm-item-meta { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--amber); }
+.lm-item-type { font-family: 'Share Tech Mono', monospace; font-size: 7px; color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -1144,6 +1422,109 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   </div>
 
 </main>
+
+
+<!-- ── LOADOUT MODAL ── -->
+<div class="loadout-modal-backdrop" id="loadout-backdrop" onclick="if(event.target===this)closeLoadoutModal()">
+  <div class="loadout-modal">
+    <div class="lm-title">
+      MANAGE LOADOUT
+      <span class="lm-close" onclick="closeLoadoutModal()">✕ CLOSE</span>
+    </div>
+    <input type="hidden" id="lm-pi">
+    <input type="hidden" id="lm-si">
+    <div id="lm-op-name" style="font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.16em;color:#5ab0e0;margin-bottom:12px"></div>
+    <div id="lm-items" style="margin-bottom:12px"></div>
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:12px;margin-bottom:12px">
+      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:8px">■ ADD ITEM</div>
+      <div class="lm-grid c4" style="margin-bottom:8px">
+        <div><label class="lm-label">NAME</label><input class="lm-input" id="lm-new-name" placeholder="e.g. Assault Rifle"></div>
+        <div><label class="lm-label">DAMAGE</label><input class="lm-input mono" id="lm-new-dice" placeholder="2d10"></div>
+        <div><label class="lm-label">ATK BONUS</label><input class="lm-input mono" id="lm-new-bonus" type="number" value="0"></div>
+        <div><label class="lm-label">RANGE</label>
+          <select class="lm-input mono" id="lm-new-range">
+            <option value="close">CLOSE</option>
+            <option value="near">NEAR</option>
+            <option value="far" selected>FAR</option>
+            <option value="out">OUT</option>
+            <option value="any">ANY</option>
+          </select>
+        </div>
+      </div>
+      <div class="lm-grid c2" style="margin-bottom:8px">
+        <div><label class="lm-label">SLOT TYPE</label>
+          <select class="lm-input mono" id="lm-new-type">
+            <option value="action">ACTION</option>
+            <option value="minor">MINOR ACTION</option>
+            <option value="passive">PASSIVE / ABILITY</option>
+          </select>
+        </div>
+        <div><label class="lm-label">NOTES (OPTIONAL)</label><input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE"></div>
+      </div>
+      <button class="lm-btn add" onclick="addTrackerEquipItem()">+ ADD TO LOADOUT</button>
+    </div>
+    <button class="lm-btn" onclick="closeLoadoutModal()" style="width:100%">DONE</button>
+  </div>
+</div>
+
+<!-- ── ATTACK EXECUTE MODAL ── -->
+<div class="loadout-modal-backdrop" id="exec-backdrop" onclick="if(event.target===this)closeExecModal()">
+  <div class="loadout-modal" style="border-top-color:var(--amber)">
+    <div class="lm-title">
+      <span id="exec-title">EXECUTE ATTACK</span>
+      <span class="lm-close" onclick="closeExecModal()">✕ CLOSE</span>
+    </div>
+    <input type="hidden" id="exec-pi">
+    <input type="hidden" id="exec-si">
+    <input type="hidden" id="exec-item-dice">
+    <input type="hidden" id="exec-item-bonus">
+    <div id="exec-item-info" style="font-family:Share Tech Mono,monospace;font-size:9px;color:var(--amber);margin-bottom:10px;padding:5px 8px;background:var(--surface);border:1px solid var(--border-hi)"></div>
+    <div style="margin-bottom:10px">
+      <div style="font-family:Share Tech Mono,monospace;font-size:7px;letter-spacing:.16em;color:var(--text-dim);margin-bottom:6px">■ SELECT TARGET</div>
+      <div id="exec-targets" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+      <input type="hidden" id="exec-target-id">
+    </div>
+    <div class="lm-grid" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+      <div>
+        <label class="lm-label">ATTACK ROLL (d10)</label>
+        <div style="display:flex;gap:4px">
+          <input class="lm-input mono" id="exec-roll" type="number" placeholder="Roll...">
+          <button class="exec-mini-btn" onclick="execAutoRoll()" style="border:1px solid var(--border-hi);background:var(--surface2);color:var(--amber);font-family:Share Tech Mono,monospace;font-size:9px;padding:3px 8px;cursor:pointer;min-height:32px;white-space:nowrap">⬡ ROLL</button>
+        </div>
+      </div>
+      <div><label class="lm-label">TN</label><input class="lm-input mono" id="exec-tn" type="number" value="9"></div>
+      <div><label class="lm-label">ADV / DISADV</label>
+        <select class="lm-input mono" id="exec-mode">
+          <option value="normal">Normal</option>
+          <option value="advantage">Advantage</option>
+          <option value="disadvantage">Disadv.</option>
+        </select>
+      </div>
+    </div>
+    <div id="exec-hit-banner" style="display:none;font-family:Share Tech Mono,monospace;font-size:10px;padding:5px 10px;margin-bottom:8px;border:1px solid var(--border-hi)"></div>
+    <div class="lm-grid" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+      <div>
+        <label class="lm-label">DAMAGE ROLL</label>
+        <div style="display:flex;gap:4px">
+          <input class="lm-input mono" id="exec-dmg" type="number" placeholder="Dmg...">
+          <button class="exec-mini-btn" onclick="execRollDamage()" style="border:1px solid var(--border-hi);background:var(--surface2);color:var(--red-bright);font-family:Share Tech Mono,monospace;font-size:9px;padding:3px 8px;cursor:pointer;min-height:32px;white-space:nowrap">⬡ ROLL</button>
+        </div>
+      </div>
+      <div><label class="lm-label">DMG MOD</label><input class="lm-input mono" id="exec-dmgmod" type="number" value="0"></div>
+      <div style="display:flex;align-items:flex-end;padding-bottom:4px">
+        <label style="font-family:Share Tech Mono,monospace;font-size:7px;color:var(--text-dim);display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" id="exec-use-armor" checked> Apply target armor
+        </label>
+      </div>
+    </div>
+    <div id="exec-outcome" style="font-family:Share Tech Mono,monospace;font-size:9px;padding:8px 10px;background:var(--surface2);border:1px solid var(--border-hi);margin-bottom:12px;min-height:30px;color:var(--text-dim)">Select target and roll to check hit.</div>
+    <div style="display:flex;gap:8px">
+      <button class="lm-btn" style="border-color:var(--amber);color:var(--amber)" onclick="execCheckHit()">CHECK HIT</button>
+      <button class="lm-btn" id="exec-apply-btn" style="display:none;border-color:var(--red-bright);color:var(--red-bright)" onclick="execApplyDamage()">APPLY DAMAGE</button>
+      <button class="lm-btn" onclick="closeExecModal()">CANCEL</button>
+    </div>
+  </div>
+</div>
 
 <footer>
   <span>UGD // SPIKE: THE REEVES TRIALS // PARTY TRACKER</span>
@@ -1363,6 +1744,8 @@ function buildCharCardHTML(d, pIdx, sIdx) {
   const compMax    = d.compMax ?? 0;
   const reactions  = (slot && slot.sessionReactions) ? slot.sessionReactions
                    : (d.reactionPips || [false, false]);
+  const equipment  = (slot && slot.sessionEquipment)  ? slot.sessionEquipment  : [];
+  const aimed      = (slot && slot.sessionAimed)       ? slot.sessionAimed      : false;
 
   const name      = inputs[0] || 'UNKNOWN';
   const callsign  = inputs[1] || '';
@@ -1459,6 +1842,33 @@ function buildCharCardHTML(d, pIdx, sIdx) {
   const hpColor   = hpPct > 50 ? 'var(--green-dim)' : hpPct > 25 ? 'var(--amber)' : 'var(--red-bright)';
   const compColor = compPct > 50 ? 'var(--amber-dim)' : compPct > 25 ? 'var(--amber)' : 'var(--red-bright)';
 
+  // Build loadout chips
+  const loadoutChipsHtml = equipment.length
+    ? equipment.map((item, i) =>
+        `<span class="loadout-item" onclick="openExecModal(${pIdx},${sIdx},${i})"
+          title="${escHtml(item.notes||'')} ${item.range||''} / ${item.type||''}"
+        >${escHtml(item.name)}${item.dice ? ` [${escHtml(item.dice)}]` : ''}</span>`
+      ).join('')
+    : '';
+
+  // Reaction buttons
+  const used = reactions.filter(Boolean).length;
+  const remaining = 2 - used;
+  const rxnDefs = [
+    { name:'OVERWATCH',     key:'overwatch', requiresAimed:true  },
+    { name:'COUNTERATTACK', key:'counter',   requiresAimed:false },
+    { name:'PROTECT',       key:'protect',   requiresAimed:false },
+    { name:'BRACE',         key:'brace',     requiresAimed:false },
+  ];
+  const rxnBtnsHtml = rxnDefs.map(r => {
+    const isLocked = r.requiresAimed && !aimed;
+    const isUsed   = remaining <= 0;
+    const cls = `rxn-exp-btn${isUsed ? ' used' : isLocked ? ' locked' : ''}`;
+    const onclick = (isUsed || isLocked) ? '' : `onclick="fireTrackerReaction(${pIdx},${sIdx},'${r.key}','${r.name}')"`;
+    const title = isUsed ? 'No reactions remaining' : isLocked ? 'Requires AIM as minor action first' : r.name;
+    return `<button class="${cls}" ${onclick} title="${title}">${r.name}${isLocked ? ' 🔒' : ''}</button>`;
+  }).join('');
+
   return `
     <div class="char-identity">
       <div class="char-name">${escHtml(name)} ${awoken}</div>
@@ -1508,20 +1918,6 @@ function buildCharCardHTML(d, pIdx, sIdx) {
       </div>
     </div>
 
-    <div class="tracker-reactions" id="rxn-${sid}">
-      <span class="tracker-rxn-label">REACT</span>
-      <div class="tracker-rxn-pips">
-        <div class="tracker-rxn-pip${reactions[0] ? ' used' : ''}"
-          onclick="toggleTrackerReaction(${pIdx},${sIdx},0)"
-          title="Reaction 1 — click to toggle"></div>
-        <div class="tracker-rxn-pip${reactions[1] ? ' used' : ''}"
-          onclick="toggleTrackerReaction(${pIdx},${sIdx},1)"
-          title="Reaction 2 — click to toggle"></div>
-      </div>
-      <span class="tracker-rxn-count" style="color:${reactions.filter(Boolean).length >= 2 ? 'var(--red-bright)' : reactions.filter(Boolean).length === 1 ? 'var(--amber)' : 'var(--amber)'}">${2 - reactions.filter(Boolean).length}/2</span>
-      <button class="tracker-rxn-reset" onclick="resetTrackerReactions(${pIdx},${sIdx})" title="Long rest — restore reactions">↺ LONG REST</button>
-    </div>
-
     <div style="flex-shrink:0">
       <div class="mini-lbl">ATTRIBUTES</div>
       <div class="attrs-grid">${attrsHtml}</div>
@@ -1535,6 +1931,40 @@ function buildCharCardHTML(d, pIdx, sIdx) {
     ${traitsHtml}
     ${flawsHtml}
     ${bg}
+
+    <div class="loadout-section" id="loadout-${sid}">
+      <div class="mini-lbl" style="display:flex;justify-content:space-between;align-items:center">
+        LOADOUT
+        <button class="loadout-add-btn" onclick="openLoadoutModal(${pIdx},${sIdx})">+ MANAGE</button>
+      </div>
+      <div class="loadout-items" id="loadout-items-${sid}">
+        ${loadoutChipsHtml || '<span style="font-size:10px;color:var(--text-dim);font-style:italic">No loadout — click MANAGE to add attacks</span>'}
+      </div>
+    </div>
+
+    <div class="aimed-row" id="aimed-row-${sid}">
+      <span class="aimed-label">MINOR ACTION:</span>
+      <button class="aimed-toggle${aimed ? ' active' : ''}" id="aimed-btn-${sid}" onclick="toggleAimed(${pIdx},${sIdx})" title="Toggle Aim (enables Overwatch reaction)">
+        ${aimed ? '◉ AIMED' : '○ AIM'}
+      </button>
+      ${aimed ? '<span style="font-family:Share Tech Mono,monospace;font-size:7px;color:var(--green);letter-spacing:.12em">OVERWATCH UNLOCKED</span>' : ''}
+    </div>
+
+    <div class="rxn-expanded" id="rxn-exp-${sid}">
+      <div class="rxn-exp-head">
+        <span>■ REACTIONS (${remaining}/2)</span>
+        <button class="tracker-rxn-reset" onclick="resetTrackerReactions(${pIdx},${sIdx})" title="Long rest — restore all reactions">↺ LONG REST</button>
+      </div>
+      <div class="rxn-exp-btns" id="rxn-btns-${sid}">${rxnBtnsHtml}</div>
+      <div id="rxn-exec-${sid}" class="inline-exec"></div>
+    </div>
+
+    <div class="tracker-reactions" id="rxn-${sid}" style="display:none">
+      <div class="tracker-rxn-pips">
+        <div class="tracker-rxn-pip${reactions[0] ? ' used' : ''}" onclick="toggleTrackerReaction(${pIdx},${sIdx},0)" title="Reaction 1"></div>
+        <div class="tracker-rxn-pip${reactions[1] ? ' used' : ''}" onclick="toggleTrackerReaction(${pIdx},${sIdx},1)" title="Reaction 2"></div>
+      </div>
+    </div>
   `;
 }
 
@@ -1608,11 +2038,13 @@ function loadFile(ev, pIdx, sIdx) {
       const existing = state[pIdx][sIdx];
       state[pIdx][sIdx] = {
         charData,
-        gmNotes:          existing ? (existing.gmNotes         || '') : '',
-        sessionSpike:     existing ? existing.sessionSpike     : undefined,
-        sessionHp:        existing ? existing.sessionHp        : undefined,
-        sessionComp:      existing ? existing.sessionComp      : undefined,
-        sessionReactions: existing ? existing.sessionReactions : undefined,
+        gmNotes:           existing ? (existing.gmNotes          || '') : '',
+        sessionSpike:      existing ? existing.sessionSpike      : undefined,
+        sessionHp:         existing ? existing.sessionHp         : undefined,
+        sessionComp:       existing ? existing.sessionComp       : undefined,
+        sessionReactions:  existing ? existing.sessionReactions  : undefined,
+        sessionEquipment:  existing ? (existing.sessionEquipment || []) : [],
+        sessionAimed:      false,
       };
       saveToStorage();
       // Re-render just this slot
@@ -1800,8 +2232,19 @@ function resetTrackerReactions(pIdx, sIdx) {
   const slot = getSlot(pIdx, sIdx);
   if (!slot) return;
   slot.sessionReactions = [false, false];
+  slot.sessionAimed = false;
   saveToStorage();
   updateReactionDOM(pIdx, sIdx, slot.sessionReactions);
+  refreshRxnButtons(pIdx, sIdx, slot);
+  // Reset aimed button
+  const sid = `${pIdx}-${sIdx}`;
+  const aimBtn = document.getElementById('aimed-btn-' + sid);
+  if (aimBtn) { aimBtn.textContent = '○ AIM'; aimBtn.classList.remove('active'); }
+  const aimHint = document.querySelector(`#aimed-row-${sid} .aimed-hint`);
+  if (aimHint) aimHint.remove();
+  // Close any open exec strip
+  const execStrip = document.getElementById('rxn-exec-' + sid);
+  if (execStrip) { execStrip.className = 'inline-exec'; execStrip.innerHTML = ''; }
 }
 
 function updateReactionDOM(pIdx, sIdx, reactions) {
@@ -1922,6 +2365,527 @@ if (syncChannel) {
     flashSyncCard(pi, si);
     setSyncPill('pulse');
   };
+}
+
+
+// ═══════════════════════════════════════════════════════
+//  LOADOUT MANAGEMENT
+// ═══════════════════════════════════════════════════════
+
+function openLoadoutModal(pIdx, sIdx) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  if (!slot.sessionEquipment) slot.sessionEquipment = [];
+  document.getElementById('lm-pi').value = pIdx;
+  document.getElementById('lm-si').value = sIdx;
+  document.getElementById('lm-op-name').textContent =
+    (slot.charData.inputs && slot.charData.inputs[0]) || 'OPERATIVE';
+  document.getElementById('lm-new-name').value = '';
+  document.getElementById('lm-new-dice').value = '';
+  document.getElementById('lm-new-bonus').value = '0';
+  document.getElementById('lm-new-range').value = 'far';
+  document.getElementById('lm-new-type').value = 'action';
+  document.getElementById('lm-new-notes').value = '';
+  renderLmItems(slot);
+  document.getElementById('loadout-backdrop').classList.add('open');
+}
+
+function closeLoadoutModal() {
+  document.getElementById('loadout-backdrop').classList.remove('open');
+}
+
+function renderLmItems(slot) {
+  const eq = slot.sessionEquipment || [];
+  const pIdx = parseInt(document.getElementById('lm-pi').value);
+  const sIdx = parseInt(document.getElementById('lm-si').value);
+  const el = document.getElementById('lm-items');
+  if (!eq.length) {
+    el.innerHTML = '<div style="font-family:Share Tech Mono,monospace;font-size:8px;color:var(--text-dim);padding:6px">No items. Add attacks or abilities below.</div>';
+    return;
+  }
+  el.innerHTML = eq.map((item, i) => `
+    <div class="lm-item-row">
+      <div class="lm-item-name">${escHtml(item.name)}</div>
+      <div class="lm-item-meta">${escHtml(item.dice || '—')}${item.bonus && item.bonus !== 0 ? (item.bonus > 0 ? ` +${item.bonus}` : ` ${item.bonus}`) : ''}</div>
+      <div class="lm-item-type">${(item.range || '').toUpperCase()} / ${(item.type || 'ACTION').toUpperCase()}</div>
+      ${item.notes ? `<div style="font-family:Share Tech Mono,monospace;font-size:7px;color:var(--text-dim);font-style:italic">${escHtml(item.notes)}</div>` : ''}
+      <button class="lm-btn del" onclick="removeTrackerEquipItem(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addTrackerEquipItem() {
+  const pIdx = parseInt(document.getElementById('lm-pi').value);
+  const sIdx = parseInt(document.getElementById('lm-si').value);
+  const name = document.getElementById('lm-new-name').value.trim();
+  if (!name) { document.getElementById('lm-new-name').focus(); return; }
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  if (!slot.sessionEquipment) slot.sessionEquipment = [];
+  slot.sessionEquipment.push({
+    name,
+    dice:  document.getElementById('lm-new-dice').value.trim() || '',
+    bonus: parseInt(document.getElementById('lm-new-bonus').value) || 0,
+    range: document.getElementById('lm-new-range').value,
+    type:  document.getElementById('lm-new-type').value,
+    notes: document.getElementById('lm-new-notes').value.trim(),
+  });
+  document.getElementById('lm-new-name').value = '';
+  document.getElementById('lm-new-dice').value = '';
+  document.getElementById('lm-new-bonus').value = '0';
+  document.getElementById('lm-new-notes').value = '';
+  saveToStorage();
+  renderLmItems(slot);
+  refreshLoadoutChips(pIdx, sIdx, slot);
+}
+
+function removeTrackerEquipItem(idx) {
+  const pIdx = parseInt(document.getElementById('lm-pi').value);
+  const sIdx = parseInt(document.getElementById('lm-si').value);
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot || !slot.sessionEquipment) return;
+  slot.sessionEquipment.splice(idx, 1);
+  saveToStorage();
+  renderLmItems(slot);
+  refreshLoadoutChips(pIdx, sIdx, slot);
+}
+
+function refreshLoadoutChips(pIdx, sIdx, slot) {
+  const sid = `${pIdx}-${sIdx}`;
+  const el = document.getElementById('loadout-items-' + sid);
+  if (!el) return;
+  const eq = slot.sessionEquipment || [];
+  el.innerHTML = eq.length
+    ? eq.map((item, i) =>
+        `<span class="loadout-item" onclick="openExecModal(${pIdx},${sIdx},${i})"
+          title="${escHtml(item.notes || '')} ${item.range || ''} / ${item.type || ''}"
+        >${escHtml(item.name)}${item.dice ? ` [${escHtml(item.dice)}]` : ''}</span>`
+      ).join('')
+    : '<span style="font-size:10px;color:var(--text-dim);font-style:italic">No loadout — click MANAGE to add attacks</span>';
+}
+
+// ═══════════════════════════════════════════════════════
+//  AIMED STATE
+// ═══════════════════════════════════════════════════════
+
+function toggleAimed(pIdx, sIdx) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  slot.sessionAimed = !slot.sessionAimed;
+  saveToStorage();
+  const sid = `${pIdx}-${sIdx}`;
+  // Update the aimed button
+  const btn = document.getElementById('aimed-btn-' + sid);
+  if (btn) {
+    btn.textContent = slot.sessionAimed ? '◉ AIMED' : '○ AIM';
+    btn.classList.toggle('active', slot.sessionAimed);
+  }
+  // Update aimed row hint text
+  const row = document.getElementById('aimed-row-' + sid);
+  if (row) {
+    const hint = row.querySelector('.aimed-hint');
+    if (slot.sessionAimed && !hint) {
+      const h = document.createElement('span');
+      h.className = 'aimed-hint';
+      h.style.cssText = "font-family:Share Tech Mono,monospace;font-size:7px;color:var(--green);letter-spacing:.12em";
+      h.textContent = 'OVERWATCH UNLOCKED';
+      row.appendChild(h);
+    } else if (!slot.sessionAimed && hint) {
+      hint.remove();
+    }
+  }
+  // Refresh reaction buttons to lock/unlock Overwatch
+  refreshRxnButtons(pIdx, sIdx, slot);
+}
+
+function refreshRxnButtons(pIdx, sIdx, slot) {
+  const sid = `${pIdx}-${sIdx}`;
+  const el = document.getElementById('rxn-btns-' + sid);
+  if (!el) return;
+  const reactions = slot.sessionReactions || (slot.charData.reactionPips || [false, false]);
+  const aimed = slot.sessionAimed || false;
+  const used = reactions.filter(Boolean).length;
+  const remaining = 2 - used;
+  const rxnDefs = [
+    { name:'OVERWATCH',     key:'overwatch', requiresAimed:true  },
+    { name:'COUNTERATTACK', key:'counter',   requiresAimed:false },
+    { name:'PROTECT',       key:'protect',   requiresAimed:false },
+    { name:'BRACE',         key:'brace',     requiresAimed:false },
+  ];
+  el.innerHTML = rxnDefs.map(r => {
+    const isLocked = r.requiresAimed && !aimed;
+    const isUsed   = remaining <= 0;
+    const cls = `rxn-exp-btn${isUsed ? ' used' : isLocked ? ' locked' : ''}`;
+    const onclick = (isUsed || isLocked) ? '' : `onclick="fireTrackerReaction(${pIdx},${sIdx},'${r.key}','${r.name}')"`;
+    const title = isUsed ? 'No reactions remaining' : isLocked ? 'Requires AIM as minor action first' : r.name;
+    return `<button class="${cls}" ${onclick} title="${title}">${r.name}${isLocked ? ' 🔒' : ''}</button>`;
+  }).join('');
+  // Update header count
+  const head = document.querySelector(`#rxn-exp-${sid} .rxn-exp-head span`);
+  if (head) head.textContent = `■ REACTIONS (${remaining}/2)`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  REACTION FIRING
+// ═══════════════════════════════════════════════════════
+
+function fireTrackerReaction(pIdx, sIdx, rxnKey, rxnName) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  if (!slot.sessionReactions) {
+    slot.sessionReactions = (slot.charData.reactionPips || [false, false]).slice();
+  }
+  const used = slot.sessionReactions.filter(Boolean).length;
+  if (used >= 2) { alert('No reactions remaining.'); return; }
+  // Mark one reaction pip used
+  const idx = slot.sessionReactions.findIndex(r => !r);
+  if (idx !== -1) slot.sessionReactions[idx] = true;
+  saveToStorage();
+  updateReactionDOM(pIdx, sIdx, slot.sessionReactions);
+  refreshRxnButtons(pIdx, sIdx, slot);
+
+  const sid = `${pIdx}-${sIdx}`;
+  const strip = document.getElementById('rxn-exec-' + sid);
+  if (!strip) return;
+
+  const eq = slot.sessionEquipment || [];
+  const atkItems = eq.filter(i => i.type === 'action' && i.dice);
+
+  // Build weapon selector for attack reactions
+  let weaponHtml = '';
+  if (rxnKey === 'overwatch' || rxnKey === 'counter') {
+    if (atkItems.length) {
+      weaponHtml = `<div class="exec-field"><label>WEAPON</label>
+        <select class="exec-field input" id="rxnwpn-${sid}" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:Share Tech Mono,monospace;font-size:11px;padding:3px 6px;min-height:26px;outline:none">
+          ${atkItems.map(i => `<option value="${escHtml(i.name)}">${escHtml(i.name)} (${escHtml(i.dice)})</option>`).join('')}
+        </select></div>`;
+    } else {
+      weaponHtml = `<div class="exec-field"><label>DMG DICE</label>
+        <input id="rxndice-${sid}" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:Share Tech Mono,monospace;font-size:11px;padding:3px 6px;width:70px;outline:none" placeholder="1d10"></div>`;
+    }
+  }
+
+  // Build target list from localStorage combat state if available
+  let targetHtml = '';
+  try {
+    const combatRaw = localStorage.getItem('spike_gm_combat_v2');
+    if (combatRaw) {
+      const combatData = JSON.parse(combatRaw);
+      const combatants = (combatData && combatData.combatants) || [];
+      const myRef = `${pIdx}-${sIdx}`;
+      const targets = combatants.filter(c => c.trackerRef !== myRef && c.status !== 'dead');
+      if (targets.length) {
+        targetHtml = `<div class="exec-field" style="flex:1"><label>TARGET</label>
+          <div style="display:flex;flex-wrap:wrap;gap:4px" id="rxntgt-row-${sid}">
+            ${targets.map(t =>
+              `<button class="exec-mini-btn" id="rxntgt-${sid}-${t.id}" onclick="selectTrackerRxnTarget('${sid}','${t.id}','${escHtml(t.name)}')"
+                style="border:1px solid var(--border-hi);background:var(--surface2);color:var(--text-dim);font-family:Share Tech Mono,monospace;font-size:8px;padding:3px 8px;cursor:pointer;min-height:24px">
+                ${escHtml(t.name)} HP:${t.hp}
+              </button>`
+            ).join('')}
+          </div></div>`;
+      }
+    }
+  } catch(e) {}
+  if (!targetHtml) {
+    targetHtml = `<div class="exec-field"><label>TARGET (manual)</label>
+      <input id="rxntgt-manual-${sid}" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:Share Tech Mono,monospace;font-size:11px;padding:3px 6px;width:120px;outline:none" placeholder="Target name..."></div>`;
+  }
+
+  let innerHtml = `<div class="exec-head">■ REACTION: ${escHtml(rxnName)}</div>`;
+
+  if (rxnKey === 'brace') {
+    innerHtml += `<div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--green);padding:4px 0">✓ BRACING — –2 to incoming damage this hit.</div>`;
+  } else if (rxnKey === 'protect') {
+    innerHtml += targetHtml;
+    innerHtml += `<div style="font-family:Share Tech Mono,monospace;font-size:9px;color:var(--amber);padding:4px 0;margin-top:4px">Select the ally you are protecting. You take the hit instead.</div>`;
+  } else {
+    // overwatch / counterattack — need roll + damage
+    innerHtml += `<div class="exec-row">
+      ${targetHtml}
+      <div class="exec-field"><label>ATTACK ROLL (d10)</label>
+        <div style="display:flex;gap:3px">
+          <input id="rxnroll-${sid}" type="number" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:Share Tech Mono,monospace;font-size:11px;padding:3px 6px;width:65px;outline:none" placeholder="Roll">
+          <button onclick="trackerRxnAutoRoll('${sid}')" style="border:1px solid var(--amber-dim);background:var(--surface2);color:var(--amber);font-family:Share Tech Mono,monospace;font-size:9px;padding:3px 7px;cursor:pointer;min-height:26px">⬡</button>
+        </div>
+      </div>
+      <div class="exec-field"><label>TN</label>
+        <input id="rxntn-${sid}" type="number" value="9" style="background:var(--surface2);border:1px solid var(--border-hi);color:var(--text-hi);font-family:Share Tech Mono,monospace;font-size:11px;padding:3px 6px;width:55px;outline:none">
+      </div>
+      ${weaponHtml}
+      <button onclick="trackerRxnCheckHit('${sid}')" style="border:1px solid var(--amber);background:rgba(184,120,32,.1);color:var(--amber);font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.1em;padding:5px 10px;cursor:pointer;min-height:26px;align-self:flex-end">CHECK HIT</button>
+    </div>`;
+  }
+  innerHtml += `<div class="exec-result" id="rxnresult-${sid}"></div>`;
+
+  strip.className = 'inline-exec open';
+  strip.innerHTML = innerHtml;
+
+  // Auto-select first target
+  if (rxnKey !== 'protect' && rxnKey !== 'brace') {
+    try {
+      const combatRaw = localStorage.getItem('spike_gm_combat_v2');
+      if (combatRaw) {
+        const combatData = JSON.parse(combatRaw);
+        const combatants = (combatData && combatData.combatants) || [];
+        const myRef = `${pIdx}-${sIdx}`;
+        const first = combatants.find(c => c.trackerRef !== myRef && c.status !== 'dead');
+        if (first) selectTrackerRxnTarget(sid, first.id, first.name);
+      }
+    } catch(e) {}
+  }
+}
+
+function selectTrackerRxnTarget(sid, targetId, targetName) {
+  // Highlight selected target button
+  document.querySelectorAll(`[id^="rxntgt-${sid}-"]`).forEach(b => {
+    b.style.borderColor = 'var(--border-hi)';
+    b.style.color = 'var(--text-dim)';
+  });
+  const btn = document.getElementById(`rxntgt-${sid}-${targetId}`);
+  if (btn) { btn.style.borderColor = 'var(--amber)'; btn.style.color = 'var(--amber)'; }
+  // Store on strip dataset
+  const strip = document.getElementById('rxn-exec-' + sid);
+  if (strip) { strip.dataset.targetId = targetId; strip.dataset.targetName = targetName; }
+}
+
+function trackerRxnAutoRoll(sid) {
+  const el = document.getElementById('rxnroll-' + sid);
+  if (el) el.value = Math.ceil(Math.random() * 10);
+}
+
+function trackerRxnCheckHit(sid) {
+  const rollEl = document.getElementById('rxnroll-' + sid);
+  const tnEl   = document.getElementById('rxntn-'   + sid);
+  const result = document.getElementById('rxnresult-' + sid);
+  if (!result) return;
+  const roll = parseInt(rollEl && rollEl.value);
+  const tn   = parseInt(tnEl && tnEl.value) || 9;
+  if (isNaN(roll)) { result.innerHTML = '<span style="color:var(--text-dim)">Enter a roll first.</span>'; return; }
+  const hit  = roll >= tn;
+  const crit = roll === 10;
+
+  result.innerHTML = `<span class="${hit ? 'exec-hit' : 'exec-miss'}">${hit ? (crit ? '★ CRIT HIT' : '✓ HIT') : '✕ MISS'}</span> — Roll ${roll} vs TN ${tn}`;
+
+  if (hit) {
+    // Figure out damage dice
+    const strip = document.getElementById('rxn-exec-' + sid);
+    const targetId   = strip && strip.dataset.targetId;
+    const targetName = strip && strip.dataset.targetName;
+
+    const wpnSel  = document.getElementById('rxnwpn-' + sid);
+    const diceFld = document.getElementById('rxndice-' + sid);
+    let dice = '1d10';
+
+    if (wpnSel) {
+      // find in session equipment
+      const [pi, si] = sid.split('-').map(Number);
+      const slot = getSlot(pi, si);
+      const item = slot && slot.sessionEquipment && slot.sessionEquipment.find(i => i.name === wpnSel.value);
+      if (item && item.dice) dice = item.dice;
+    } else if (diceFld && diceFld.value) {
+      dice = diceFld.value.trim();
+    }
+
+    // Roll damage
+    const dmgRolls = rollDiceStr(dice);
+    const finalDmg = dmgRolls.total + (crit ? 2 : 0);
+
+    // Apply to combat state in localStorage
+    let appliedMsg = '';
+    if (targetId) {
+      try {
+        const combatRaw = localStorage.getItem('spike_gm_combat_v2');
+        if (combatRaw) {
+          const combatData = JSON.parse(combatRaw);
+          const tc = combatData.combatants && combatData.combatants.find(c => c.id === targetId);
+          if (tc) {
+            const armor = tc.armor || 0;
+            const applied = Math.max(0, finalDmg - armor);
+            tc.hp = Math.max(0, tc.hp - applied);
+            if (tc.hp === 0 && tc.status === 'alive') tc.status = 'down';
+            localStorage.setItem('spike_gm_combat_v2', JSON.stringify(combatData));
+            // Broadcast so combat suite updates live
+            if (typeof syncChannel !== 'undefined' && syncChannel) {
+              syncChannel.postMessage({ type: 'tracker_dmg', targetId, hp: tc.hp, status: tc.status });
+            }
+            appliedMsg = ` → <span class="exec-dmg">${applied} dmg applied</span> (${finalDmg} - ${armor} armor) → ${escHtml(tc.name || targetName)} HP: ${tc.hp}/${tc.hpMax}`;
+          }
+        }
+      } catch(e) {}
+    }
+
+    result.innerHTML += ` <span class="exec-dmg">[${finalDmg} dmg${crit ? ' +crit' : ''}]</span>${appliedMsg}`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  ATTACK EXECUTE MODAL (from loadout chip)
+// ═══════════════════════════════════════════════════════
+
+let _execLastHit = false;
+let _execLastCrit = false;
+
+function openExecModal(pIdx, sIdx, itemIdx) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  const eq = slot.sessionEquipment || [];
+  const item = eq[itemIdx];
+  if (!item) return;
+  _execLastHit = false; _execLastCrit = false;
+
+  document.getElementById('exec-pi').value = pIdx;
+  document.getElementById('exec-si').value = sIdx;
+  document.getElementById('exec-item-dice').value  = item.dice  || '';
+  document.getElementById('exec-item-bonus').value = item.bonus || 0;
+  document.getElementById('exec-title').textContent = item.name.toUpperCase();
+  document.getElementById('exec-item-info').textContent =
+    `${item.name} // ${item.dice || '—'} dmg // Bonus +${item.bonus || 0} // ${(item.range || 'ANY').toUpperCase()} range${item.notes ? ' // ' + item.notes : ''}`;
+  document.getElementById('exec-roll').value   = '';
+  document.getElementById('exec-dmg').value    = '';
+  document.getElementById('exec-dmgmod').value = '0';
+  document.getElementById('exec-tn').value     = '9';
+  document.getElementById('exec-mode').value   = 'normal';
+  document.getElementById('exec-use-armor').checked = true;
+  document.getElementById('exec-hit-banner').style.display = 'none';
+  document.getElementById('exec-apply-btn').style.display  = 'none';
+  document.getElementById('exec-outcome').textContent = 'Select a target and check hit.';
+
+  // Build target list from combat localStorage
+  const tEl = document.getElementById('exec-targets');
+  tEl.innerHTML = '';
+  document.getElementById('exec-target-id').value = '';
+  try {
+    const combatRaw = localStorage.getItem('spike_gm_combat_v2');
+    if (combatRaw) {
+      const combatData = JSON.parse(combatRaw);
+      const myRef = `${pIdx}-${sIdx}`;
+      const targets = (combatData.combatants || []).filter(c => c.trackerRef !== myRef && c.status !== 'dead');
+      targets.forEach((t, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'exec-mini-btn';
+        btn.id = 'extgt-' + t.id;
+        btn.style.cssText = 'border:1px solid var(--border-hi);background:var(--surface2);color:var(--text-dim);font-family:Share Tech Mono,monospace;font-size:8px;padding:4px 10px;cursor:pointer;min-height:28px';
+        btn.textContent = `${t.name}  HP:${t.hp}/${t.hpMax}  ARM:${t.armor || 0}`;
+        btn.onclick = () => selectExecTarget(t.id, t.name);
+        tEl.appendChild(btn);
+        if (i === 0) selectExecTarget(t.id, t.name);
+      });
+      if (!targets.length) tEl.innerHTML = '<span style="font-family:Share Tech Mono,monospace;font-size:8px;color:var(--text-dim)">No targets in combat tracker.</span>';
+    } else {
+      tEl.innerHTML = '<span style="font-family:Share Tech Mono,monospace;font-size:8px;color:var(--text-dim)">Open Combat Suite to track targets.</span>';
+    }
+  } catch(e) {
+    tEl.innerHTML = '<span style="font-family:Share Tech Mono,monospace;font-size:8px;color:var(--text-dim)">Could not read combat data.</span>';
+  }
+
+  document.getElementById('exec-backdrop').classList.add('open');
+}
+
+function closeExecModal() {
+  document.getElementById('exec-backdrop').classList.remove('open');
+}
+
+function selectExecTarget(targetId, targetName) {
+  document.getElementById('exec-target-id').value = targetId;
+  document.querySelectorAll('[id^="extgt-"]').forEach(b => {
+    b.style.borderColor = 'var(--border-hi)'; b.style.color = 'var(--text-dim)';
+  });
+  const btn = document.getElementById('extgt-' + targetId);
+  if (btn) { btn.style.borderColor = 'var(--amber)'; btn.style.color = 'var(--amber)'; }
+}
+
+function execAutoRoll() {
+  const bonus = parseInt(document.getElementById('exec-item-bonus').value) || 0;
+  const mode  = document.getElementById('exec-mode').value;
+  let r;
+  if (mode === 'advantage')    r = Math.max(rollD10t(), rollD10t());
+  else if (mode === 'disadvantage') r = Math.min(rollD10t(), rollD10t());
+  else r = rollD10t();
+  document.getElementById('exec-roll').value = r + bonus;
+}
+
+function rollD10t() { return Math.ceil(Math.random() * 10); }
+
+function rollDiceStr(str) {
+  const m = str.trim().match(/^(\d+)d(\d+)$/i);
+  if (!m) return { rolls: [0], total: 0, sides: 10 };
+  const count = Math.min(parseInt(m[1]), 20);
+  const sides = parseInt(m[2]);
+  const rolls = Array.from({ length: count }, () => Math.ceil(Math.random() * sides));
+  return { rolls, total: rolls.reduce((a, b) => a + b, 0), sides };
+}
+
+function execCheckHit() {
+  const roll = parseInt(document.getElementById('exec-roll').value);
+  const tn   = parseInt(document.getElementById('exec-tn').value) || 9;
+  const bonus = parseInt(document.getElementById('exec-item-bonus').value) || 0;
+  if (isNaN(roll)) { document.getElementById('exec-outcome').textContent = 'Enter an attack roll first.'; return; }
+  const hit  = roll >= tn;
+  const crit = (roll - bonus) === 10;
+  _execLastHit = hit; _execLastCrit = crit;
+  const banner = document.getElementById('exec-hit-banner');
+  banner.style.display = 'block';
+  banner.style.background = hit ? 'rgba(138,32,32,.12)' : 'rgba(0,0,0,.2)';
+  banner.style.color      = hit ? 'var(--red-bright)' : 'var(--text-dim)';
+  banner.style.border     = `1px solid ${hit ? 'var(--red)' : 'var(--border-hi)'}`;
+  banner.textContent = hit
+    ? (crit ? `★ CRITICAL HIT — Roll ${roll} vs TN ${tn} (+2 dmg)` : `✓ HIT — Roll ${roll} vs TN ${tn}`)
+    : `✕ MISS — Roll ${roll} vs TN ${tn}`;
+  document.getElementById('exec-apply-btn').style.display = hit ? '' : 'none';
+  document.getElementById('exec-outcome').textContent = hit ? 'Hit confirmed. Roll or enter damage.' : 'Miss. No damage applied.';
+}
+
+function execRollDamage() {
+  const dice = document.getElementById('exec-item-dice').value || '1d10';
+  const mod  = parseInt(document.getElementById('exec-dmgmod').value) || 0;
+  const result = rollDiceStr(dice);
+  document.getElementById('exec-dmg').value = result.total + (_execLastCrit ? 2 : 0) + mod;
+}
+
+function execApplyDamage() {
+  const targetId = document.getElementById('exec-target-id').value;
+  const rawDmg   = parseInt(document.getElementById('exec-dmg').value);
+  const mod      = parseInt(document.getElementById('exec-dmgmod').value) || 0;
+  if (!targetId) { document.getElementById('exec-outcome').textContent = 'No target selected.'; return; }
+  if (isNaN(rawDmg)) { document.getElementById('exec-outcome').textContent = 'Enter a damage value.'; return; }
+
+  const useArmor = document.getElementById('exec-use-armor').checked;
+  const pIdx = parseInt(document.getElementById('exec-pi').value);
+  const sIdx = parseInt(document.getElementById('exec-si').value);
+  const attackerSlot = getSlot(pIdx, sIdx);
+  const attackerName = (attackerSlot && attackerSlot.charData.inputs && attackerSlot.charData.inputs[0]) || 'Operative';
+
+  let outcomeMsg = '';
+  try {
+    const combatRaw = localStorage.getItem('spike_gm_combat_v2');
+    if (combatRaw) {
+      const combatData = JSON.parse(combatRaw);
+      const tc = combatData.combatants && combatData.combatants.find(c => c.id === targetId);
+      if (tc) {
+        const armor   = useArmor ? (tc.armor || 0) : 0;
+        const applied = Math.max(0, rawDmg - armor);
+        tc.hp = Math.max(0, tc.hp - applied);
+        if (tc.hp === 0 && tc.status === 'alive') tc.status = 'down';
+        localStorage.setItem('spike_gm_combat_v2', JSON.stringify(combatData));
+        // Broadcast live update
+        if (typeof syncChannel !== 'undefined' && syncChannel) {
+          syncChannel.postMessage({ type: 'tracker_dmg', targetId, hp: tc.hp, status: tc.status });
+        }
+        outcomeMsg = `DAMAGE APPLIED — ${escHtml(attackerName)} → ${escHtml(tc.name)}: ${applied} dmg (${rawDmg} - ${armor} armor) → HP now ${tc.hp}/${tc.hpMax}`;
+      } else {
+        outcomeMsg = 'Target not found in combat tracker.';
+      }
+    } else {
+      outcomeMsg = 'Combat tracker not open. Damage not auto-applied.';
+    }
+  } catch(e) {
+    outcomeMsg = 'Error applying damage.';
+  }
+
+  const outcome = document.getElementById('exec-outcome');
+  outcome.style.color = 'var(--red-bright)';
+  outcome.textContent = outcomeMsg;
+  document.getElementById('exec-apply-btn').style.display = 'none';
 }
 
 // ═══════════════════════════════════════════════════════
