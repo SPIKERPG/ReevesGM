@@ -1225,6 +1225,84 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 .exec-miss { color: var(--text-dim); }
 .exec-dmg  { color: var(--amber); font-weight: 700; }
 
+/* ─── SKILLS MANAGE BUTTON ─── */
+.skills-manage-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 1px 6px;
+  border: 1px dashed var(--border);
+  line-height: 1.4;
+  transition: all .1s;
+  background: transparent;
+}
+.skills-manage-btn:hover { color: var(--green); border-color: var(--green-dim); }
+
+/* ─── SKILL TOGGLE ROW ─── */
+.skill-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+}
+.skill-toggle-row:last-child { border-bottom: none; }
+.skill-toggle-row:hover { background: rgba(255,255,255,.02); }
+
+.skill-toggle-name {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+}
+.skill-toggle-attr {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  margin-right: 10px;
+  min-width: 48px;
+}
+.skill-state-btns { display: flex; gap: 3px; }
+.skill-state-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .08em;
+  padding: 3px 8px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .12s;
+  min-height: 24px;
+}
+.skill-state-btn:hover { border-color: var(--green-dim); color: var(--green); }
+.skill-state-btn.active-trained {
+  background: rgba(122,154,40,.15);
+  border-color: var(--green-dim);
+  color: var(--green);
+}
+.skill-state-btn.active-specialized {
+  background: rgba(184,120,32,.18);
+  border-color: var(--amber-dim);
+  color: var(--amber);
+}
+
+/* skill group header inside modal */
+.skill-group-header {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .2em;
+  color: var(--text-dim);
+  background: var(--surface);
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+.skill-group-header:first-child { margin-top: 0; border-top: none; }
+
 /* ─── LOADOUT MODAL (in-page overlay) ─── */
 .loadout-modal-backdrop {
   position: fixed;
@@ -1464,6 +1542,34 @@ select.lm-input { appearance: none; cursor: pointer; }
       <button class="lm-btn add" onclick="addTrackerEquipItem()">+ ADD TO LOADOUT</button>
     </div>
     <button class="lm-btn" onclick="closeLoadoutModal()" style="width:100%">DONE</button>
+  </div>
+</div>
+
+<!-- ── SKILLS MODAL ── -->
+<div class="loadout-modal-backdrop" id="skills-backdrop" onclick="if(event.target===this)closeSkillsModal()">
+  <div class="loadout-modal" style="border-top-color:var(--green);max-width:480px">
+    <div class="lm-title">
+      MANAGE SKILLS
+      <span class="lm-close" onclick="closeSkillsModal()">✕ CLOSE</span>
+    </div>
+    <input type="hidden" id="sk-pi">
+    <input type="hidden" id="sk-si">
+    <div id="sk-op-name" style="font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.16em;color:var(--green);margin-bottom:4px"></div>
+    <div style="font-family:Share Tech Mono,monospace;font-size:7px;letter-spacing:.14em;color:var(--text-dim);margin-bottom:12px">
+      Click TRAINED or SPEC to set level. Click the active button to clear it.
+    </div>
+    <div id="sk-list" style="border:1px solid var(--border-hi);max-height:60vh;overflow-y:auto"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:5px">
+        <span class="skill-tag">NAME</span>
+        <span style="font-family:Share Tech Mono,monospace;font-size:8px;color:var(--text-dim)">= Trained (+2)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px">
+        <span class="skill-tag specialized">NAME ★</span>
+        <span style="font-family:Share Tech Mono,monospace;font-size:8px;color:var(--text-dim)">= Specialized (+3)</span>
+      </div>
+    </div>
+    <button class="lm-btn" onclick="closeSkillsModal()" style="width:100%;margin-top:10px">DONE</button>
   </div>
 </div>
 
@@ -1783,9 +1889,10 @@ function buildCharCardHTML(d, pIdx, sIdx) {
     </div>
   `).join('');
 
-  // Skills (trained=1, specialized=2)
+  // Skills (trained=1, specialized=2) — use session override if present
+  const skillStates = (slot && slot.sessionSkillState) ? slot.sessionSkillState : skillState;
   const activeSkills = SKILLS
-    .map((sk, i) => ({ ...sk, state: skillState[i] || 0 }))
+    .map((sk, i) => ({ ...sk, state: skillStates[i] || 0 }))
     .filter(sk => sk.state > 0);
 
   const skillsHtml = activeSkills.length
@@ -1924,8 +2031,11 @@ function buildCharCardHTML(d, pIdx, sIdx) {
     </div>
 
     <div style="flex-shrink:0">
-      <div class="mini-lbl">SKILLS</div>
-      <div class="skills-list">${skillsHtml}</div>
+      <div class="mini-lbl" style="display:flex;justify-content:space-between;align-items:center">
+        SKILLS
+        <button class="skills-manage-btn" onclick="openSkillsModal(${pIdx},${sIdx})">✎ MANAGE</button>
+      </div>
+      <div class="skills-list" id="skills-list-${sid}">${skillsHtml}</div>
     </div>
 
     ${traitsHtml}
@@ -2461,6 +2571,104 @@ function refreshLoadoutChips(pIdx, sIdx, slot) {
         >${escHtml(item.name)}${item.dice ? ` [${escHtml(item.dice)}]` : ''}</span>`
       ).join('')
     : '<span style="font-size:10px;color:var(--text-dim);font-style:italic">No loadout — click MANAGE to add attacks</span>';
+}
+
+// ═══════════════════════════════════════════════════════
+//  SKILLS MANAGEMENT
+// ═══════════════════════════════════════════════════════
+
+function openSkillsModal(pIdx, sIdx) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  // Ensure sessionSkillState exists — seed from charData if not
+  if (!slot.sessionSkillState) {
+    slot.sessionSkillState = (slot.charData.skillState || []).slice();
+  }
+  document.getElementById('sk-pi').value = pIdx;
+  document.getElementById('sk-si').value = sIdx;
+  document.getElementById('sk-op-name').textContent =
+    (slot.charData.inputs && slot.charData.inputs[0]) || 'OPERATIVE';
+  renderSkillsList(slot);
+  document.getElementById('skills-backdrop').classList.add('open');
+}
+
+function closeSkillsModal() {
+  document.getElementById('skills-backdrop').classList.remove('open');
+}
+
+function renderSkillsList(slot) {
+  const el = document.getElementById('sk-list');
+  const pIdx = parseInt(document.getElementById('sk-pi').value);
+  const sIdx = parseInt(document.getElementById('sk-si').value);
+  const skillStates = slot.sessionSkillState || [];
+
+  // Group skills by attribute
+  const groups = {};
+  SKILLS.forEach((sk, i) => {
+    if (!groups[sk.attr]) groups[sk.attr] = [];
+    groups[sk.attr].push({ ...sk, idx: i, state: skillStates[i] || 0 });
+  });
+
+  const attrOrder = ['BODY', 'MIND', 'TECH', 'AWARENESS', 'RESOLVE'];
+  let html = '';
+  attrOrder.forEach(attr => {
+    if (!groups[attr]) return;
+    html += `<div class="skill-group-header">// ${attr}</div>`;
+    groups[attr].forEach(sk => {
+      const isTrained    = sk.state === 1;
+      const isSpec       = sk.state === 2;
+      html += `
+        <div class="skill-toggle-row">
+          <div class="skill-toggle-name">${escHtml(sk.name)}</div>
+          <div class="skill-toggle-attr">${attr}</div>
+          <div class="skill-state-btns">
+            <button class="skill-state-btn${isTrained ? ' active-trained' : ''}"
+              onclick="setSkillState(${pIdx},${sIdx},${sk.idx},${isTrained ? 0 : 1})"
+              title="${isTrained ? 'Click to clear' : 'Set as Trained (+2)'}">
+              TRAINED +2
+            </button>
+            <button class="skill-state-btn${isSpec ? ' active-specialized' : ''}"
+              onclick="setSkillState(${pIdx},${sIdx},${sk.idx},${isSpec ? 0 : 2})"
+              title="${isSpec ? 'Click to clear' : 'Set as Specialized (+3)'}">
+              SPEC +3
+            </button>
+          </div>
+        </div>`;
+    });
+  });
+
+  el.innerHTML = html;
+}
+
+function setSkillState(pIdx, sIdx, skillIdx, newState) {
+  const slot = getSlot(pIdx, sIdx);
+  if (!slot) return;
+  if (!slot.sessionSkillState) {
+    slot.sessionSkillState = (slot.charData.skillState || []).slice();
+  }
+  // Pad array if needed
+  while (slot.sessionSkillState.length <= skillIdx) slot.sessionSkillState.push(0);
+  slot.sessionSkillState[skillIdx] = newState;
+  saveToStorage();
+  // Re-render modal list
+  renderSkillsList(slot);
+  // Update the skills chips on the card
+  refreshSkillChips(pIdx, sIdx, slot);
+}
+
+function refreshSkillChips(pIdx, sIdx, slot) {
+  const sid = `${pIdx}-${sIdx}`;
+  const el = document.getElementById('skills-list-' + sid);
+  if (!el) return;
+  const skillStates = slot.sessionSkillState || slot.charData.skillState || [];
+  const activeSkills = SKILLS
+    .map((sk, i) => ({ ...sk, state: skillStates[i] || 0 }))
+    .filter(sk => sk.state > 0);
+  el.innerHTML = activeSkills.length
+    ? activeSkills.map(sk =>
+        `<span class="skill-tag${sk.state === 2 ? ' specialized' : ''}">${escHtml(sk.name)}${sk.state === 2 ? ' ★' : ''}</span>`
+      ).join('')
+    : `<span style="font-size:11px;color:var(--text-dim);font-style:italic">None trained</span>`;
 }
 
 // ═══════════════════════════════════════════════════════
