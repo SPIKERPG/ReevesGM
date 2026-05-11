@@ -490,8 +490,8 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 
   <div class="panel quiet">
     <div class="panel-title">GM CALIBRATION NOTES</div>
-    <p><strong>When in doubt, use TN 9.</strong> Raise it when environment, opposition, or consequence warrants — not because the moment feels important. Importance is a story tool, not a TN modifier.</p>
-    <p>Advantage = roll 2 dice, take higher. Disadvantage = roll 2 dice, take lower. Nat 10 (d10) = +2 damage OR narrative bonus. Nat 1 = complication, not automatic failure.</p>
+    <p><strong>When in doubt, use TN 9 / Defense Value 6.</strong> Raise the Defense Value when opposition is tougher — not because the moment feels important. Importance is a story tool, not a Defense modifier.</p>
+    <p>Advantage = roll 2 dice, take higher. Disadvantage = roll 2 dice, take lower. Nat 10 (d10) = double the base damage before adding weapon modifier. Nat 1 = complication, not automatic failure.</p>
     <p style="margin-bottom:0">SPIKE-related rolls (saves, recovery, assistance) always use the <strong>d20</strong>. All controlled actions use the <strong>d10</strong>.</p>
   </div>
 </section>
@@ -713,7 +713,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <ul>
         <li><strong>Initiative:</strong> d10 + AWARENESS</li>
         <li><strong>Each Turn:</strong> 1 Action + 1 Minor Action</li>
-        <li><strong>Attack:</strong> d10 + Attribute + Skill vs TN</li>
+        <li><strong>Attack:</strong> d10 + Attribute + Skill vs Enemy Defense Value — margin = base damage</li>
         <li><strong>Movement:</strong> 1 zone as Minor Action; 2 zones as Minor (–1 COMPOSURE) or full turn (no penalty)</li>
         <li><strong>Zones:</strong> CLOSE / NEAR / FAR / OUT OF REACH</li>
       </ul>
@@ -724,26 +724,36 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <li><strong>Overwatch:</strong> If Aimed last turn — shoot enemy entering line of sight</li>
         <li><strong>Counterattack:</strong> If attacked in melee — immediate return strike</li>
         <li><strong>Protect:</strong> Take a hit for adjacent ally</li>
-        <li><strong>Brace:</strong> Reduce incoming damage by 2</li>
+        <li><strong>Brace:</strong> Reduce final damage by 2</li>
       </ul>
     </div>
+  </div>
+
+  <div class="panel mbr">
+    <div class="panel-title">ATTACK RESOLUTION — MARGIN OF SUCCESS</div>
+    <p>One roll determines hit and damage. Roll <strong>d10 + Attribute + Skill</strong> vs the enemy's <strong>Defense Value</strong>. If you meet or exceed it, the attack lands and the margin (your total minus the Defense Value) is the base damage.</p>
+    <p style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text-hi);background:var(--surface);padding:8px 12px;margin-bottom:8px;">
+      BASE DAMAGE = ROLL TOTAL − DEFENSE VALUE<br>
+      FINAL DAMAGE = BASE + WEAPON MODIFIER − ARMOR
+    </p>
+    <p style="margin-bottom:0"><strong>Nat 10:</strong> double the base damage before adding weapon modifier. <strong>Nat 1:</strong> miss regardless of modifiers, introduce a complication. Minimum 0 damage on any hit.</p>
   </div>
 
   <div class="g3">
     <div class="panel">
       <div class="panel-title">WEAPONS</div>
       <ul>
-        <li><strong>Light</strong> (pistol, knife): 1d10</li>
-        <li><strong>Standard</strong> (rifle, shotgun): 2d10</li>
-        <li><strong>Heavy</strong> (sniper, LMG): 3d10 — cannot move and attack</li>
+        <li><strong>Light</strong> (pistol, knife): margin only</li>
+        <li><strong>Standard</strong> (rifle, shotgun): margin + 2</li>
+        <li><strong>Heavy</strong> (sniper, LMG): margin + 4 — cannot move and attack</li>
       </ul>
     </div>
     <div class="panel">
       <div class="panel-title">ARMOR</div>
       <ul>
-        <li><strong>Light:</strong> –2 damage, no penalty</li>
-        <li><strong>Medium:</strong> –4 damage, –1 Mobility</li>
-        <li><strong>Heavy:</strong> –6 damage, –1 Mobility, extended move costs +1 COMPOSURE</li>
+        <li><strong>Light:</strong> –2 final damage, no penalty</li>
+        <li><strong>Medium:</strong> –4 final damage, –1 Mobility</li>
+        <li><strong>Heavy:</strong> –6 final damage, –1 Mobility, extended move costs +1 COMPOSURE</li>
       </ul>
     </div>
     <div class="panel">
@@ -773,8 +783,8 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="enemy-stat-row">
         <span class="esr">HP: <strong>5–8</strong></span>
         <span class="esr">ATK: <strong>+2</strong></span>
-        <span class="esr">DMG: <strong>1d10</strong></span>
-        <span class="esr">DEF TN: <strong>9</strong></span>
+        <span class="esr">WPN: <strong>Light</strong></span>
+        <span class="esr">DEF: <strong>6</strong></span>
       </div>
       <div style="font-size:12px;color:var(--text-dim)">Used in groups. Goes down quickly. 0–1 trait.</div>
     </div>
@@ -784,8 +794,8 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="enemy-stat-row">
         <span class="esr">HP: <strong>10–15</strong></span>
         <span class="esr">ATK: <strong>+3</strong></span>
-        <span class="esr">DMG: <strong>2d10</strong></span>
-        <span class="esr">DEF TN: <strong>9–11</strong></span>
+        <span class="esr">WPN: <strong>Standard</strong></span>
+        <span class="esr">DEF: <strong>7–8</strong></span>
       </div>
       <div style="font-size:12px;color:var(--text-dim)">Solid field presence. Balanced. 1 trait.</div>
     </div>
@@ -795,8 +805,8 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="enemy-stat-row">
         <span class="esr">HP: <strong>18–25</strong></span>
         <span class="esr">ATK: <strong>+4</strong></span>
-        <span class="esr">DMG: <strong>2d10–3d10</strong></span>
-        <span class="esr">DEF TN: <strong>11–13</strong></span>
+        <span class="esr">WPN: <strong>Standard/Heavy</strong></span>
+        <span class="esr">DEF: <strong>9–10</strong></span>
       </div>
       <div style="font-size:12px;color:var(--text-dim)">1 unique ability/trait. Creates identity, not complexity.</div>
     </div>
@@ -806,8 +816,8 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="enemy-stat-row">
         <span class="esr">HP: <strong>30+</strong></span>
         <span class="esr">ATK: <strong>+5</strong></span>
-        <span class="esr">DMG: <strong>3d10</strong></span>
-        <span class="esr">DEF TN: <strong>11–13</strong></span>
+        <span class="esr">WPN: <strong>Heavy</strong></span>
+        <span class="esr">DEF: <strong>10–11</strong></span>
       </div>
       <div style="font-size:12px;color:var(--text-dim)">2 traits. May act multiple times per round (GM discretion).</div>
     </div>
@@ -819,12 +829,12 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <table class="ref-table">
         <thead><tr><th>TRAIT</th><th>EFFECT</th></tr></thead>
         <tbody>
-          <tr><td>Aggressive</td><td>+1 damage at CLOSE range</td></tr>
+          <tr><td>Aggressive</td><td>+1 to weapon modifier at CLOSE range</td></tr>
           <tr><td>Suppressive</td><td>On hit, target –1 to next roll</td></tr>
-          <tr><td>Durable</td><td>–2 to all incoming damage</td></tr>
+          <tr><td>Durable</td><td>+2 to Defense Value (harder to hurt)</td></tr>
           <tr><td>Unstable</td><td>On hit, target +1 SPIKE</td></tr>
           <tr><td>Hunter</td><td>Advantage vs isolated targets</td></tr>
-          <tr><td>Swarm</td><td>+1 attack per adjacent ally</td></tr>
+          <tr><td>Swarm</td><td>+1 to attack roll per adjacent ally</td></tr>
           <tr><td>Phase Shift</td><td>Once/encounter: ignore damage from one attack</td></tr>
           <tr><td>Resonant</td><td>CLOSE PCs must SPIKE Save at turn start</td></tr>
         </tbody>

@@ -1608,12 +1608,20 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
           </div>
         </div>
         <div class="acc-atk-field">
-          <label>BONUS</label>
+          <label>BONUS (attr+skill)</label>
           <input id="acc-atk-bonus" type="number" value="0" style="width:60px">
         </div>
         <div class="acc-atk-field">
-          <label>TN</label>
-          <input id="acc-atk-tn" type="number" value="9" style="width:60px">
+          <label>DEFENSE VALUE</label>
+          <input id="acc-atk-tn" type="number" value="6" style="width:60px">
+        </div>
+        <div class="acc-atk-field">
+          <label>WEAPON</label>
+          <select id="acc-atk-wpn-class" style="min-width:90px">
+            <option value="0">Light (+0)</option>
+            <option value="2" selected>Standard (+2)</option>
+            <option value="4">Heavy (+4)</option>
+          </select>
         </div>
         <div class="acc-atk-field">
           <label>MODE</label>
@@ -1623,22 +1631,13 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
             <option value="disadvantage">Disadv.</option>
           </select>
         </div>
-        <button class="btn amber" onclick="accCheckHit()" style="align-self:flex-end">CHECK HIT</button>
+        <button class="btn amber" onclick="accCheckHit()" style="align-self:flex-end">RESOLVE</button>
       </div>
       <div class="acc-atk-row" id="acc-dmg-row">
-        <div class="acc-atk-field">
-          <label>DAMAGE DICE</label>
-          <input id="acc-atk-dmg-dice" value="1d10" style="width:80px">
-        </div>
-        <div class="acc-atk-field">
-          <label>DMG MOD</label>
-          <input id="acc-atk-dmg-mod" type="number" value="0" style="width:60px">
-        </div>
         <div class="acc-atk-field" style="justify-content:flex-end">
           <label><input type="checkbox" id="acc-atk-use-armor" checked> Apply target armor</label>
         </div>
         <button class="btn red" onclick="accApplyDamage()" id="acc-apply-btn" style="align-self:flex-end;display:none">💥 APPLY DAMAGE</button>
-        <button class="btn amber" onclick="accRollDmgOnly()" style="align-self:flex-end">💥 ROLL DAMAGE</button>
       </div>
       <div class="acc-atk-result" id="acc-atk-result">Select target and roll attack.</div>
     </div>
@@ -1762,6 +1761,9 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
           <div><label class="f-label">COMPOSURE</label><input class="f-input mono sm" id="h-comp" type="number" value="5"></div>
           <div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="h-armor" type="number" value="0"></div>
         </div>
+        <div class="f-group" style="margin-top:6px;margin-bottom:0">
+          <div><label class="f-label">DEFENSE VALUE <span style="color:var(--text-dim);font-size:7px;">(what attackers must beat)</span></label><input class="f-input mono sm" id="h-defense" type="number" value="6" min="1" max="15"></div>
+        </div>
       </div>
 
       <div class="panel">
@@ -1769,7 +1771,13 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <div id="attacks-builder">
           <div class="attack-build-row">
             <div><label class="f-label">NAME</label><input class="f-input sm" placeholder="e.g. Service Pistol"></div>
-            <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" placeholder="1d10"></div>
+            <div><label class="f-label">WEAPON CLASS</label>
+              <select class="f-input sm mono">
+                <option value="light">Light (+0)</option>
+                <option value="standard" selected>Standard (+2)</option>
+                <option value="heavy">Heavy (+4)</option>
+              </select>
+            </div>
             <div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="+1"></div>
             <div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">✕</button></div>
           </div>
@@ -1865,19 +1873,23 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 
       <!-- Attack panel -->
       <div class="panel amber" style="margin-top:0">
-        <div class="panel-label amber">■ ATTACK ROLL (d10 system)</div>
+        <div class="panel-label amber">■ ATTACK ROLL (d10 — MARGIN OF SUCCESS)</div>
         <div class="f-group" style="margin-bottom:6px">
           <div><label class="f-label">ATTACK LABEL</label><input class="f-input sm" id="atk-label" placeholder="e.g. Guard — Service Pistol"></div>
           <div><label class="f-label">BONUS (attr+skill)</label><input class="f-input mono sm" id="atk-bonus" type="number" value="0"></div>
         </div>
         <div class="f-group3" style="margin-bottom:8px">
-          <div><label class="f-label">DAMAGE DICE</label><input class="f-input mono sm" id="atk-dmg" value="1d10"></div>
-          <div><label class="f-label">DMG MOD</label><input class="f-input mono sm" id="atk-dmgmod" type="number" value="0"></div>
-          <div><label class="f-label">TARGET TN (0=skip)</label><input class="f-input mono sm" id="atk-tn" type="number" value="9"></div>
+          <div><label class="f-label">DEFENSE VALUE</label><input class="f-input mono sm" id="atk-tn" type="number" value="6"></div>
+          <div><label class="f-label">WEAPON CLASS</label>
+            <select class="f-input mono sm" id="atk-wpn">
+              <option value="0">Light (+0)</option>
+              <option value="2" selected>Standard (+2)</option>
+              <option value="4">Heavy (+4)</option>
+            </select>
+          </div>
         </div>
         <div class="btn-row" style="margin-bottom:0">
-          <button class="btn amber full" onclick="rollAttack()">⬡ ATTACK ROLL (d10)</button>
-          <button class="btn red full" onclick="rollDamage()">💥 DAMAGE</button>
+          <button class="btn amber full" onclick="rollAttack()">⬡ ATTACK ROLL (d10 — RESOLVES HIT + DAMAGE)</button>
         </div>
       </div>
 
@@ -1898,10 +1910,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
           <button class="quick-btn d20" onclick="quickRoll('Assist Spiked','1d20',0,14)">Assist SPIKED TN 14</button>
           <button class="quick-btn d20" onclick="quickRoll('Flaw Resist','1d10',0,9)">Flaw Resist TN 9</button>
           <button class="quick-btn dmg" onclick="quickRoll('True Damage','1d6',0,0)">1d6 True Damage</button>
-          <button class="quick-btn dmg" onclick="quickRoll('Light Weapon','1d10',0,0)">1d10 Light Wpn</button>
-          <button class="quick-btn dmg" onclick="quickRoll('Standard Weapon','2d10',0,0)">2d10 Standard Wpn</button>
-          <button class="quick-btn dmg" onclick="quickRoll('Heavy Weapon','3d10',0,0)">3d10 Heavy Wpn</button>
-          <button class="quick-btn dmg" onclick="quickRoll('Lash Out','1d4',0,0)">1d4 Lash Out</button>
+          <button class="quick-btn dmg" onclick="quickRoll('Lash Out (SPIKED)','1d4',0,0)">1d4 Lash Out</button>
           <button class="quick-btn dmg" onclick="quickRoll('True Damage x2','2d6',0,0)">2d6 True Damage</button>
         </div>
       </div>
@@ -2023,10 +2032,11 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="eh-resolve" type="number" min="0" max="5"></div>
     </div>
     <div class="panel-label" style="margin:0 0 6px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--red-bright);">■ VITALS</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:9px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:9px;">
       <div><label class="f-label">HP</label><input class="f-input mono sm" id="eh-hp" type="number"></div>
       <div><label class="f-label">COMPOSURE</label><input class="f-input mono sm" id="eh-comp" type="number"></div>
       <div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="eh-armor" type="number"></div>
+      <div><label class="f-label">DEFENSE VALUE</label><input class="f-input mono sm" id="eh-defense" type="number" min="1" max="15"></div>
     </div>
     <div class="panel-label" style="margin:0 0 6px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--red-bright);">■ ATTACKS</div>
     <div id="eh-attacks-builder"></div>
@@ -2569,6 +2579,7 @@ function renderActiveCommandCenter() {
     `<span class="acc-badge ${typeC}">${c.type.toUpperCase()}</span>` +
     (c.trackerRef ? '<span class="acc-badge tracker">TRACKER</span>' : '') +
     (c.armor ? `<span class="acc-badge">ARM-${c.armor}</span>` : '') +
+    (c.defense ? `<span class="acc-badge" style="color:var(--amber);border-color:var(--amber-dim)">DEF-${c.defense}</span>` : '') +
     `<span class="acc-badge ${warnC}" style="color:${sc};border-color:${sc}60">SPIKE ${c.spike||0} — ${sl}</span>`;
 
   // ── HP
@@ -2682,10 +2693,21 @@ function _refreshAtkTargets() {
   if (!sel) return;
   const targets = combatants.filter(x => x.id !== c.id && x.status !== 'dead');
   sel.innerHTML = targets.map(t =>
-    `<option value="${t.id}">${escHtml(t.name)} HP:${t.hp} ARM:${t.armor||0}</option>`
+    `<option value="${t.id}" data-def="${t.defense || 6}">${escHtml(t.name)} HP:${t.hp} ARM:${t.armor||0} DEF:${t.defense||6}</option>`
   ).join('');
-  if (targets.length) _accAtkTargetId = targets[0].id;
-  sel.onchange = () => { _accAtkTargetId = sel.value; };
+  if (targets.length) {
+    _accAtkTargetId = targets[0].id;
+    // Auto-fill defense value from first target
+    const defInput = document.getElementById('acc-atk-tn');
+    if (defInput) defInput.value = targets[0].defense || 6;
+  }
+  sel.onchange = () => {
+    _accAtkTargetId = sel.value;
+    // Update defense field to match selected target
+    const opt = sel.options[sel.selectedIndex];
+    const defInput = document.getElementById('acc-atk-tn');
+    if (defInput && opt) defInput.value = opt.dataset.def || 6;
+  };
 }
 
 function getCurrentAcc() {
@@ -2781,86 +2803,88 @@ function accLaunchAtk() {
   const lbl   = document.getElementById('acc-atk-strip-label');
   if (lbl) lbl.textContent = c.name.toUpperCase() + ' // ATTACK';
   document.getElementById('acc-atk-bonus').value = 0;
-  document.getElementById('acc-atk-dmg-dice').value = '1d10';
-  document.getElementById('acc-atk-dmg-mod').value = 0;
-  document.getElementById('acc-atk-tn').value = 9;
+  document.getElementById('acc-atk-tn').value = 6;
   document.getElementById('acc-atk-mode').value = 'normal';
   document.getElementById('acc-atk-roll').value = '';
-  document.getElementById('acc-atk-result').innerHTML = 'Select target and roll attack.';
+  document.getElementById('acc-atk-result').innerHTML = 'Select target and roll to resolve.';
   document.getElementById('acc-apply-btn').style.display = 'none';
   _accLastHitResult = null;
   _refreshAtkTargets();
   strip.classList.add('open');
 }
 function accLaunchAtkFromItem(name, dice, bonus) {
+  // dice param now encodes weapon class: 'light', 'standard', 'heavy' or legacy dice string
   accLaunchAtk();
   const lbl = document.getElementById('acc-atk-strip-label');
   if (lbl) lbl.textContent = name.toUpperCase();
   document.getElementById('acc-atk-bonus').value = bonus;
-  document.getElementById('acc-atk-dmg-dice').value = dice;
+  // Map weapon class to modifier if applicable
+  const wpnSel = document.getElementById('acc-atk-wpn-class');
+  if (wpnSel) {
+    if (dice === 'light' || dice === '1d10')       wpnSel.value = '0';
+    else if (dice === 'heavy' || dice === '3d10')  wpnSel.value = '4';
+    else                                           wpnSel.value = '2'; // standard default
+  }
 }
 function accAutoRoll() {
   const bonus = parseInt(document.getElementById('acc-atk-bonus').value) || 0;
   const mode  = document.getElementById('acc-atk-mode').value;
   let roll;
-  if (mode === 'advantage')    roll = Math.max(rollD10(), rollD10());
+  if (mode === 'advantage')         roll = Math.max(rollD10(), rollD10());
   else if (mode === 'disadvantage') roll = Math.min(rollD10(), rollD10());
-  else roll = rollD10();
+  else                              roll = rollD10();
   document.getElementById('acc-atk-roll').value = roll + bonus;
 }
 function accCheckHit() {
-  const total  = parseInt(document.getElementById('acc-atk-roll').value);
-  const tn     = parseInt(document.getElementById('acc-atk-tn').value) || 9;
-  const bonus  = parseInt(document.getElementById('acc-atk-bonus').value) || 0;
-  const raw    = total - bonus;
-  const result = document.getElementById('acc-atk-result');
+  const total   = parseInt(document.getElementById('acc-atk-roll').value);
+  const defVal  = parseInt(document.getElementById('acc-atk-tn').value) || 6;
+  const bonus   = parseInt(document.getElementById('acc-atk-bonus').value) || 0;
+  const wpnMod  = parseInt(document.getElementById('acc-atk-wpn-class').value) || 0;
+  const raw     = total - bonus;  // the die face
+  const result  = document.getElementById('acc-atk-result');
   if (isNaN(total)) { result.innerHTML='<span class="acc-r-miss">Enter an attack roll first.</span>'; return; }
-  const hit    = total >= tn;
-  const isCrit = raw === 10;
-  const isFault= raw === 1;
+  const hit     = total >= defVal;
+  const isCrit  = raw === 10;
+  const isFault = raw === 1;
   const c = getCurrentAcc();
-  addToLog({ expr: `1d10${bonus>=0?'+':''}${bonus}`, label: `⬡ ${c?c.name:'?'} Attack`, rolls: [raw], sides: 10, total, tn, timestamp: now(), crit: isCrit, fault: isFault });
-  if (hit) {
-    result.innerHTML = `<span class="acc-r-hit">${isCrit?'★ CRIT HIT':'✓ HIT'}</span> Roll ${total} vs TN ${tn}${isCrit?' — +2 damage bonus':''}`;
-    document.getElementById('acc-apply-btn').style.display = '';
-    _accLastHitResult = { hit: true, crit: isCrit };
-  } else {
-    result.innerHTML = `<span class="acc-r-miss">${isFault?'✗ CRIT FAULT':'✗ MISS'}</span> Roll ${total} vs TN ${tn}`;
+
+  if (!hit || isFault) {
+    result.innerHTML = `<span class="acc-r-miss">${isFault?'✗ CRIT FAULT':'✗ MISS'}</span> — Roll ${total} vs DEF ${defVal}${isFault?' — complication introduced':''}`;
     document.getElementById('acc-apply-btn').style.display = 'none';
     _accLastHitResult = { hit: false };
+    addToLog({ expr: `1d10${bonus>=0?'+':''}${bonus}`, label: `⬡ ${c?c.name:'?'} Attack`, rolls: [raw], sides: 10, total, tn: defVal, timestamp: now(), fault: isFault });
+    return;
   }
-}
-function accRollDmgOnly() {
-  const dice = document.getElementById('acc-atk-dmg-dice').value || '1d10';
-  const mod  = parseInt(document.getElementById('acc-atk-dmg-mod').value) || 0;
-  const crit = _accLastHitResult && _accLastHitResult.crit;
-  const result = rollDiceStr(dice);
-  const total  = result.total + (crit ? 2 : 0) + mod;
-  const c = getCurrentAcc();
-  addToLog({ expr: dice + (mod?(mod>0?'+':'')+mod:''), label: `💥 ${c?c.name:'?'} Damage${crit?' (CRIT +2)':''}`, rolls: result.rolls, sides: result.sides, total, tn: 0, timestamp: now() });
-  document.getElementById('acc-atk-result').innerHTML = `<span class="acc-r-dmg">💥 ${total} DAMAGE</span>${crit?'<span class="acc-r-crit"> (CRIT +2)</span>':''}`;
+
+  // Hit — calculate damage immediately from margin
+  let baseDmg = total - defVal;
+  if (isCrit) baseDmg *= 2;  // Nat 10 doubles base before weapon mod
+  const rawDmg = baseDmg + wpnMod;
+
+  const wpnLabel = wpnMod === 0 ? 'Light' : wpnMod === 2 ? 'Standard' : 'Heavy';
+  result.innerHTML = `<span class="acc-r-hit">${isCrit?'★ CRIT':'✓ HIT'}</span> — Roll ${total} vs DEF ${defVal} → margin ${total - defVal}${isCrit?' ×2 (CRIT)':''} + ${wpnLabel} (+${wpnMod}) = <span class="acc-r-dmg">${rawDmg} raw damage</span> — apply armor then click APPLY`;
+  document.getElementById('acc-apply-btn').style.display = '';
+  _accLastHitResult = { hit: true, crit: isCrit, rawDmg };
+  addToLog({ expr: `1d10${bonus>=0?'+':''}${bonus}`, label: `⬡ ${c?c.name:'?'} Attack (DEF ${defVal})`, rolls: [raw], sides: 10, total, tn: defVal, timestamp: now(), crit: isCrit });
 }
 function accApplyDamage() {
   const targetId = _accAtkTargetId || document.getElementById('acc-atk-target').value;
-  const dice     = document.getElementById('acc-atk-dmg-dice').value || '1d10';
-  const mod      = parseInt(document.getElementById('acc-atk-dmg-mod').value) || 0;
   const useArmor = document.getElementById('acc-atk-use-armor').checked;
+  const rawDmg   = _accLastHitResult ? _accLastHitResult.rawDmg : 0;
   const crit     = _accLastHitResult && _accLastHitResult.crit;
   if (!targetId) { document.getElementById('acc-atk-result').innerHTML = '<span class="acc-r-miss">No target selected.</span>'; return; }
   const tc = combatants.find(x => x.id === targetId);
   if (!tc) return;
-  const dmgResult = rollDiceStr(dice);
-  const rawDmg    = dmgResult.total + (crit ? 2 : 0) + mod;
-  const armor     = useArmor ? (tc.armor || 0) : 0;
-  const finalDmg  = Math.max(0, rawDmg - armor);
+  const armor    = useArmor ? (tc.armor || 0) : 0;
+  const finalDmg = Math.max(0, rawDmg - armor);
   tc.hp = Math.max(0, tc.hp - finalDmg);
   if (tc.hp === 0 && tc.status === 'alive') tc.status = 'down';
   saveState(); liveUpdateHp(tc); broadcastSyncFromCombat(tc);
   const c = getCurrentAcc();
   document.getElementById('acc-atk-result').innerHTML =
     `<span class="acc-r-hit">✓ APPLIED</span> <span class="acc-r-dmg">${finalDmg} dmg</span>` +
-    ` (${rawDmg} raw${armor?` −${armor} armor`:''}) → ${escHtml(tc.name)} HP: ${tc.hp}/${tc.hpMax}`;
-  addToLog({ expr: dice + (mod?(mod>0?'+':'')+mod:''), label: `💥 ${c?c.name:'?'} → ${tc.name}${crit?' (CRIT)':''}`, rolls: dmgResult.rolls, sides: dmgResult.sides, total: rawDmg, tn: 0, timestamp: now() });
+    ` (${rawDmg} raw${armor ? ` −${armor} armor` : ''}${crit?' CRIT':''}) → ${escHtml(tc.name)} HP: ${tc.hp}/${tc.hpMax}`;
+  addToLog({ expr: `margin+wpn`, label: `💥 ${c?c.name:'?'} → ${tc.name}${crit?' (CRIT)':''}`, rolls: [rawDmg], sides: rawDmg, total: finalDmg, tn: 0, timestamp: now() });
   document.getElementById('acc-apply-btn').style.display = 'none';
   _accLastHitResult = null;
 }
@@ -3129,11 +3153,13 @@ function saveHostile() {
 
   const attacks = [];
   document.querySelectorAll('#attacks-builder .attack-build-row').forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const aName  = inputs[0]?.value.trim();
-    const aDice  = inputs[1]?.value.trim();
-    const aBonus = inputs[2]?.value.trim();
-    if (aName || aDice) attacks.push({ name: aName || '—', dice: aDice || '1d10', bonus: aBonus || '0' });
+    const nameEl  = row.querySelector('input[placeholder="e.g. Service Pistol"], input[placeholder="Attack name"]');
+    const wpnSel  = row.querySelector('select');
+    const bonusEl = row.querySelectorAll('input')[1];
+    const aName   = nameEl?.value.trim();
+    const aWpn    = wpnSel?.value || 'standard';
+    const aBonus  = bonusEl?.value.trim();
+    if (aName) attacks.push({ name: aName || '—', dice: aWpn, bonus: aBonus || '0' });
   });
 
   hostileRoster.push({
@@ -3147,6 +3173,7 @@ function saveHostile() {
     hp:      parseInt(document.getElementById('h-hp').value)      || 10,
     comp:    parseInt(document.getElementById('h-comp').value)    || 5,
     armor:   parseInt(document.getElementById('h-armor').value)   || 0,
+    defense: parseInt(document.getElementById('h-defense').value) || 6,
     attacks,
     notes: document.getElementById('h-notes').value.trim()
   });
@@ -3161,10 +3188,17 @@ function clearHostileForm() {
   ['h-body','h-mind','h-tech','h-aware','h-resolve'].forEach(id => { const el = document.getElementById(id); if (el) el.value = '1'; });
   ['h-hp','h-comp'].forEach(id => { const el = document.getElementById(id); if (el) el.value = id==='h-hp'?'10':'5'; });
   document.getElementById('h-armor').value = '0';
+  document.getElementById('h-defense').value = '6';
   document.getElementById('attacks-builder').innerHTML = `
     <div class="attack-build-row">
       <div><label class="f-label">NAME</label><input class="f-input sm" placeholder="e.g. Service Pistol"></div>
-      <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" placeholder="1d10"></div>
+      <div><label class="f-label">WEAPON CLASS</label>
+        <select class="f-input sm mono">
+          <option value="light">Light (+0)</option>
+          <option value="standard" selected>Standard (+2)</option>
+          <option value="heavy">Heavy (+4)</option>
+        </select>
+      </div>
       <div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="+1"></div>
       <div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">✕</button></div>
     </div>`;
@@ -3175,7 +3209,13 @@ function addAtkRow() {
   row.className = 'attack-build-row';
   row.innerHTML = `
     <div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div>
-    <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" placeholder="2d10"></div>
+    <div><label class="f-label">WEAPON CLASS</label>
+      <select class="f-input sm mono">
+        <option value="light">Light (+0)</option>
+        <option value="standard" selected>Standard (+2)</option>
+        <option value="heavy">Heavy (+4)</option>
+      </select>
+    </div>
     <div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="+2"></div>
     <div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">✕</button></div>`;
   document.getElementById('attacks-builder').appendChild(row);
@@ -3208,18 +3248,26 @@ function openEditHostile(id) {
   document.getElementById('eh-hp').value      = h.hp     ?? 10;
   document.getElementById('eh-comp').value    = h.comp   ?? 5;
   document.getElementById('eh-armor').value   = h.armor  ?? 0;
+  document.getElementById('eh-defense').value = h.defense ?? 6;
   document.getElementById('eh-notes').value   = h.notes  || '';
 
   // Build attack rows
   const builder = document.getElementById('eh-attacks-builder');
   builder.innerHTML = '';
-  const attacks = (h.attacks && h.attacks.length) ? h.attacks : [{ name: '', dice: '1d10', bonus: '0' }];
+  const attacks = (h.attacks && h.attacks.length) ? h.attacks : [{ name: '', dice: 'standard', bonus: '0' }];
   attacks.forEach(a => {
+    const wpnVal = (a.dice === 'light' || a.dice === 'heavy') ? a.dice : 'standard';
     const row = document.createElement('div');
     row.className = 'attack-build-row';
     row.innerHTML = `
       <div><label class="f-label">NAME</label><input class="f-input sm" value="${escHtml(a.name || '')}"></div>
-      <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" value="${escHtml(a.dice || '1d10')}"></div>
+      <div><label class="f-label">WEAPON CLASS</label>
+        <select class="f-input sm mono">
+          <option value="light"${wpnVal==='light'?' selected':''}>Light (+0)</option>
+          <option value="standard"${wpnVal==='standard'?' selected':''}>Standard (+2)</option>
+          <option value="heavy"${wpnVal==='heavy'?' selected':''}>Heavy (+4)</option>
+        </select>
+      </div>
       <div><label class="f-label">BONUS</label><input class="f-input sm mono" value="${escHtml(a.bonus || '0')}"></div>
       <div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">✕</button></div>`;
     builder.appendChild(row);
@@ -3233,7 +3281,13 @@ function addEhAtkRow() {
   row.className = 'attack-build-row';
   row.innerHTML = `
     <div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div>
-    <div><label class="f-label">DAMAGE</label><input class="f-input sm mono" placeholder="1d10"></div>
+    <div><label class="f-label">WEAPON CLASS</label>
+      <select class="f-input sm mono">
+        <option value="light">Light (+0)</option>
+        <option value="standard" selected>Standard (+2)</option>
+        <option value="heavy">Heavy (+4)</option>
+      </select>
+    </div>
     <div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div>
     <div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">✕</button></div>`;
   document.getElementById('eh-attacks-builder').appendChild(row);
@@ -3255,11 +3309,13 @@ function confirmEditHostile() {
 
   const attacks = [];
   document.querySelectorAll('#eh-attacks-builder .attack-build-row').forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const aName  = inputs[0]?.value.trim();
-    const aDice  = inputs[1]?.value.trim();
-    const aBonus = inputs[2]?.value.trim();
-    if (aName || aDice) attacks.push({ name: aName || '—', dice: aDice || '1d10', bonus: aBonus || '0' });
+    const nameEl  = row.querySelector('input');
+    const wpnSel  = row.querySelector('select');
+    const bonusEl = row.querySelectorAll('input')[1];
+    const aName   = nameEl?.value.trim();
+    const aWpn    = wpnSel?.value || 'standard';
+    const aBonus  = bonusEl?.value.trim();
+    if (aName) attacks.push({ name: aName || '—', dice: aWpn, bonus: aBonus || '0' });
   });
 
   // Update in place
@@ -3274,6 +3330,7 @@ function confirmEditHostile() {
     hp:      parseInt(document.getElementById('eh-hp').value)      || 10,
     comp:    parseInt(document.getElementById('eh-comp').value)    || 5,
     armor:   parseInt(document.getElementById('eh-armor').value)   || 0,
+    defense: parseInt(document.getElementById('eh-defense').value) || 6,
     attacks,
     notes: document.getElementById('eh-notes').value.trim(),
   });
@@ -3346,6 +3403,7 @@ function deployHostile() {
       init, initBonus: h.aware || 0,
       hp: h.hp, hpMax: h.hp,
       armor: h.armor || 0,
+      defense: h.defense || 6,
       comp: h.comp || 5, compMax: h.comp || 5,
       spike: 0,
       reactions: [false, false],
@@ -3368,6 +3426,7 @@ function deployOne(id) {
     init, initBonus: h.aware || 0,
     hp: h.hp, hpMax: h.hp,
     armor: h.armor || 0,
+    defense: h.defense || 6,
     comp: h.comp || 5, compMax: h.comp || 5,
     spike: 0,
     reactions: [false, false],
@@ -3416,16 +3475,21 @@ function renderHostileRoster() {
           <div class="hostile-vital"><div class="hostile-vital-lbl">HP</div><div class="hostile-vital-val">${h.hp}</div></div>
           <div class="hostile-vital"><div class="hostile-vital-lbl">COMP</div><div class="hostile-vital-val">${h.comp}</div></div>
           <div class="hostile-vital"><div class="hostile-vital-lbl">ARMOR</div><div class="hostile-vital-val">${h.armor}</div></div>
+          <div class="hostile-vital" style="border-left:2px solid var(--amber-dim)"><div class="hostile-vital-lbl" style="color:var(--amber)">DEF</div><div class="hostile-vital-val" style="color:var(--amber)">${h.defense ?? 6}</div></div>
         </div>
         ${h.attacks && h.attacks.length ? `
           <div class="hostile-attacks">
             <div style="font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:.14em;color:var(--text-dim);margin-bottom:5px">ATTACKS</div>
-            ${h.attacks.map(a => `
+            ${h.attacks.map(a => {
+              const wpnMod = a.dice === 'light' ? 0 : a.dice === 'heavy' ? 4 : 2;
+              const wpnLabel = a.dice === 'light' ? 'Light +0' : a.dice === 'heavy' ? 'Heavy +4' : 'Std +2';
+              return `
               <div class="attack-entry">
                 <div class="attack-name">${escHtml(a.name)}</div>
-                <div class="attack-dice">${escHtml(a.dice)}${a.bonus && a.bonus !== '0' ? ` (${a.bonus})` : ''}</div>
-                <button class="btn sm amber" onclick="quickRollAtk('${escHtml(a.name)}','${escHtml(a.dice)}',${parseInt(a.bonus)||0})">⬡</button>
-              </div>`).join('')}
+                <div class="attack-dice">${wpnLabel}${a.bonus && a.bonus !== '0' ? ` atk${parseInt(a.bonus)>=0?'+':''}${a.bonus}` : ''}</div>
+                <button class="btn sm amber" onclick="accLaunchAtkFromItem('${escHtml(a.name)}','${escHtml(a.dice)}',${parseInt(a.bonus)||0})">⬡ ATK</button>
+              </div>`;
+            }).join('')}
           </div>` : ''}
         ${h.notes ? `<div style="font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--text-dim);padding-top:7px;border-top:1px solid var(--border);margin-top:6px;line-height:1.5">${escHtml(h.notes)}</div>` : ''}
       </div>
@@ -3507,28 +3571,31 @@ function quickRoll(label, diceStr, mod, tn) {
 }
 
 function rollAttack() {
-  const label = document.getElementById('atk-label').value.trim() || 'Attack Roll';
-  const bonus = parseInt(document.getElementById('atk-bonus').value) || 0;
-  const tn    = parseInt(document.getElementById('atk-tn').value)   || 0;
-  const roll  = rollD10();
-  const total = roll + bonus;
-  const isCrit = roll === 10;
+  const label  = document.getElementById('atk-label').value.trim() || 'Attack Roll';
+  const bonus  = parseInt(document.getElementById('atk-bonus').value) || 0;
+  const defVal = parseInt(document.getElementById('atk-tn').value)   || 6;
+  const wpnMod = parseInt(document.getElementById('atk-wpn').value)  || 0;
+  const wpnLabel = wpnMod === 0 ? 'Light' : wpnMod === 4 ? 'Heavy' : 'Standard';
+  const roll   = rollD10();
+  const total  = roll + bonus;
+  const isCrit  = roll === 10;
   const isFault = roll === 1;
+  const hit     = total >= defVal && !isFault;
+
+  let dmgNote = '';
+  if (hit) {
+    let base = total - defVal;
+    if (isCrit) base *= 2;
+    const raw = base + wpnMod;
+    dmgNote = ` → margin ${total - defVal}${isCrit?' ×2':''}+${wpnMod}(${wpnLabel}) = ${raw} raw dmg`;
+  }
+
   addToLog({
     expr: `1d10${bonus>=0?'+':''}${bonus}`,
-    label: `⬡ ${label}${isCrit ? ' ★ CRIT SUCCESS' : isFault ? ' ✗ CRIT FAULT' : ''}`,
-    rolls: [roll], sides: 10, total, tn, timestamp: now(),
+    label: `⬡ ${label} vs DEF ${defVal}${isCrit?' ★ CRIT':isFault?' ✗ FAULT':hit?'':' MISS'}${dmgNote}`,
+    rolls: [roll], sides: 10, total, tn: defVal, timestamp: now(),
     crit: isCrit, fault: isFault
   });
-}
-
-function rollDamage() {
-  const diceStr = document.getElementById('atk-dmg').value.trim() || '1d10';
-  const mod     = parseInt(document.getElementById('atk-dmgmod').value) || 0;
-  const label   = (document.getElementById('atk-label').value.trim() || 'Attack') + ' DAMAGE';
-  const result  = rollDiceStr(diceStr);
-  const total   = result.total + mod;
-  addToLog({ expr: `${diceStr}${mod?(mod>0?'+':'')+mod:''}`, label: `💥 ${label}`, rolls: result.rolls, sides: result.sides, total, tn: 0, timestamp: now() });
 }
 
 function addToLog(entry) {
