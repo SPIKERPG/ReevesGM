@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SPIKE — Field Map</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap');
+
+:root {
+  --bg:        #090a07;
+  --surface:   #0e0f0b;
+  --surface2:  #131408;
+  --border:    #1e2014;
+  --border-hi: #2a2d1a;
+  --text:      #b8baa5;
+  --text-dim:  #555748;
+  --text-hi:   #dfe1cc;
+  --green:     #7a9a28;
+  --green-dim: #4a5e18;
+  --red:       #8a2020;
+  --red-b:     #c03030;
+  --amber:     #b87820;
+  --amber-dim: #6e4810;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html, body {
+  width:100%; height:100%;
+  background:var(--bg-override, var(--bg));
+  overflow:hidden;
+}
+
+body {
+  display:flex;
+  flex-direction:column;
+  font-family:'Share Tech Mono',monospace;
+}
+
+/* ── SCANLINES ── */
+body::after{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);
+  pointer-events:none;z-index:9998;
+}
+
+/* ── HEADER STRIP ── */
+.viewer-header{
+  background:rgba(0,0,0,.6);
+  border-bottom:1px solid var(--border-hi);
+  padding:6px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+  z-index:100;
+  backdrop-filter:blur(4px);
+}
+
+.vh-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:14px;
+  letter-spacing:.4em;
+  color:var(--text-hi);
+  line-height:1;
+}
+
+.vh-mapname{
+  font-size:9px;
+  letter-spacing:.18em;
+  color:var(--green);
+  margin-top:1px;
+}
+
+.vh-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.vh-status{
+  font-size:7.5px;
+  letter-spacing:.2em;
+  color:var(--text-dim);
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.vh-status .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:pulse 2s ease-in-out infinite;
+}
+
+.vh-status .dot.inactive{background:var(--text-dim);animation:none}
+
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.35}
+}
+
+.vh-meta{font-size:7px;letter-spacing:.16em;color:var(--text-dim)}
+
+/* ── PIN BUTTON (hidden in player mode) ── */
+.gm-btn{
+  font-size:7.5px;letter-spacing:.14em;
+  color:var(--text-dim);
+  border:1px solid var(--border-hi);
+  padding:4px 10px;cursor:pointer;
+  background:none;transition:all .12s;
+}
+.gm-btn:hover{color:var(--amber);border-color:var(--amber-dim)}
+
+/* ── MAP AREA ── */
+.map-area{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  min-height:0;
+}
+
+/* The image itself */
+#map-img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+  transition:opacity .4s ease;
+}
+
+#map-img.fill-mode{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  max-width:none;
+  max-height:none;
+}
+
+#map-img.original-mode{
+  max-width:none;
+  max-height:none;
+  width:auto;
+  height:auto;
+  overflow:auto;
+}
+
+/* ── EMPTY / WAITING STATE ── */
+.waiting-screen{
+  position:absolute;inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+}
+
+.ws-icon{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:80px;
+  letter-spacing:.2em;
+  color:rgba(122,154,40,.08);
+  line-height:1;
+}
+
+.ws-label{
+  font-size:8.5px;
+  letter-spacing:.28em;
+  color:var(--text-dim);
+  text-align:center;
+  line-height:1.8;
+}
+
+.ws-pulse{
+  width:40px;height:2px;
+  background:var(--green-dim);
+  animation:ws-scan 1.8s ease-in-out infinite;
+}
+
+@keyframes ws-scan{
+  0%{width:40px;opacity:.3}
+  50%{width:120px;opacity:.8}
+  100%{width:40px;opacity:.3}
+}
+
+/* ── LOCATION BADGE ── */
+.location-badge{
+  position:absolute;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.75);
+  border:1px solid var(--border-hi);
+  border-top:1px solid var(--green-dim);
+  padding:6px 20px;
+  display:none;
+  z-index:50;
+  backdrop-filter:blur(4px);
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.location-badge.visible{display:block}
+
+.lb-folder{
+  font-size:7px;letter-spacing:.2em;color:var(--green-dim);margin-bottom:2px;
+}
+
+.lb-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;letter-spacing:.2em;color:var(--text-hi);
+}
+
+/* ── PIN MODAL ── */
+.modal-backdrop{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;justify-content:center;
+  z-index:1000;
+}
+.modal-backdrop.open{display:flex}
+
+.modal{
+  background:var(--surface2);
+  border:1px solid var(--border-hi);
+  border-top:2px solid var(--amber);
+  padding:28px 32px;
+  width:340px;
+  text-align:center;
+}
+.modal-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.3em;
+  color:var(--text-hi);margin-bottom:6px;
+}
+.modal-sub{font-size:8px;letter-spacing:.16em;color:var(--text-dim);margin-bottom:22px}
+.pin-display{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+.pin-dot{
+  width:18px;height:18px;border-radius:50%;
+  border:1px solid var(--border-hi);background:transparent;transition:all .12s;
+}
+.pin-dot.filled{background:var(--amber);border-color:var(--amber)}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pin-key{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.1em;
+  background:var(--surface);border:1px solid var(--border-hi);
+  color:var(--text-hi);padding:12px;cursor:pointer;transition:all .12s;
+}
+.pin-key:hover{border-color:var(--amber);color:var(--amber)}
+.pin-error{
+  font-size:8.5px;letter-spacing:.14em;color:var(--red-b);
+  padding:6px;margin-bottom:6px;display:none;
+}
+.pin-error.visible{display:block}
+.modal-cancel{
+  font-size:8px;letter-spacing:.14em;color:var(--text-dim);cursor:pointer;
+  padding:5px 14px;border:1px solid var(--border);background:none;transition:all .12s;
+}
+.modal-cancel:hover{color:var(--text);border-color:var(--border-hi)}
+
+/* ── NAV MODAL (shown after PIN) ── */
+.nav-modal-content{
+  background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid var(--red-b);
+  padding:24px;width:min(90vw,800px);max-height:90vh;overflow-y:auto;
+}
+.nav-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.3em;
+  color:var(--red-b);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;
+}
+.nav-sub{font-size:7.5px;letter-spacing:.14em;color:var(--text-dim);margin-bottom:18px}
+.nav-folder-tabs{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--border-hi);margin-bottom:14px}
+.nav-folder-tab{
+  font-size:8px;letter-spacing:.14em;color:var(--text-dim);
+  padding:8px 16px;border-right:1px solid var(--border);cursor:pointer;
+  white-space:nowrap;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .12s;
+}
+.nav-folder-tab.active{color:var(--red-b);border-bottom-color:var(--red-b)}
+.nav-folder-tab:hover{color:var(--text)}
+.nav-map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.nav-map-card{
+  background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--border-hi);
+  cursor:pointer;transition:all .12s;overflow:hidden;
+}
+.nav-map-card:hover{border-top-color:var(--red-b);border-color:var(--border-hi)}
+.nav-map-card.active-map{border-top-color:var(--green);border-color:var(--green-dim)}
+.nav-map-thumb{
+  width:100%;aspect-ratio:16/10;object-fit:cover;display:block;filter:brightness(.75);transition:filter .12s;
+}
+.nav-map-card:hover .nav-map-thumb{filter:brightness(1)}
+.nav-map-thumb-ph{
+  width:100%;aspect-ratio:16/10;background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--border-hi);
+}
+.nav-map-info{padding:7px 9px}
+.nav-map-name{
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.14em;
+  color:var(--text-hi);margin-bottom:1px;
+}
+.nav-map-meta{font-size:7px;letter-spacing:.1em;color:var(--text-dim)}
+
+/* ── TOUCH ZOOM ── */
+.map-area{touch-action:pinch-zoom}
+
+/* ── FULLSCREEN BUTTON ── */
+.fs-btn{
+  font-size:9px;letter-spacing:.1em;color:var(--text-dim);
+  border:1px solid var(--border);padding:4px 9px;cursor:pointer;
+  background:none;transition:all .12s;
+}
+.fs-btn:hover{color:var(--text-hi);border-color:var(--border-hi)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="viewer-header">
+  <div>
+    <div class="vh-title" id="vh-title">SPIKE: THE REEVES TRIALS</div>
+    <div class="vh-mapname" id="vh-mapname">■ AWAITING MAP SELECTION</div>
+  </div>
+  <div class="vh-right">
+    <div class="vh-status">
+      <div class="dot" id="status-dot"></div>
+      <span id="status-text">LIVE</span>
+    </div>
+    <div class="vh-meta" id="vh-time">—</div>
+    <button class="fs-btn" onclick="toggleFullscreen()">⬛ FULLSCREEN</button>
+    <button class="gm-btn" onclick="openPinModal()">■ GM</button>
+  </div>
+</div>
+
+<!-- MAP AREA -->
+<div class="map-area" id="map-area">
+  <!-- Waiting state -->
+  <div class="waiting-screen" id="waiting-screen">
+    <div class="ws-icon">UGD</div>
+    <div class="ws-pulse"></div>
+    <div class="ws-label">■ UNITED GLOBAL DIRECTORATE ■ FIELD OPERATIONS ■<br>AWAITING MAP SELECTION FROM GM<br><span style="color:var(--text-hi)">MAP VIEWER IS LIVE</span></div>
+  </div>
+
+  <!-- Map image (hidden until map is selected) -->
+  <img id="map-img" src="" alt="" style="display:none" onload="onMapLoaded()" onerror="onMapError()">
+
+  <!-- Location badge (bottom center) -->
+  <div class="location-badge" id="location-badge">
+    <div class="lb-folder" id="lb-folder">LOCATION</div>
+    <div class="lb-name" id="lb-name">MAP NAME</div>
+  </div>
+</div>
+
+<!-- PIN MODAL -->
+<div class="modal-backdrop" id="pin-modal">
+  <div class="modal">
+    <div class="modal-title">GM ACCESS</div>
+    <div class="modal-sub">■ ENTER PIN TO ACCESS MAP NAVIGATION ■</div>
+    <div class="pin-display" id="pin-display">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-error" id="pin-error">■ INCORRECT PIN — ACCESS DENIED ■</div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinKey('1')">1</button>
+      <button class="pin-key" onclick="pinKey('2')">2</button>
+      <button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button>
+      <button class="pin-key" onclick="pinKey('5')">5</button>
+      <button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button>
+      <button class="pin-key" onclick="pinKey('8')">8</button>
+      <button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key" onclick="pinBackspace()">⌫</button>
+      <button class="pin-key" onclick="pinKey('0')">0</button>
+      <button class="pin-key" onclick="pinConfirm()">✓</button>
+    </div>
+    <button class="modal-cancel" onclick="closePinModal()">CANCEL</button>
+  </div>
+</div>
+
+<!-- NAV MODAL (unlocked after PIN) -->
+<div class="modal-backdrop" id="nav-modal" onclick="if(event.target===this)closeNavModal()">
+  <div class="nav-modal-content">
+    <div class="nav-title">
+      MAP NAVIGATION
+      <button onclick="closeNavModal()" style="font-size:9px;color:var(--text-dim);border:1px solid var(--border);background:none;padding:4px 10px;cursor:pointer">✕ CLOSE</button>
+    </div>
+    <div class="nav-sub">■ GM COMMAND // SELECT MAP TO DISPLAY ■ &nbsp;|&nbsp; <a href="gm_maps.html" style="color:var(--amber);text-decoration:none">→ OPEN GM MAP COMMAND</a></div>
+    <div class="nav-folder-tabs" id="nav-folder-tabs"></div>
+    <div class="nav-map-grid" id="nav-map-grid"></div>
+  </div>
+</div>
+
+<script>
+const DISPLAY_KEY = 'spike_active_map_v1';
+const STORAGE_KEY = 'spike_maps_v1';
+const CONFIG_KEY  = 'spike_map_config_v1';
+
+let currentData   = null;
+let mapsState     = null;
+let config        = { pin: '', title: 'SPIKE: THE REEVES TRIALS', bg: '#090a07' };
+let pinBuffer     = '';
+let navFolder     = null;
+let pollInterval  = null;
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  loadAll();
+  startPolling();
+  updateClock();
+  setInterval(updateClock, 10000);
+});
+
+function loadAll() {
+  try {
+    const rawCfg = localStorage.getItem(CONFIG_KEY);
+    if (rawCfg) config = { ...config, ...JSON.parse(rawCfg) };
+  } catch(e) {}
+  try {
+    const rawMaps = localStorage.getItem(STORAGE_KEY);
+    if (rawMaps) mapsState = JSON.parse(rawMaps);
+  } catch(e) {}
+
+  // Apply title
+  document.getElementById('vh-title').textContent = config.title || 'SPIKE: THE REEVES TRIALS';
+
+  // Apply background
+  document.documentElement.style.setProperty('--bg-override', config.bg || '#090a07');
+  document.body.style.background = config.bg || '#090a07';
+
+  readDisplayState();
+}
+
+// ── POLLING ──
+function startPolling() {
+  // Poll localStorage every 1.5 seconds for map changes
+  pollInterval = setInterval(readDisplayState, 1500);
+}
+
+// Also react instantly to storage events from same browser
+window.addEventListener('storage', e => {
+  if (e.key === DISPLAY_KEY || e.key === STORAGE_KEY || e.key === CONFIG_KEY) {
+    loadAll();
+  }
+});
+
+function readDisplayState() {
+  try {
+    const raw = localStorage.getItem(DISPLAY_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+
+    // Check if anything changed
+    const ts = data.ts || 0;
+    if (currentData && currentData.ts === ts) return;
+    currentData = data;
+
+    // Apply config updates
+    if (data.config) {
+      config = { ...config, ...data.config };
+      document.getElementById('vh-title').textContent = config.title || 'SPIKE: THE REEVES TRIALS';
+      document.body.style.background = config.bg || '#090a07';
+    }
+
+    applyMap(data.map);
+  } catch(e) {}
+}
+
+function applyMap(map) {
+  const img     = document.getElementById('map-img');
+  const waiting = document.getElementById('waiting-screen');
+  const badge   = document.getElementById('location-badge');
+  const dot     = document.getElementById('status-dot');
+  const statusTxt = document.getElementById('status-text');
+
+  if (!map || !map.path) {
+    // No active map
+    img.style.display = 'none';
+    img.src = '';
+    waiting.style.display = 'flex';
+    badge.classList.remove('visible');
+    document.getElementById('vh-mapname').textContent = '■ AWAITING MAP SELECTION';
+    dot.className = 'dot inactive';
+    statusTxt.textContent = 'STANDBY';
+    return;
+  }
+
+  // Fade out, swap, fade in
+  img.style.opacity = '0';
+  waiting.style.display = 'none';
+
+  // Apply display mode
+  img.className = '';
+  if (map.scale === 'fill') img.classList.add('fill-mode');
+  else if (map.scale === 'original') img.classList.add('original-mode');
+
+  img.src = map.path;
+  img.style.display = 'block';
+  img.style.opacity = '0';
+
+  // Header update
+  document.getElementById('vh-mapname').textContent = '■ ' + (map.name || '').toUpperCase();
+
+  // Badge
+  document.getElementById('lb-folder').textContent = (map.folder || 'LOCATION').toUpperCase();
+  document.getElementById('lb-name').textContent   = (map.name  || '').toUpperCase();
+  badge.classList.add('visible');
+
+  dot.className = 'dot';
+  statusTxt.textContent = 'LIVE';
+}
+
+function onMapLoaded() {
+  const img = document.getElementById('map-img');
+  img.style.transition = 'opacity .4s ease';
+  img.style.opacity = '1';
+}
+
+function onMapError() {
+  const img = document.getElementById('map-img');
+  img.style.opacity = '1';
+  document.getElementById('vh-mapname').textContent = '■ IMAGE NOT FOUND — CHECK PATH';
+}
+
+// ── CLOCK ──
+function updateClock() {
+  document.getElementById('vh-time').textContent = new Date().toLocaleTimeString('en-US', { hour12:false, hour:'2-digit', minute:'2-digit' });
+}
+
+// ── FULLSCREEN ──
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
+}
+
+// ── PIN MODAL ──
+function openPinModal() {
+  pinBuffer = '';
+  updatePinDots();
+  document.getElementById('pin-error').classList.remove('visible');
+  document.getElementById('pin-modal').classList.add('open');
+}
+
+function closePinModal() {
+  document.getElementById('pin-modal').classList.remove('open');
+  pinBuffer = '';
+}
+
+function pinKey(k) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += k;
+  updatePinDots();
+  if (pinBuffer.length === 4) setTimeout(pinConfirm, 120);
+}
+
+function pinBackspace() {
+  pinBuffer = pinBuffer.slice(0,-1);
+  updatePinDots();
+}
+
+function pinConfirm() {
+  // If no PIN set, any input (or empty) grants access
+  if (!config.pin || pinBuffer === config.pin || config.pin === '') {
+    closePinModal();
+    openNavModal();
+  } else {
+    document.getElementById('pin-error').classList.add('visible');
+    const modal = document.querySelector('#pin-modal .modal');
+    modal.style.transform = 'translateX(-8px)';
+    setTimeout(() => { modal.style.transform = 'translateX(8px)'; }, 80);
+    setTimeout(() => { modal.style.transform = ''; }, 160);
+    pinBuffer = '';
+    updatePinDots();
+  }
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('pd' + i).classList.toggle('filled', i < pinBuffer.length);
+  }
+}
+
+// ── NAV MODAL ──
+function openNavModal() {
+  // Reload state
+  try {
+    const rawMaps = localStorage.getItem(STORAGE_KEY);
+    if (rawMaps) mapsState = JSON.parse(rawMaps);
+  } catch(e) {}
+
+  if (!mapsState || !mapsState.folders || !mapsState.folders.length) {
+    alert('No maps configured. Open gm_maps.html on the GM device first.');
+    return;
+  }
+
+  navFolder = navFolder || mapsState.folders[0];
+  renderNavFolderTabs();
+  renderNavMapGrid();
+  document.getElementById('nav-modal').classList.add('open');
+}
+
+function closeNavModal() {
+  document.getElementById('nav-modal').classList.remove('open');
+}
+
+function setNavFolder(name) {
+  navFolder = name;
+  renderNavFolderTabs();
+  renderNavMapGrid();
+}
+
+function renderNavFolderTabs() {
+  const tabs = document.getElementById('nav-folder-tabs');
+  if (!mapsState) return;
+  tabs.innerHTML = mapsState.folders.map(f =>
+    `<div class="nav-folder-tab${f === navFolder ? ' active' : ''}" onclick="setNavFolder('${escHtml(f)}')">${escHtml(f)}</div>`
+  ).join('');
+}
+
+function renderNavMapGrid() {
+  const grid = document.getElementById('nav-map-grid');
+  if (!mapsState) { grid.innerHTML = ''; return; }
+  const maps = mapsState.maps.filter(m => m.folder === navFolder);
+  if (!maps.length) {
+    grid.innerHTML = '<div style="font-size:8px;color:var(--text-dim);padding:24px;text-align:center">No maps in this location.</div>';
+    return;
+  }
+  grid.innerHTML = maps.map(m => `
+    <div class="nav-map-card${m.active ? ' active-map' : ''}" onclick="selectMap('${m.id}')">
+      ${m.path
+        ? `<img class="nav-map-thumb" src="${escHtml(m.path)}" alt="${escHtml(m.name)}"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        : ''}
+      <div class="nav-map-thumb-ph" style="display:${m.path ? 'none' : 'flex'}">⬡</div>
+      <div class="nav-map-info">
+        <div class="nav-map-name">${escHtml(m.name)}</div>
+        <div class="nav-map-meta">${m.active ? '■ DISPLAYED' : ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectMap(id) {
+  if (!mapsState) return;
+  mapsState.maps.forEach(m => m.active = false);
+  const map = mapsState.maps.find(m => m.id === id);
+  if (map) map.active = true;
+
+  // Write back to storage
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(mapsState)); } catch(e) {}
+
+  // Also write to display key
+  try {
+    localStorage.setItem(DISPLAY_KEY, JSON.stringify({
+      map: map || null,
+      config: { title: config.title, bg: config.bg },
+      ts: Date.now()
+    }));
+  } catch(e) {}
+
+  closeNavModal();
+  applyMap(map || null);
+  renderNavMapGrid();
+  currentData = { ts: Date.now() }; // Prevent poll from overwriting
+}
+
+// ── KEYBOARD SUPPORT ──
+document.addEventListener('keydown', e => {
+  const pinOpen = document.getElementById('pin-modal').classList.contains('open');
+  if (pinOpen) {
+    if (e.key >= '0' && e.key <= '9') pinKey(e.key);
+    if (e.key === 'Backspace') pinBackspace();
+    if (e.key === 'Enter') pinConfirm();
+    if (e.key === 'Escape') closePinModal();
+    return;
+  }
+
+  const navOpen = document.getElementById('nav-modal').classList.contains('open');
+  if (e.key === 'Escape') {
+    if (navOpen) closeNavModal();
+  }
+
+  if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+  if (e.key === 'g' || e.key === 'G') openPinModal();
+});
+
+// ── UTILITY ──
+function escHtml(str) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+</script>
+
+</body>
+</html>
