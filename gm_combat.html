@@ -734,6 +734,123 @@ select.f-input { appearance: none; cursor: pointer; }
 }
 .type-btn.active-operative { background: rgba(122,154,40,.18); border-color: var(--green-dim); color: var(--green); }
 .type-btn.active-hostile   { background: rgba(138,32,32,.22); border-color: var(--red); color: var(--red-bright); }
+.type-btn.active-npc       { background: rgba(74,122,154,.2); border-color: var(--blue-dim); color: #5ab0e0; }
+
+/* ── ACTION USED INDICATORS ── */
+.action-slots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.action-slot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.action-slot-pip {
+  width: 100%;
+  padding: 7px 6px 5px;
+  border: 2px solid var(--border-hi);
+  background: var(--surface);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .14em;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+  user-select: none;
+  position: relative;
+}
+.action-slot-pip.available {
+  border-color: var(--green-dim);
+  color: var(--green);
+  background: rgba(122,154,40,.07);
+}
+.action-slot-pip.available::before {
+  content: '●';
+  display: block;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 3px;
+  color: var(--green);
+}
+.action-slot-pip.used {
+  border-color: var(--border);
+  color: var(--text-dim);
+  background: var(--surface);
+  opacity: .45;
+}
+.action-slot-pip.used::before {
+  content: '○';
+  display: block;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 3px;
+  color: var(--border-hi);
+}
+.action-slot-pip.minor.available {
+  border-color: var(--amber-dim);
+  color: var(--amber);
+  background: rgba(184,120,32,.07);
+}
+.action-slot-pip.minor.available::before { color: var(--amber); }
+
+/* PC roll input strip */
+.pc-roll-strip {
+  background: rgba(0,0,0,.2);
+  border: 1px solid var(--border-hi);
+  border-left: 3px solid var(--green-dim);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+}
+.pc-roll-strip-head {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .2em;
+  color: var(--green);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pc-roll-row {
+  display: flex;
+  gap: 7px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 7px;
+}
+.pc-roll-field { display: flex; flex-direction: column; gap: 3px; }
+.pc-roll-field label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .14em;
+  color: var(--text-dim);
+}
+.pc-roll-field input, .pc-roll-field select {
+  background: var(--surface2);
+  border: 1px solid var(--border-hi);
+  color: var(--text-hi);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 15px;
+  padding: 6px 8px;
+  outline: none;
+  min-height: 34px;
+}
+.pc-roll-field input:focus { border-color: var(--green); }
+.pc-roll-result {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  min-height: 28px;
+}
 
 /* ── HOSTILES PAGE ── */
 #page-hostiles {
@@ -897,86 +1014,6 @@ select.f-input { appearance: none; cursor: pointer; }
   .cmd-actions-grid { grid-template-columns: 1fr; }
   .cmd-action-panel { border-right: none; border-bottom: 1px solid var(--border); }
 }
-
-/* ==== SPIKE OPERATIVE AGENCY PATCH ==== */
-.turn-economy-bar{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.econ-pill{
-  font-family:'Share Tech Mono',monospace;
-  font-size:9px;
-  letter-spacing:.14em;
-  padding:6px 10px;
-  border:1px solid var(--border-hi);
-  background:var(--surface);
-  transition:all .12s;
-}
-.econ-pill.ready{
-  color:var(--green);
-  border-color:var(--green-dim);
-  background:rgba(122,154,40,.12);
-}
-.econ-pill.used{
-  color:var(--amber);
-  border-color:var(--amber-dim);
-  background:rgba(184,120,32,.12);
-  opacity:.72;
-}
-.turn-state-banner{
-  margin-top:8px;
-  padding:8px 10px;
-  border:1px solid var(--border-hi);
-  font-family:'Share Tech Mono',monospace;
-  font-size:8px;
-  letter-spacing:.18em;
-}
-.turn-state-banner.operative{
-  border-color:var(--green-dim);
-  color:var(--green);
-  background:rgba(122,154,40,.08);
-}
-.turn-state-banner.hostile{
-  border-color:var(--red);
-  color:var(--red-bright);
-  background:rgba(138,32,32,.08);
-}
-.turn-state-banner.awaiting{
-  animation: pulseAwait 1.2s infinite;
-}
-@keyframes pulseAwait{
-  0%{ box-shadow:0 0 0 rgba(184,120,32,0); }
-  50%{ box-shadow:0 0 12px rgba(184,120,32,.45); }
-  100%{ box-shadow:0 0 0 rgba(184,120,32,0); }
-}
-.manual-roll-panel{
-  margin-top:10px;
-  padding:12px;
-  border:1px solid var(--amber-dim);
-  background:rgba(184,120,32,.06);
-}
-.manual-roll-grid{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  align-items:flex-end;
-  margin-top:8px;
-}
-.manual-roll-grid input{
-  width:100px;
-  background:var(--surface);
-  border:1px solid var(--border-hi);
-  color:var(--text-hi);
-  padding:8px;
-}
-.cmd-act-btn.spent{
-  opacity:.3;
-  pointer-events:none;
-  filter:grayscale(1);
-}
-
 </style>
 </head>
 <body>
@@ -999,6 +1036,7 @@ select.f-input { appearance: none; cursor: pointer; }
 <nav class="nav">
   <button class="nav-tab active" onclick="switchPage('encounter')" id="ntab-encounter">◈ ENCOUNTER</button>
   <button class="nav-tab" onclick="switchPage('hostiles')" id="ntab-hostiles">◉ HOSTILES</button>
+  <button class="nav-tab" onclick="switchPage('npcs')" id="ntab-npcs">◎ NPCS</button>
   <div class="nav-spacer"></div>
   <div class="nav-enc-info" id="nav-enc-info">
     ROUND <strong id="nav-round">—</strong> &nbsp;|&nbsp; TURN <strong id="nav-turn">—</strong>
@@ -1046,6 +1084,7 @@ select.f-input { appearance: none; cursor: pointer; }
           <div class="type-toggle">
             <button class="type-btn active-operative" id="tbtn-operative" onclick="setType('operative')">OPERATIVE</button>
             <button class="type-btn" id="tbtn-hostile" onclick="setType('hostile')">HOSTILE</button>
+            <button class="type-btn" id="tbtn-npc" onclick="setType('npc')">NPC</button>
           </div>
           <div class="f-row">
             <label class="f-label">NAME</label>
@@ -1107,10 +1146,6 @@ select.f-input { appearance: none; cursor: pointer; }
         <button class="cmd-next-btn" onclick="nextTurn()">▶▶ NEXT TURN</button>
       </div>
 
-<div class="turn-economy-bar" id="turn-economy-bar"></div>
-<div class="turn-state-banner" id="turn-state-banner">TURN READY</div>
-
-
       <!-- Vitals row -->
       <div class="cmd-vitals-row">
         <!-- HP -->
@@ -1166,25 +1201,27 @@ select.f-input { appearance: none; cursor: pointer; }
 
       <!-- Actions + Reactions -->
       <div class="cmd-actions-wrap">
+
+        <!-- Action used indicators (top of panel, always visible) -->
+        <div style="padding:10px 13px 0;background:var(--surface2);border:1px solid var(--border-hi);border-bottom:none;">
+          <div class="action-slots" id="action-slots">
+            <div class="action-slot">
+              <div class="action-slot-pip available" id="action-pip" onclick="toggleActionUsed()" title="Click to mark action used / available">ACTION</div>
+            </div>
+            <div class="action-slot">
+              <div class="action-slot-pip minor available" id="minor-pip" onclick="toggleMinorUsed()" title="Click to mark minor action used / available">MINOR</div>
+            </div>
+            <div class="action-slot" style="flex:0.6">
+              <div class="action-slot-pip available" id="bonus-pip" onclick="toggleBonusUsed()" title="Bonus action / free action" style="font-size:6.5px">BONUS</div>
+            </div>
+          </div>
+        </div>
+
         <div class="cmd-actions-grid">
 
-          <!-- ACTIONS -->
-          <div class="cmd-action-panel">
-            <div class="cmd-panel-head">■ ACTION</div>
-            <div class="cmd-action-btns">
-              <button class="cmd-act-btn" onclick="quickRoll('Core Roll TN 9','1d10',9)">⬡ ROLL TN 9</button>
-              <button class="cmd-act-btn" onclick="quickRoll('Core Roll TN 11','1d10',11)">⬡ ROLL TN 11</button>
-              <button class="cmd-act-btn" onclick="quickRoll('Core Roll TN 13','1d10',13)">⬡ ROLL TN 13</button>
-              <button class="cmd-act-btn" onclick="quickRoll('Grounding (d20+MIND)','1d20',13)">⬡ GROUND TN 13</button>
-              <button class="cmd-act-btn" onclick="quickRoll('Assist SPIKED (d20+MIND)','1d20',14)">⬡ ASSIST SPIKED</button>
-              <button class="cmd-act-btn atk" onclick="cmdLaunchAtk()" id="cmd-atk-btn">⬡ ATTACK</button>
-              <button class="cmd-act-btn" onclick="cmdOpenCondModal()">+ CONDITION</button>
-            </div>
-            <!-- Hostile weapon buttons injected here -->
-            <div id="cmd-weapon-btns" class="cmd-weapon-zone" style="display:none">
-              <div class="cmd-weapon-zone-label">■ WEAPON ATTACKS</div>
-              <div id="cmd-weapon-btns-inner" class="cmd-action-btns"></div>
-            </div>
+          <!-- LEFT: ACTION PANEL — adapts to PC vs hostile/NPC -->
+          <div class="cmd-action-panel" id="cmd-action-panel-left">
+            <!-- Content injected by renderCommandCenter -->
           </div>
 
           <!-- MINOR ACTIONS + REACTIONS -->
@@ -1192,22 +1229,22 @@ select.f-input { appearance: none; cursor: pointer; }
             <div class="cmd-panel-head">■ MINOR ACTIONS &amp; REACTIONS <span class="rxn-remaining" id="cmd-rxn-remaining" style="color:var(--amber)">2/2</span></div>
             <div class="cmd-action-btns">
               <!-- Movement -->
-              <button class="cmd-act-btn minor" onclick="logAction('Move 1 Zone')">↑ MOVE 1 ZONE</button>
-              <button class="cmd-act-btn minor" onclick="logAction('Extended Move (−1 COMPOSURE)');cmdAdjComp(-1)">↑↑ EXTEND MOVE (−1 COMP)</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Move 1 Zone')">↑ MOVE 1 ZONE</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Extended Move');cmdAdjComp(-1)">↑↑ EXTEND MOVE (−1 COMP)</button>
               <!-- Weapon / gear -->
-              <button class="cmd-act-btn minor" onclick="logAction('Draw Weapon')">✦ DRAW WEAPON</button>
-              <button class="cmd-act-btn minor" onclick="logAction('Stow / Swap Weapon')">✦ STOW / SWAP</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Draw Weapon')">✦ DRAW WEAPON</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Stow / Swap Weapon')">✦ STOW / SWAP</button>
               <!-- Tactical -->
               <button class="cmd-act-btn minor" id="cmd-aim-btn" onclick="cmdToggleAimed()"><span id="cmd-aim-label">○ AIM (OVERWATCH)</span></button>
-              <button class="cmd-act-btn minor" onclick="logAction('Take Cover')">▣ TAKE COVER</button>
-              <button class="cmd-act-btn minor" onclick="logAction('Interact with Object')">⊙ INTERACT</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Take Cover')">▣ TAKE COVER</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Interact with Object')">⊙ INTERACT</button>
               <!-- Medical / SPIKE -->
-              <button class="cmd-act-btn minor" onclick="logAction('Quick Stabilize (Medicine check)')">✚ QUICK STABILIZE</button>
-              <button class="cmd-act-btn minor" onclick="quickRoll('Quick Grounding','1d10',9)">⬡ QUICK GROUND</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Quick Stabilize')">✚ QUICK STABILIZE</button>
+              <button class="cmd-act-btn minor" onclick="spendMinor('Quick Grounding')">⬡ QUICK GROUND</button>
               <!-- Communication -->
-              <button class="cmd-act-btn minor" onclick="logAction('Signal / Communicate')">⌂ SIGNAL</button>
-              <!-- Reactions -->
-              <hr style="border:none;border-top:1px solid var(--border);width:100%;margin:2px 0">
+              <button class="cmd-act-btn minor" onclick="spendMinor('Signal / Communicate')">⌂ SIGNAL</button>
+              <!-- Reactions separator -->
+              <hr style="border:none;border-top:1px solid var(--border);width:100%;margin:3px 0">
               <button class="cmd-act-btn minor" onclick="cmdReactionUse('OVERWATCH')" id="cmd-rxn-overwatch">↺ OVERWATCH</button>
               <button class="cmd-act-btn minor" onclick="cmdReactionUse('COUNTER')" id="cmd-rxn-counter">↺ COUNTERATTACK</button>
               <button class="cmd-act-btn minor" onclick="cmdReactionUse('PROTECT')" id="cmd-rxn-protect">↺ PROTECT</button>
@@ -1218,7 +1255,34 @@ select.f-input { appearance: none; cursor: pointer; }
 
         </div><!-- /actions-grid -->
 
-        <!-- Attack execution strip -->
+        <!-- PC Roll Input Strip -->
+        <div class="pc-roll-strip" id="pc-roll-strip" style="display:none">
+          <div class="pc-roll-strip-head">
+            ■ RECORD PLAYER ROLL — <span id="pc-roll-context">—</span>
+            <button class="btn sm" onclick="document.getElementById('pc-roll-strip').style.display='none'" style="font-size:7px;padding:2px 7px">✕</button>
+          </div>
+          <div class="pc-roll-row">
+            <div class="pc-roll-field">
+              <label>PLAYER'S ROLL (d10 total)</label>
+              <input id="pc-roll-val" type="number" placeholder="e.g. 11" style="width:80px" oninput="evaluatePcRoll()">
+            </div>
+            <div class="pc-roll-field">
+              <label>TARGET NUMBER</label>
+              <input id="pc-roll-tn" type="number" value="9" style="width:65px" oninput="evaluatePcRoll()">
+            </div>
+            <div class="pc-roll-field" id="pc-roll-wpn-wrap" style="display:none">
+              <label>WEAPON CLASS</label>
+              <select id="pc-roll-wpn" style="min-width:95px" onchange="evaluatePcRoll()">
+                <option value="0">Light (+0)</option>
+                <option value="2" selected>Standard (+2)</option>
+                <option value="4">Heavy (+4)</option>
+              </select>
+            </div>
+          </div>
+          <div class="pc-roll-result" id="pc-roll-result">Enter the player's roll to record outcome.</div>
+        </div>
+
+        <!-- Hostile / NPC Attack execution strip -->
         <div class="cmd-atk-strip" id="cmd-atk-strip">
           <div class="cmd-atk-head">
             ■ ATTACK EXECUTION — <span id="cmd-atk-label">—</span>
@@ -1272,26 +1336,6 @@ select.f-input { appearance: none; cursor: pointer; }
         </div>
 
       </div><!-- /actions-wrap -->
-
-      
-<div class="manual-roll-panel" id="manual-roll-panel" style="display:none">
-  <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--amber)">
-    ■ AWAITING PLAYER ROLL
-  </div>
-  <div id="manual-roll-context" style="margin-top:6px;color:var(--text-hi)"></div>
-  <div class="manual-roll-grid">
-    <div>
-      <label class="f-label">TN</label>
-      <div id="manual-roll-tn" class="cmd-atk-result">—</div>
-    </div>
-    <div>
-      <label class="f-label">PLAYER TOTAL</label>
-      <input type="number" id="manual-roll-input" placeholder="Enter total">
-    </div>
-    <button class="btn amber" onclick="recordManualRoll()">RECORD RESULT</button>
-  </div>
-</div>
-
 
       <!-- Quick Roll Log -->
       <div class="qroll-log">
@@ -2411,237 +2455,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   }
   startPresenceHeartbeat();
 });
-
-// ==== SPIKE OPERATIVE AGENCY PATCH ====
-
-function ensureTurnState(c){
-  if(!c) return;
-  if(c.actionUsed === undefined) c.actionUsed = false;
-  if(c.minorUsed === undefined) c.minorUsed = false;
-  if(c.awaitingRoll === undefined) c.awaitingRoll = false;
-  if(c.awaitingRollData === undefined) c.awaitingRollData = null;
-}
-
-const _originalRenderCommandCenter = renderCommandCenter;
-renderCommandCenter = function(){
-  const c = getCurrent();
-  if(c) ensureTurnState(c);
-
-  _originalRenderCommandCenter();
-
-  if(!c) return;
-
-  const econ = document.getElementById('turn-economy-bar');
-  if(econ){
-    const rxnLeft = c.reactions ? (2 - c.reactions.filter(Boolean).length) : 2;
-    econ.innerHTML = `
-      <div class="econ-pill ${c.actionUsed ? 'used' : 'ready'}">
-        ${c.actionUsed ? 'ACTION USED' : 'ACTION READY'}
-      </div>
-      <div class="econ-pill ${c.minorUsed ? 'used' : 'ready'}">
-        ${c.minorUsed ? 'MINOR USED' : 'MINOR READY'}
-      </div>
-      <div class="econ-pill ready">
-        REACTIONS ${rxnLeft}/2
-      </div>
-    `;
-  }
-
-  const banner = document.getElementById('turn-state-banner');
-  if(banner){
-    banner.className = 'turn-state-banner ' + c.type;
-    let txt = c.type === 'operative'
-      ? 'OPERATIVE TURN // PLAYER INPUT PRIORITY'
-      : 'HOSTILE TURN // AUTOMATED RESOLUTION';
-
-    if(c.awaitingRoll){
-      banner.className += ' awaiting';
-      txt += ' // AWAITING PLAYER ROLL';
-    }
-
-    banner.textContent = txt;
-  }
-
-  updateEconomyButtons();
-  renderManualRollPanel();
-};
-
-function updateEconomyButtons(){
-  const c = getCurrent();
-  if(!c) return;
-
-  document.querySelectorAll('.cmd-act-btn').forEach(btn=>{
-    btn.classList.remove('spent');
-  });
-
-  if(c.actionUsed){
-    const attackBtn = document.getElementById('cmd-atk-btn');
-    if(attackBtn) attackBtn.classList.add('spent');
-  }
-
-  if(c.minorUsed){
-    [
-      'cmd-aim-btn'
-    ].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.classList.add('spent');
-    });
-  }
-}
-
-function consumeAction(type){
-  const c = getCurrent();
-  if(!c) return false;
-
-  ensureTurnState(c);
-
-  if(type === 'major'){
-    if(c.actionUsed) return false;
-    c.actionUsed = true;
-  }
-
-  if(type === 'minor'){
-    if(c.minorUsed) return false;
-    c.minorUsed = true;
-  }
-
-  saveState();
-  renderCommandCenter();
-  renderQueue();
-  return true;
-}
-
-const _originalNextTurn = nextTurn;
-nextTurn = function(){
-  _originalNextTurn();
-
-  const c = getCurrent();
-  if(!c) return;
-
-  ensureTurnState(c);
-  c.actionUsed = false;
-  c.minorUsed = false;
-  c.awaitingRoll = false;
-  c.awaitingRollData = null;
-
-  saveState();
-  renderCommandCenter();
-};
-
-const _originalQuickRoll = quickRoll;
-quickRoll = function(label, diceStr, tn){
-  const c = getCurrent();
-
-  if(c && c.type === 'operative'){
-    ensureTurnState(c);
-
-    c.awaitingRoll = true;
-    c.awaitingRollData = {
-      label,
-      tn,
-      diceStr
-    };
-
-    saveState();
-    renderCommandCenter();
-    return;
-  }
-
-  return _originalQuickRoll(label, diceStr, tn);
-};
-
-function renderManualRollPanel(){
-  const c = getCurrent();
-  const panel = document.getElementById('manual-roll-panel');
-
-  if(!panel || !c){
-    return;
-  }
-
-  if(!c.awaitingRoll || !c.awaitingRollData){
-    panel.style.display = 'none';
-    return;
-  }
-
-  panel.style.display = 'block';
-
-  document.getElementById('manual-roll-context').textContent =
-    c.awaitingRollData.label;
-
-  document.getElementById('manual-roll-tn').textContent =
-    'TN ' + (c.awaitingRollData.tn || '—');
-}
-
-function recordManualRoll(){
-  const c = getCurrent();
-  if(!c || !c.awaitingRollData) return;
-
-  const total = parseInt(document.getElementById('manual-roll-input').value || '0');
-
-  addToRollLog({
-    label: '[PLAYER] ' + c.awaitingRollData.label,
-    total,
-    tn: c.awaitingRollData.tn || 0
-  });
-
-  c.awaitingRoll = false;
-  c.awaitingRollData = null;
-
-  saveState();
-  renderCommandCenter();
-}
-
-const _originalCmdLaunchAtk = cmdLaunchAtk;
-cmdLaunchAtk = function(){
-  const c = getCurrent();
-
-  if(c && c.type === 'operative'){
-    if(!consumeAction('major')) return;
-
-    c.awaitingRoll = true;
-    c.awaitingRollData = {
-      label: 'ATTACK ROLL',
-      tn: document.getElementById('cmd-atk-tn')
-        ? parseInt(document.getElementById('cmd-atk-tn').value || '0')
-        : 0
-    };
-
-    saveState();
-    renderCommandCenter();
-    return;
-  }
-
-  consumeAction('major');
-  return _originalCmdLaunchAtk();
-};
-
-const _originalCmdToggleAimed = cmdToggleAimed;
-cmdToggleAimed = function(){
-  if(!consumeAction('minor')) return;
-  return _originalCmdToggleAimed();
-};
-
-const _originalLogAction = logAction;
-logAction = function(label){
-  const c = getCurrent();
-
-  if(c){
-    const upper = label.toUpperCase();
-
-    if(
-      upper.includes('MOVE') ||
-      upper.includes('DRAW') ||
-      upper.includes('SIGNAL') ||
-      upper.includes('INTERACT') ||
-      upper.includes('COVER')
-    ){
-      consumeAction('minor');
-    }
-  }
-
-  return _originalLogAction(label);
-};
-
 </script>
 
 </body>
