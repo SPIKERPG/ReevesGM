@@ -1443,6 +1443,79 @@ select.f-input { appearance: none; cursor: pointer; }
   </div>
 </div>
 
+<!-- ════ NPCS PAGE ════ -->
+<div class="page" id="page-npcs">
+  <div class="hostiles-inner">
+
+    <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:20px;">
+
+      <!-- NPC Builder -->
+      <div>
+        <div class="sec-head"><span class="sec-num">// BUILD</span><span class="sec-title">NPC BUILDER</span><span class="sec-line"></span></div>
+        <div class="panel" style="border-left-color:var(--blue-dim)">
+          <div class="panel-label" style="color:#5ab0e0">■ DESIGNATION</div>
+          <div class="f-row"><label class="f-label">NAME</label><input class="f-input" id="n-name" placeholder="e.g. Dr. Chen"></div>
+          <div class="f-row"><label class="f-label">ROLE / AFFILIATION</label><input class="f-input" id="n-role" placeholder="e.g. UGD RESEARCHER // COMPLIANT"></div>
+        </div>
+        <div class="panel" style="border-left-color:var(--blue-dim)">
+          <div class="panel-label" style="color:#5ab0e0">■ VITALS</div>
+          <div class="f-group3">
+            <div><label class="f-label">HP</label><input class="f-input mono sm" id="n-hp" type="number" value="8"></div>
+            <div><label class="f-label">COMPOSURE</label><input class="f-input mono sm" id="n-comp" type="number" value="5"></div>
+            <div><label class="f-label">SPIKE</label><input class="f-input mono sm" id="n-spike" type="number" value="0"></div>
+          </div>
+        </div>
+        <div class="panel" style="border-left-color:var(--blue-dim)">
+          <div class="panel-label" style="color:#5ab0e0">■ DISPOSITION</div>
+          <div class="f-row">
+            <label class="f-label">DISPOSITION TOWARD PARTY</label>
+            <select class="f-input" id="n-disposition">
+              <option value="neutral">NEUTRAL</option>
+              <option value="friendly">FRIENDLY</option>
+              <option value="hostile">HOSTILE</option>
+              <option value="fearful">FEARFUL</option>
+              <option value="compliant">COMPLIANT</option>
+              <option value="unknown">UNKNOWN</option>
+            </select>
+          </div>
+          <div class="f-row">
+            <label class="f-label">NOTES / KNOWLEDGE / SECRETS</label>
+            <textarea class="f-input" id="n-notes" rows="4" placeholder="What they know, what they want, what they're hiding..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn lg" style="border-color:var(--blue-dim);color:#5ab0e0" onclick="saveNpc()">+ SAVE TO ROSTER</button>
+          <button class="btn sm" onclick="clearNpcForm()">CLEAR</button>
+          <button class="btn sm" style="border-color:var(--blue-dim);color:#5ab0e0" onclick="deployNpcAll()">⬡ DEPLOY ALL</button>
+        </div>
+      </div>
+
+      <!-- NPC Roster -->
+      <div>
+        <div class="sec-head">
+          <span class="sec-num">// ROSTER</span>
+          <span class="sec-title">SAVED NPCS</span>
+          <span class="sec-line"></span>
+          <span class="sec-count" id="npc-count">// 0 SAVED</span>
+        </div>
+        <div class="btn-row" style="margin-bottom:14px;">
+          <button class="btn sm" style="border-color:var(--blue-dim);color:#5ab0e0" onclick="saveNpcRosterToFile()">↓ SAVE ROSTER</button>
+          <button class="btn sm" onclick="document.getElementById('npcRosterLoadInput').click()">↑ LOAD ROSTER</button>
+          <input type="file" id="npcRosterLoadInput" accept=".json" style="display:none" onchange="loadNpcRosterFromFile(event)">
+          <button class="btn sm red" onclick="clearNpcRoster()">✕ CLEAR ROSTER</button>
+          <span id="npcRosterStatus" style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);margin-left:4px;"></span>
+        </div>
+        <div class="hostile-grid" id="npc-grid">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);padding:20px;border:1px dashed var(--border)">
+            No NPCs saved. Build a profile and save it.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 </div><!-- /app-body -->
 
 <!-- MODALS -->
@@ -1585,7 +1658,7 @@ function loadState() {
 //  PAGE NAVIGATION
 // ═══════════════════════════════════════════════════════
 function switchPage(name) {
-  ['encounter','hostiles'].forEach(p => {
+  ['encounter','hostiles','npcs'].forEach(p => {
     document.getElementById('page-' + p).classList.toggle('active', p === name);
     document.getElementById('ntab-' + p).classList.toggle('active', p === name);
   });
@@ -1650,6 +1723,7 @@ function setType(t) {
   addType = t;
   document.getElementById('tbtn-operative').className = 'type-btn' + (t==='operative'?' active-operative':'');
   document.getElementById('tbtn-hostile').className   = 'type-btn' + (t==='hostile'  ?' active-hostile':'');
+  document.getElementById('tbtn-npc').className       = 'type-btn' + (t==='npc'      ?' active-npc':'');
 }
 function toggleAddForm() {
   const body = document.getElementById('add-form-body');
@@ -1666,7 +1740,7 @@ function addCombatant() {
   if (!name) { document.getElementById('add-name').focus(); return; }
   const init      = parseInt(document.getElementById('add-init').value)     || rollD10();
   const initBonus = parseInt(document.getElementById('add-initbonus').value) || 0;
-  const hp        = parseInt(document.getElementById('add-hp').value)        || (addType === 'operative' ? 10 : 8);
+  const hp        = parseInt(document.getElementById('add-hp').value)        || (addType === 'operative' ? 10 : addType === 'npc' ? 8 : 8);
   const hpMax     = parseInt(document.getElementById('add-hpmax').value)     || hp;
   const armor     = parseInt(document.getElementById('add-armor').value)     || 0;
   const comp      = parseInt(document.getElementById('add-comp').value)      || 5;
@@ -1716,9 +1790,9 @@ function nextTurn() {
   while (combatants[next].status==='dead' && safety < combatants.length) { next=(next+1)%combatants.length; safety++; }
   if (next <= currentTurnIdx) roundNum++;
   currentTurnIdx = next;
-  // Clear aimed state from previous turn
-  const prev = combatants.filter((c,i)=>i!==next);
-  // (aimed resets per-turn automatically via render)
+  // Reset per-turn action tracking on the new combatant
+  const c = combatants[next];
+  c.actionUsed = false; c.minorUsed = false; c.bonusUsed = false;
   saveState(); renderQueue(); renderCommandCenter(); updateNavInfo();
 }
 function updateNavInfo() {
@@ -1872,18 +1946,24 @@ function renderCommandCenter() {
 
   // header
   const header = document.getElementById('cmd-header');
-  header.className = 'cmd-header' + (c.type==='hostile'?' hostile-turn':'');
+  const isHostileOrNpc = c.type==='hostile' || c.type==='npc';
+  header.className = 'cmd-header' + (c.type==='hostile'?' hostile-turn':c.type==='npc'?' npc-turn':'');
   document.getElementById('cmd-name').textContent = c.name;
   const badges = document.getElementById('cmd-badges');
   const warnC = (c.spike||0) >= 8 ? 'spike-hi' : '';
+  const typeBadgeCls = c.type==='hostile'?'type-ho':c.type==='npc'?'type-npc':(c.trackerRef?'tracker':'type-op');
+  const typeLabel = c.type==='hostile'?'HOSTILE':c.type==='npc'?('NPC'+(c.npcRole?' // '+c.npcRole.toUpperCase().slice(0,16):'')):(c.type.toUpperCase()+(c.trackerRef?' // TRACKER':''));
   badges.innerHTML =
     `<span class="cmd-badge round">ROUND ${roundNum}</span>` +
-    `<span class="cmd-badge ${c.type==='hostile'?'type-ho':(c.trackerRef?'tracker':'type-op')}">${c.type.toUpperCase()}${c.trackerRef?' // TRACKER':''}</span>` +
+    `<span class="cmd-badge ${typeBadgeCls}">${typeLabel}</span>` +
     (c.armor?`<span class="cmd-badge">ARM-${c.armor}</span>`:'') +
     (c.defense?`<span class="cmd-badge" style="color:var(--amber);border-color:var(--amber-dim)">DEF-${c.defense}</span>`:'') +
     `<span class="cmd-badge ${warnC}" style="color:${sc};border-color:${sc}60">SPIKE ${c.spike||0} — ${sl}</span>`;
 
   refreshVitals(); refreshSpike();
+
+  // action slot pips
+  refreshActionSlots(c);
 
   // status & conditions
   const stEl = document.getElementById('cmd-status');
@@ -1904,25 +1984,63 @@ function renderCommandCenter() {
   // reactions
   refreshReactions(c);
 
-  // weapon buttons for hostiles
-  const wpnZone  = document.getElementById('cmd-weapon-btns');
-  const wpnInner = document.getElementById('cmd-weapon-btns-inner');
-  wpnInner.innerHTML = '';
-  if (c.type==='hostile' && c.hostileRef) {
-    const h = hostileRoster.find(x=>x.id===c.hostileRef);
-    if (h && h.attacks && h.attacks.length) {
-      wpnZone.style.display='block';
-      h.attacks.forEach(atk => {
-        const btn = document.createElement('button');
-        btn.className='cmd-act-btn atk';
-        btn.textContent=`⬡ ${atk.name} (${atk.dice==='light'?'Light':atk.dice==='heavy'?'Heavy':'Std'})`;
-        btn.onclick=()=>cmdLaunchAtkFromItem(atk.name, atk.dice, parseInt(atk.bonus)||0);
-        wpnInner.appendChild(btn);
-      });
-    } else wpnZone.style.display='none';
-  } else wpnZone.style.display='none';
+  // ── LEFT ACTION PANEL: PC/NPC = roll input; Hostile = auto-roll buttons ──
+  const leftPanel = document.getElementById('cmd-action-panel-left');
+  if (!isHostileOrNpc) {
+    // OPERATIVE — player rolls, GM records
+    leftPanel.innerHTML = `
+      <div class="cmd-panel-head">■ ACTION — RECORD PLAYER ROLL</div>
+      <div class="cmd-action-btns">
+        <button class="cmd-act-btn" onclick="openPcRoll('Core Check','9',false)" style="border-color:var(--green-dim);color:var(--green)">✎ CORE CHECK TN 9</button>
+        <button class="cmd-act-btn" onclick="openPcRoll('Core Check (Difficult)','11',false)">✎ CORE CHECK TN 11</button>
+        <button class="cmd-act-btn" onclick="openPcRoll('Core Check (Extreme)','13',false)">✎ CORE CHECK TN 13</button>
+        <button class="cmd-act-btn" onclick="openPcRoll('Attack','6',true)" style="border-color:var(--amber-dim);color:var(--amber)">✎ ATTACK ROLL</button>
+        <button class="cmd-act-btn" onclick="openPcRoll('Grounding (d20+MIND)','13',false)">✎ GROUNDING TN 13</button>
+        <button class="cmd-act-btn" onclick="openPcRoll('Assist SPIKED','14',false)">✎ ASSIST SPIKED</button>
+        <button class="cmd-act-btn" onclick="openPcRoll('SPIKE Save (d20)','16',false)">✎ SPIKE SAVE</button>
+        <button class="cmd-act-btn" onclick="cmdOpenCondModal()">+ CONDITION</button>
+      </div>
+      <div style="margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);letter-spacing:.14em;margin-bottom:5px">■ QUICK LOG (no roll)</div>
+        <div class="cmd-action-btns">
+          <button class="cmd-act-btn" onclick="spendAction('Skill Action — player rolls')">⊙ SKILL USE</button>
+          <button class="cmd-act-btn" onclick="spendAction('Technical Action')">⊙ TECHNICAL</button>
+          <button class="cmd-act-btn" onclick="spendAction('Roleplay / Social Action')">⊙ SOCIAL</button>
+        </div>
+      </div>`;
+  } else {
+    // HOSTILE / NPC — GM rolls or auto-rolls
+    const wpnZoneHtml = (() => {
+      if (c.type==='hostile' && c.hostileRef) {
+        const h = hostileRoster.find(x=>x.id===c.hostileRef);
+        if (h && h.attacks && h.attacks.length) {
+          const btns = h.attacks.map(atk=>
+            `<button class="cmd-act-btn atk" onclick="cmdLaunchAtkFromItem('${escHtml(atk.name)}','${escHtml(atk.dice)}',${parseInt(atk.bonus)||0})">`+
+            `⬡ ${escHtml(atk.name)} (${atk.dice==='light'?'Light':atk.dice==='heavy'?'Heavy':'Std'})</button>`
+          ).join('');
+          return `<div class="cmd-weapon-zone"><div class="cmd-weapon-zone-label">■ WEAPON ATTACKS</div><div class="cmd-action-btns">${btns}</div></div>`;
+        }
+      }
+      if (c.type==='npc' && c.npcRef) {
+        const n = npcRoster.find(x=>x.id===c.npcRef);
+        if (n && n.notes) return `<div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);padding:6px;border:1px solid var(--border);line-height:1.5;margin-top:6px">${escHtml(n.notes.slice(0,200))}</div>`;
+      }
+      return '';
+    })();
+    leftPanel.innerHTML = `
+      <div class="cmd-panel-head">■ ACTION</div>
+      <div class="cmd-action-btns">
+        <button class="cmd-act-btn atk" onclick="cmdLaunchAtk()">⬡ ATTACK</button>
+        <button class="cmd-act-btn" onclick="quickRoll('Core Roll TN 9','1d10',9)">⬡ ROLL TN 9</button>
+        <button class="cmd-act-btn" onclick="quickRoll('Core Roll TN 11','1d10',11)">⬡ ROLL TN 11</button>
+        <button class="cmd-act-btn" onclick="quickRoll('SPIKE Save','1d20',16)">⬡ SPIKE SAVE</button>
+        <button class="cmd-act-btn" onclick="quickRoll('Behavior Table','1d20',0)">⬡ BEHAVIOR TABLE</button>
+        <button class="cmd-act-btn" onclick="cmdOpenCondModal()">+ CONDITION</button>
+      </div>
+      ${wpnZoneHtml}`;
+  }
 
-  // Refresh attack target list
+  // Refresh attack target list (only relevant for hostile strip)
   refreshAtkTargets();
 }
 
