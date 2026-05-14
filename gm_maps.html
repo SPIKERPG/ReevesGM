@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPIKE: Map Command — GM</title>
+<title>SPIKE: Document Command — GM</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap');
 
@@ -45,7 +45,6 @@ body::after{
   pointer-events:none;z-index:9999;
 }
 
-/* ── TOP BAND ── */
 .top-band{
   background:var(--red);
   padding:3px 16px;
@@ -55,7 +54,6 @@ body::after{
   flex-shrink:0;
 }
 
-/* ── HEADER ── */
 .header{
   background:var(--surface);
   border-bottom:2px solid var(--red);
@@ -69,8 +67,27 @@ body::after{
 .header-center .hsub{font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:var(--red-b)}
 .header-right{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--text-dim);text-align:right;line-height:1.7}
 
-/* ── MAIN ── */
 main{flex:1;max-width:1200px;margin:0 auto;padding:28px 20px 60px;width:100%}
+
+/* ── STATUS BAR ── */
+.status-bar{
+  background:var(--surface);
+  border:1px solid var(--border-hi);
+  border-left:3px solid var(--red);
+  padding:12px 18px;
+  margin-bottom:22px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.status-item{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--text-dim)}
+.status-item strong{color:var(--text-hi);font-size:13px;font-family:'Bebas Neue';letter-spacing:.1em;margin-left:5px}
+.status-item.active strong{color:var(--green)}
+.player-link{
+  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;
+  color:var(--amber);border:1px solid var(--amber-dim);
+  padding:4px 12px;text-decoration:none;transition:all .12s;white-space:nowrap;
+  margin-left:auto;
+}
+.player-link:hover{background:rgba(184,120,32,.12);border-color:var(--amber)}
 
 /* ── SECTION ── */
 .sec-head{
@@ -82,62 +99,13 @@ main{flex:1;max-width:1200px;margin:0 auto;padding:28px 20px 60px;width:100%}
 .sec-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.22em;color:var(--text-hi)}
 .sec-line{flex:1;height:1px;background:var(--border)}
 
-/* ── STATUS BAR ── */
-.status-bar{
-  background:var(--surface);
-  border:1px solid var(--border-hi);
-  border-left:3px solid var(--red);
-  padding:12px 18px;
-  margin-bottom:22px;
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-}
-.status-item{
-  font-family:'Share Tech Mono',monospace;
-  font-size:8px;letter-spacing:.14em;color:var(--text-dim);
-}
-.status-item strong{color:var(--text-hi);font-size:13px;font-family:'Bebas Neue';letter-spacing:.1em;margin-left:5px}
-.status-item.active strong{color:var(--green)}
-.status-item.active{border-right:1px solid var(--border)}
-.viewer-link{
-  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;
-  color:var(--amber);border:1px solid var(--amber-dim);
-  padding:4px 12px;text-decoration:none;transition:all .12s;white-space:nowrap;
-}
-.viewer-link:hover{background:rgba(184,120,32,.12);border-color:var(--amber)}
-
-/* ── CONFIG PANEL ── */
-.config-panel{
-  background:var(--surface2);
-  border:1px solid var(--border-hi);
-  border-left:3px solid var(--amber-dim);
-  padding:18px 20px;
-  margin-bottom:22px;
-}
-.config-title{
-  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.2em;
-  color:var(--amber);margin-bottom:12px;
-}
-.config-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.config-field label{
-  font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;
-  color:var(--text-dim);display:block;margin-bottom:4px;
-}
-.config-field input,.config-field select{
-  width:100%;background:var(--surface);
-  border:1px solid var(--border-hi);
-  color:var(--text-hi);
-  font-family:'Share Tech Mono',monospace;font-size:12px;
-  padding:7px 9px;outline:none;transition:border-color .12s;
-}
-.config-field input:focus,.config-field select:focus{border-color:var(--amber)}
-.pin-note{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);margin-top:3px}
-
 /* ── FOLDER TABS ── */
 .folder-tabs{
   display:flex;gap:0;overflow-x:auto;
   margin-bottom:0;border-bottom:1px solid var(--border-hi);
-  flex-shrink:0;
+  flex-shrink:0;scrollbar-width:none;
 }
+.folder-tabs::-webkit-scrollbar{display:none}
 .folder-tab{
   font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;
   color:var(--text-dim);padding:9px 18px;
@@ -149,8 +117,8 @@ main{flex:1;max-width:1200px;margin:0 auto;padding:28px 20px 60px;width:100%}
 .folder-tab:hover{color:var(--text)}
 .folder-tab.active{color:var(--red-b);border-bottom-color:var(--red);background:rgba(138,32,32,.06)}
 
-/* ── MAP GRID ── */
-.maps-container{
+/* ── DOCS CONTAINER ── */
+.docs-container{
   background:var(--surface2);
   border:1px solid var(--border-hi);
   border-top:none;
@@ -158,123 +126,67 @@ main{flex:1;max-width:1200px;margin:0 auto;padding:28px 20px 60px;width:100%}
   margin-bottom:22px;
 }
 
-.map-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:12px;
-}
+/* ── DOCUMENT CARD ── */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 
-.map-card{
+.doc-card{
   background:var(--surface);
   border:1px solid var(--border);
   border-top:2px solid var(--border-hi);
-  cursor:pointer;
-  transition:all .15s;
   overflow:hidden;
-  position:relative;
+  transition:border-color .15s;
 }
-.map-card:hover{border-top-color:var(--red);border-color:var(--border-hi)}
-.map-card.active-map{border-top-color:var(--green);border-color:var(--green-dim);background:rgba(122,154,40,.06)}
+.doc-card:hover{border-color:var(--border-hi)}
+.doc-card.active-doc{border-top-color:var(--green);border-color:var(--green-dim);background:rgba(122,154,40,.04)}
 
-.map-thumb{
-  width:100%;
-  aspect-ratio:16/10;
-  object-fit:cover;
-  display:block;
-  filter:brightness(.85);
-  transition:filter .15s;
+.doc-card-header{
+  padding:10px 12px 8px;
+  border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.15);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
 }
-.map-card:hover .map-thumb{filter:brightness(1)}
-.map-card.active-map .map-thumb{filter:brightness(1)}
-
-/* Thumbnail placeholder for missing images */
-.map-thumb-placeholder{
-  width:100%;aspect-ratio:16/10;
-  background:var(--surface3);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:6px;
+.doc-card-name{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.14em;
+  color:var(--text-hi);line-height:1.1;flex:1;
 }
-.map-thumb-placeholder .ph-icon{
-  font-family:'Share Tech Mono',monospace;
-  font-size:28px;color:var(--border-hi);
-}
-.map-thumb-placeholder .ph-label{
-  font-family:'Share Tech Mono',monospace;
-  font-size:7px;letter-spacing:.14em;color:var(--text-dim);
+.doc-card-type{
+  font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.14em;
+  color:var(--text-dim);white-space:nowrap;padding-top:2px;
 }
 
-.map-info{padding:9px 11px}
-.map-name{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:16px;letter-spacing:.16em;
-  color:var(--text-hi);margin-bottom:2px;
+.doc-card-body{padding:10px 12px}
+
+.doc-code-display{
+  font-family:'Share Tech Mono',monospace;font-size:18px;letter-spacing:.25em;
+  color:var(--amber);background:rgba(0,0,0,.3);
+  border:1px solid var(--amber-dim);
+  padding:5px 10px;display:inline-block;margin-bottom:8px;
 }
-.map-meta{
-  font-family:'Share Tech Mono',monospace;
-  font-size:7px;letter-spacing:.12em;color:var(--text-dim);
-}
-.map-active-badge{
-  position:absolute;top:6px;right:6px;
-  background:var(--green);color:var(--bg);
-  font-family:'Share Tech Mono',monospace;
-  font-size:6.5px;letter-spacing:.14em;
-  padding:2px 6px;
+.doc-code-label{
+  font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.2em;
+  color:var(--text-dim);margin-bottom:3px;
 }
 
-.map-card-btns{
-  padding:0 11px 9px;
-  display:flex;gap:5px;
-}
-.map-btn{
-  font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.1em;
-  padding:4px 10px;border:1px solid var(--border-hi);
-  background:var(--surface2);color:var(--text-dim);
-  cursor:pointer;transition:all .12s;
-}
-.map-btn.primary{border-color:var(--red);color:var(--red-b)}
-.map-btn.primary:hover{background:rgba(138,32,32,.15)}
-.map-btn.green{border-color:var(--green-dim);color:var(--green)}
-.map-btn.green:hover{background:rgba(122,154,40,.1)}
-.map-btn:hover{border-color:var(--border-hi);color:var(--text)}
-
-/* No maps placeholder */
-.no-maps{
-  padding:48px;text-align:center;
-  border:1px dashed var(--border-hi);
-  font-family:'Share Tech Mono',monospace;font-size:8.5px;
-  letter-spacing:.14em;color:var(--text-dim);
-  line-height:1.9;
+.doc-path{
+  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.06em;
+  color:var(--text-dim);margin-bottom:8px;word-break:break-all;line-height:1.4;
 }
 
-/* ── ADD MAP PANEL ── */
-.add-panel{
-  background:var(--surface2);
-  border:1px solid var(--border-hi);
-  border-left:3px solid var(--green-dim);
-  padding:18px 20px;
-  margin-bottom:22px;
+.doc-note-text{
+  font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:8px;line-height:1.4;
 }
-.add-title{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--green);margin-bottom:12px}
-.add-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px}
-.add-field label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.16em;color:var(--text-dim);display:block;margin-bottom:3px}
-.add-field input,.add-field select{
-  width:100%;background:var(--surface);border:1px solid var(--border-hi);
-  color:var(--text-hi);font-family:'Barlow Condensed',sans-serif;font-size:14px;
-  padding:6px 8px;outline:none;transition:border-color .12s;
+
+.doc-card-btns{
+  display:flex;gap:5px;flex-wrap:wrap;
+  padding:0 12px 10px;
 }
-.add-field input:focus,.add-field select:focus{border-color:var(--green)}
-.btn{
-  font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:.14em;
-  padding:8px 16px;border:1px solid var(--border-hi);
-  background:var(--surface3);color:var(--text-hi);
-  cursor:pointer;transition:all .12s;white-space:nowrap;
+
+.active-badge{
+  font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.14em;
+  color:var(--green);background:rgba(122,154,40,.12);
+  border:1px solid var(--green-dim);padding:2px 6px;margin-bottom:6px;
+  display:inline-block;
 }
-.btn:hover{border-color:var(--red);color:var(--red-b)}
-.btn.green{border-color:var(--green-dim);color:var(--green)}
-.btn.green:hover{background:rgba(122,154,40,.15);border-color:var(--green)}
-.btn.red{border-color:var(--red);color:var(--red-b)}
-.btn.red:hover{background:rgba(138,32,32,.15)}
 
 /* ── FOLDER MANAGER ── */
 .folder-manager{
@@ -289,8 +201,7 @@ main{flex:1;max-width:1200px;margin:0 auto;padding:28px 20px 60px;width:100%}
 .folder-input{
   background:var(--surface);border:1px solid var(--border-hi);
   color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:12px;
-  padding:5px 9px;outline:none;transition:border-color .12s;
-  width:200px;
+  padding:5px 9px;outline:none;width:200px;
 }
 .folder-input:focus{border-color:var(--amber)}
 .folder-list{display:flex;flex-wrap:wrap;gap:6px;flex:1}
@@ -300,81 +211,118 @@ main{flex:1;max-width:1200px;margin:0 auto;padding:28px 20px 60px;width:100%}
   background:var(--surface);color:var(--text-dim);
   display:flex;align-items:center;gap:6px;
 }
-.folder-chip button{
-  background:none;border:none;color:var(--red);cursor:pointer;
-  font-size:10px;line-height:1;padding:0;
-}
+.folder-chip button{background:none;border:none;color:var(--red);cursor:pointer;font-size:10px;line-height:1;padding:0}
 .folder-chip button:hover{color:var(--red-b)}
 
-/* ── PIN MODAL ── */
+/* ── ADD DOC PANEL ── */
+.add-panel{
+  background:var(--surface2);
+  border:1px solid var(--border-hi);
+  border-left:3px solid var(--green-dim);
+  padding:18px 20px;
+  margin-bottom:22px;
+}
+.add-title{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--green);margin-bottom:14px}
+
+.add-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:end;margin-bottom:10px}
+
+.add-field label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.16em;color:var(--text-dim);display:block;margin-bottom:3px}
+.add-field input,.add-field select{
+  width:100%;background:var(--surface);border:1px solid var(--border-hi);
+  color:var(--text-hi);font-family:'Barlow Condensed',sans-serif;font-size:14px;
+  padding:6px 8px;outline:none;
+}
+.add-field input:focus,.add-field select:focus{border-color:var(--green)}
+.add-field input.mono{font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.12em}
+
+.add-grid-2{display:grid;grid-template-columns:3fr 1fr;gap:10px;align-items:end;margin-bottom:10px}
+
+.code-generate-row{display:flex;gap:6px;align-items:center}
+
+/* ── CODE PREVIEW ── */
+.code-preview{
+  background:rgba(0,0,0,.3);border:1px solid var(--amber-dim);
+  padding:3px 10px;
+  font-family:'Share Tech Mono',monospace;font-size:16px;letter-spacing:.2em;
+  color:var(--amber);white-space:nowrap;
+}
+
+/* ── BUTTONS ── */
+.btn{
+  background:var(--surface3);border:1px solid var(--border-hi);
+  color:var(--text-hi);
+  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;
+  padding:7px 12px;cursor:pointer;white-space:nowrap;transition:all .12s;
+}
+.btn:hover{border-color:var(--red);color:var(--red-b)}
+.btn.green{border-color:var(--green-dim);color:var(--green)}
+.btn.green:hover{background:rgba(122,154,40,.15);border-color:var(--green)}
+.btn.red{border-color:var(--red);color:var(--red-b)}
+.btn.red:hover{background:rgba(138,32,32,.15)}
+.btn.amber{border-color:var(--amber-dim);color:var(--amber)}
+.btn.amber:hover{background:rgba(184,120,32,.12);border-color:var(--amber)}
+.btn.sm{padding:4px 9px;font-size:7.5px}
+.btn.full{width:100%;text-align:center}
+
+/* ── NO DOCS STATE ── */
+.no-docs{
+  padding:48px;text-align:center;
+  border:1px dashed var(--border-hi);
+  font-family:'Share Tech Mono',monospace;font-size:8.5px;
+  letter-spacing:.14em;color:var(--text-dim);
+  line-height:1.9;
+}
+
+/* ── MODAL ── */
 .modal-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  position:fixed;inset:0;background:rgba(0,0,0,.82);
   display:none;align-items:center;justify-content:center;z-index:1000;
 }
 .modal-backdrop.open{display:flex}
 .modal{
   background:var(--surface2);border:1px solid var(--border-hi);
   border-top:2px solid var(--amber);
-  padding:28px 32px;width:340px;text-align:center;
+  padding:24px 28px;width:min(480px,92vw);
+  max-height:90vh;overflow-y:auto;
 }
 .modal-title{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.3em;
-  color:var(--text-hi);margin-bottom:6px;
-}
-.modal-sub{
-  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.16em;
-  color:var(--text-dim);margin-bottom:22px;
-}
-.pin-display{
-  display:flex;gap:10px;justify-content:center;margin-bottom:20px;
-}
-.pin-dot{
-  width:18px;height:18px;border-radius:50%;
-  border:1px solid var(--border-hi);background:transparent;
-  transition:all .12s;
-}
-.pin-dot.filled{background:var(--amber);border-color:var(--amber)}
-.pin-keypad{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-  margin-bottom:14px;
-}
-.pin-key{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.1em;
-  background:var(--surface);border:1px solid var(--border-hi);
-  color:var(--text-hi);padding:12px;cursor:pointer;
-  transition:all .12s;
-}
-.pin-key:hover{border-color:var(--amber);color:var(--amber)}
-.pin-key.wide{grid-column:span 2}
-.pin-error{
-  font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:.14em;
-  color:var(--red-b);padding:6px;margin-bottom:6px;display:none;
-}
-.pin-error.visible{display:block}
-.modal-cancel{
-  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;
-  color:var(--text-dim);cursor:pointer;padding:5px 14px;
-  border:1px solid var(--border);background:none;
-  transition:all .12s;
-}
-.modal-cancel:hover{color:var(--text);border-color:var(--border-hi)}
-
-/* ── PREVIEW PANEL ── */
-.preview-panel{
-  background:var(--surface2);
-  border:1px solid var(--border-hi);
-  border-left:3px solid var(--amber-dim);
-  padding:16px 18px;
-  margin-bottom:22px;
-  display:none;
-}
-.preview-panel.visible{display:block}
-.preview-head{
-  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.2em;
-  color:var(--amber);margin-bottom:10px;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.3em;
+  color:var(--text-hi);margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border-hi);
   display:flex;justify-content:space-between;align-items:center;
 }
-.preview-img{max-width:100%;max-height:280px;object-fit:contain;display:block;margin:0 auto}
+.modal-close{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--text-dim);cursor:pointer;padding:3px 8px;
+  border:1px solid var(--border);
+}
+.modal-close:hover{color:var(--red-b);border-color:var(--red)}
+.modal-field{margin-bottom:12px}
+.modal-field label{
+  font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.18em;
+  color:var(--text-dim);display:block;margin-bottom:4px;
+}
+.modal-field input,.modal-field select,.modal-field textarea{
+  width:100%;background:var(--surface);border:1px solid var(--border-hi);
+  color:var(--text-hi);font-family:'Barlow Condensed',sans-serif;font-size:14px;
+  padding:7px 9px;outline:none;
+}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{border-color:var(--amber)}
+.modal-field input.mono{font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:.18em}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+
+/* ── HELP BOX ── */
+.help-box{
+  background:var(--surface);border:1px solid var(--border-hi);
+  border-left:3px solid var(--border-hi);
+  padding:14px 18px;margin-bottom:22px;
+  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.1em;
+  color:var(--text-dim);line-height:1.9;
+}
+.help-box span{color:var(--text)}
+
+/* ── IO ROW ── */
+.io-row{display:flex;gap:10px;margin-bottom:22px;align-items:center;flex-wrap:wrap}
 
 /* ── FOOTER ── */
 footer{
@@ -384,26 +332,26 @@ footer{
   letter-spacing:.12em;color:var(--text-dim);flex-shrink:0;
 }
 
-/* ── RESPONSIVE ── */
 @media(max-width:700px){
-  .config-grid,.add-grid{grid-template-columns:1fr!important}
-  .map-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .add-grid{grid-template-columns:1fr 1fr}
+  .add-grid-2{grid-template-columns:1fr}
+  .doc-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
 <div class="top-band">
-  <span>■ UGD DIV IV // GM COMMAND // MAP OPERATIONS ■</span>
-  <span>GM-MAP // TACTICAL CARTOGRAPHY</span>
+  <span>■ UGD DIV IV // GM COMMAND // DOCUMENT VAULT ■</span>
+  <span>GM-DOC // IN-WORLD DOCUMENT REGISTRY</span>
   <span>■ GM EYES ONLY ■</span>
 </div>
 
 <div class="header">
-  <div class="header-left">GM-MAP // REV.01<br>CLEARANCE ALPHA</div>
+  <div class="header-left">GM-DOC // REV.01<br>CLEARANCE ALPHA</div>
   <div class="header-center">
-    <h1>MAP COMMAND</h1>
-    <div class="hsub">■ LOCATION CARTOGRAPHY // DISPLAY CONTROL ■</div>
+    <h1>DOCUMENT COMMAND</h1>
+    <div class="hsub">■ REGISTER DOCUMENTS & MAPS // ASSIGN ACCESS CODES // PUSH TO PLAYERS ■</div>
   </div>
   <div class="header-right">YEAR 5 POST-RESET<br>INDIANA OPERATION</div>
 </div>
@@ -412,582 +360,447 @@ footer{
 
   <!-- STATUS BAR -->
   <div class="status-bar">
-    <div class="status-item active" id="active-map-status">
-      ACTIVE MAP <strong id="active-map-name">NONE</strong>
+    <div class="status-item active" id="active-doc-status">
+      FEATURED DOCUMENT <strong id="active-doc-name">NONE</strong>
     </div>
-    <div class="status-item" id="active-folder-status">
-      LOCATION <strong id="active-folder-name">—</strong>
+    <div class="status-item" id="doc-count-status">
+      REGISTERED DOCS <strong id="doc-count">0</strong>
     </div>
-    <div style="flex:1"></div>
-    <a class="viewer-link" href="map_viewer.html" target="_blank">→ OPEN PLAYER DISPLAY</a>
-  </div>
-
-  <!-- CONFIG: PIN + Settings -->
-  <div class="config-panel">
-    <div class="config-title">■ COMMAND SETTINGS</div>
-    <div class="config-grid">
-      <div class="config-field">
-        <label>GM PIN (4 digits — required to change map)</label>
-        <input type="password" id="cfg-pin" maxlength="4" placeholder="e.g. 1984" autocomplete="off" inputmode="numeric">
-        <div class="pin-note">Set a PIN so players can't change the displayed map on a shared device.</div>
-      </div>
-      <div class="config-field">
-        <label>VIEWER DISPLAY TITLE</label>
-        <input type="text" id="cfg-title" placeholder="e.g. REEVES TRIALS — YEAR 5" value="SPIKE: THE REEVES TRIALS">
-      </div>
-      <div class="config-field">
-        <label>VIEWER BACKGROUND COLOR</label>
-        <select id="cfg-bg">
-          <option value="#090a07">■ DEFAULT DARK (SPIKE)</option>
-          <option value="#000000">■ FULL BLACK</option>
-          <option value="#0d0d14">■ DEEP NAVY</option>
-          <option value="#1a0808">■ BLOOD DARK</option>
-          <option value="#0a0d0a">■ FOREST DARK</option>
-        </select>
-      </div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-      <button class="btn green" onclick="saveConfig()">■ SAVE SETTINGS</button>
-      <span id="cfg-saved" style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--text-dim)"></span>
-    </div>
+    <a class="player-link" href="player_docs.html" target="_blank">→ OPEN PLAYER VAULT</a>
   </div>
 
   <!-- FOLDER MANAGER -->
   <div class="folder-manager">
-    <div class="folder-mgr-label">■ LOCATIONS</div>
-    <input class="folder-input" id="new-folder-input" type="text" placeholder="New location name..." maxlength="40">
+    <div class="folder-mgr-label">■ CATEGORIES</div>
+    <input class="folder-input" id="new-folder-input" type="text" placeholder="New category name..." maxlength="40">
     <button class="btn green" onclick="addFolder()">+ ADD</button>
     <div class="folder-list" id="folder-list"></div>
   </div>
 
   <!-- FOLDER TABS -->
-  <div class="folder-tabs" id="folder-tabs">
-    <!-- Generated by JS -->
+  <div class="folder-tabs" id="folder-tabs"></div>
+
+  <!-- DOC GRID -->
+  <div class="docs-container">
+    <div class="doc-grid" id="doc-grid"></div>
   </div>
 
-  <!-- MAP GRID -->
-  <div class="maps-container">
-    <div class="map-grid" id="map-grid"></div>
-  </div>
-
-  <!-- ADD MAP -->
+  <!-- ADD DOCUMENT -->
   <div class="add-panel">
-    <div class="add-title">■ ADD MAP TO CURRENT LOCATION</div>
+    <div class="add-title">■ REGISTER NEW DOCUMENT OR MAP</div>
+
     <div class="add-grid">
       <div class="add-field">
-        <label>MAP NAME</label>
-        <input type="text" id="new-map-name" placeholder="e.g. Research Wing — Level B2">
+        <label>DOCUMENT / MAP NAME</label>
+        <input type="text" id="new-doc-name" placeholder="e.g. RE-01 Research Wing — Level B2">
       </div>
       <div class="add-field">
-        <label>IMAGE PATH (in repo)</label>
-        <input type="text" id="new-map-path" placeholder="maps/re01/wing_b2.jpg">
+        <label>CATEGORY</label>
+        <select id="new-doc-folder"></select>
       </div>
       <div class="add-field">
-        <label>LOCATION FOLDER</label>
-        <select id="new-map-folder"></select>
-      </div>
-      <div class="add-field">
-        <label>GRID SCALE</label>
-        <select id="new-map-scale">
-          <option value="fit">Fit to Screen</option>
-          <option value="fill">Fill Screen</option>
-          <option value="original">Original Size</option>
+        <label>TYPE</label>
+        <select id="new-doc-type">
+          <option value="MAP">MAP</option>
+          <option value="DOCUMENT">DOCUMENT</option>
+          <option value="DOSSIER">DOSSIER</option>
+          <option value="INTEL">INTEL</option>
+          <option value="LOG">LOG</option>
+          <option value="IMAGE">IMAGE</option>
         </select>
       </div>
-      <div style="align-self:flex-end">
-        <button class="btn green" onclick="addMap()" style="width:100%">+ ADD MAP</button>
+      <div class="add-field">
+        <label>DISPLAY MODE</label>
+        <select id="new-doc-mode">
+          <option value="iframe">Embedded (HTML)</option>
+          <option value="image">Full-Screen Image</option>
+          <option value="pdf">PDF Viewer</option>
+        </select>
       </div>
     </div>
-    <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);padding:10px 14px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.1em;color:var(--text-dim);line-height:1.7">
-      ■ IMAGE PATHS are relative to the repository root. Recommended structure: <span style="color:var(--amber)">maps/location_name/map_file.jpg</span><br>
-      ■ Supported formats: <span style="color:var(--text)">JPG · PNG · WEBP · SVG</span><br>
-      ■ Maps are stored in localStorage — export/import JSON backup below to persist across browsers.
+
+    <div class="add-grid-2">
+      <div class="add-field">
+        <label>FILE PATH (relative to repo root)</label>
+        <input type="text" id="new-doc-path" placeholder="maps/re01/wing_b2.jpg  or  UGD_Reeves_Dossier.html">
+      </div>
+      <div class="add-field">
+        <label>NOTES (OPTIONAL)</label>
+        <input type="text" id="new-doc-notes" placeholder="Brief description for GM reference">
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="add-field" style="margin:0">
+        <label>8-DIGIT ACCESS CODE</label>
+        <div class="code-generate-row">
+          <input type="text" id="new-doc-code" class="mono" maxlength="8" placeholder="00000000" style="width:140px;letter-spacing:.3em;font-size:18px">
+          <button class="btn amber sm" onclick="generateCode()" style="margin-left:2px">⬡ GENERATE</button>
+          <div id="code-preview-wrap" style="display:none;margin-left:8px">
+            <div class="code-preview" id="code-preview">——————</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:18px">
+        <button class="btn green" onclick="addDocument()" style="padding:8px 20px">+ REGISTER DOCUMENT</button>
+      </div>
+    </div>
+
+    <div class="help-box" style="margin-bottom:0">
+      ■ ACCESS CODES are 8 digits, entered by players on the <span>PLAYER VAULT</span> keypad to unlock this document. Each document has its own unique code.<br>
+      ■ Use <span>FEATURED</span> to push a document to all players — it appears at the top of their vault without needing a code.<br>
+      ■ FILE PATHS are relative to the repository root. HTML pages embed directly; images display full-screen.
     </div>
   </div>
 
-  <!-- IMPORT/EXPORT -->
-  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center;flex-wrap:wrap">
-    <div class="sec-num" style="margin:0">■ DATA</div>
-    <button class="btn" onclick="exportData()">↓ EXPORT MAP DATA JSON</button>
-    <button class="btn" onclick="document.getElementById('import-fi').click()">↑ IMPORT MAP DATA JSON</button>
+  <!-- EDIT MODAL -->
+  <div class="modal-backdrop" id="edit-modal" onclick="if(event.target===this)closeEdit()">
+    <div class="modal">
+      <div class="modal-title">
+        EDIT DOCUMENT
+        <span class="modal-close" onclick="closeEdit()">✕ CLOSE</span>
+      </div>
+      <input type="hidden" id="edit-id">
+      <div class="modal-field"><label>NAME</label><input type="text" id="edit-name"></div>
+      <div class="modal-field"><label>CATEGORY</label><select id="edit-folder"></select></div>
+      <div class="modal-field"><label>TYPE</label>
+        <select id="edit-type">
+          <option value="MAP">MAP</option>
+          <option value="DOCUMENT">DOCUMENT</option>
+          <option value="DOSSIER">DOSSIER</option>
+          <option value="INTEL">INTEL</option>
+          <option value="LOG">LOG</option>
+          <option value="IMAGE">IMAGE</option>
+        </select>
+      </div>
+      <div class="modal-field"><label>DISPLAY MODE</label>
+        <select id="edit-mode">
+          <option value="iframe">Embedded (HTML)</option>
+          <option value="image">Full-Screen Image</option>
+          <option value="pdf">PDF Viewer</option>
+        </select>
+      </div>
+      <div class="modal-field"><label>FILE PATH</label><input type="text" id="edit-path"></div>
+      <div class="modal-field"><label>8-DIGIT ACCESS CODE</label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="text" class="mono" id="edit-code" maxlength="8" style="width:140px;letter-spacing:.3em;font-size:18px">
+          <button class="btn amber sm" onclick="document.getElementById('edit-code').value=randCode()">⬡ NEW CODE</button>
+        </div>
+      </div>
+      <div class="modal-field"><label>NOTES</label><input type="text" id="edit-notes"></div>
+      <div class="modal-btns">
+        <button class="btn green" onclick="confirmEdit()">✓ SAVE</button>
+        <button class="btn" onclick="closeEdit()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IO + EXPORT -->
+  <div class="sec-head" style="margin-top:10px">
+    <span class="sec-num">■ DATA</span>
+    <span class="sec-title" style="font-size:16px">REGISTRY BACKUP</span>
+    <div class="sec-line"></div>
+  </div>
+  <div class="io-row">
+    <button class="btn" onclick="exportData()">↓ EXPORT REGISTRY JSON</button>
+    <button class="btn" onclick="document.getElementById('import-fi').click()">↑ IMPORT REGISTRY JSON</button>
     <input type="file" id="import-fi" accept=".json" style="display:none" onchange="importData(event)">
-    <button class="btn red" onclick="clearAllMaps()">✕ CLEAR ALL MAPS</button>
+    <button class="btn red" onclick="clearAll()">✕ CLEAR ALL</button>
     <span id="io-status" style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--text-dim)"></span>
-  </div>
-
-  <!-- README SECTION -->
-  <div style="background:var(--surface2);border:1px solid var(--border-hi);border-left:3px solid var(--border-hi);padding:18px 20px;">
-    <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--text-dim);margin-bottom:10px">■ SETUP GUIDE</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--text-dim);line-height:1.9">
-      <span style="color:var(--text)">STEP 1</span> — Set your GM PIN above. This prevents players from navigating away from the active map.<br>
-      <span style="color:var(--text)">STEP 2</span> — Create location folders (e.g. "RE-01 Research Lab", "Calafiori Lab — Italy").<br>
-      <span style="color:var(--text)">STEP 3</span> — Add maps with their repository image paths. Commit images to your <span style="color:var(--amber)">maps/</span> folder.<br>
-      <span style="color:var(--text)">STEP 4</span> — Click DISPLAY on any map to push it to the player viewer.<br>
-      <span style="color:var(--text)">STEP 5</span> — Open <span style="color:var(--amber)">map_viewer.html</span> on the player-facing device (iPad, turned laptop, or shared screen).<br>
-      <span style="color:var(--text)">STEP 6</span> — When you want to change maps, the viewer will require the GM PIN first.
-    </div>
   </div>
 
 </main>
 
-<!-- PIN MODAL -->
-<div class="modal-backdrop" id="pin-modal">
-  <div class="modal">
-    <div class="modal-title">GM VERIFICATION</div>
-    <div class="modal-sub">■ ENTER PIN TO CHANGE ACTIVE MAP ■</div>
-    <div class="pin-display" id="pin-display">
-      <div class="pin-dot" id="pd0"></div>
-      <div class="pin-dot" id="pd1"></div>
-      <div class="pin-dot" id="pd2"></div>
-      <div class="pin-dot" id="pd3"></div>
-    </div>
-    <div class="pin-error" id="pin-error">■ INCORRECT PIN — ACCESS DENIED ■</div>
-    <div class="pin-keypad">
-      <button class="pin-key" onclick="pinKey('1')">1</button>
-      <button class="pin-key" onclick="pinKey('2')">2</button>
-      <button class="pin-key" onclick="pinKey('3')">3</button>
-      <button class="pin-key" onclick="pinKey('4')">4</button>
-      <button class="pin-key" onclick="pinKey('5')">5</button>
-      <button class="pin-key" onclick="pinKey('6')">6</button>
-      <button class="pin-key" onclick="pinKey('7')">7</button>
-      <button class="pin-key" onclick="pinKey('8')">8</button>
-      <button class="pin-key" onclick="pinKey('9')">9</button>
-      <button class="pin-key" onclick="pinBackspace()">⌫</button>
-      <button class="pin-key" onclick="pinKey('0')">0</button>
-      <button class="pin-key" onclick="pinConfirm()">✓</button>
-    </div>
-    <button class="modal-cancel" onclick="closePinModal()">CANCEL</button>
-  </div>
-</div>
-
-<!-- PREVIEW MODAL -->
-<div class="modal-backdrop" id="preview-modal" onclick="if(event.target===this)closePreview()">
-  <div style="background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid var(--red);max-width:90vw;max-height:90vh;padding:0;overflow:hidden;position:relative">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border-hi)">
-      <span id="preview-modal-name" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.2em;color:var(--text-hi)"></span>
-      <button onclick="closePreview()" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);border:1px solid var(--border);background:none;padding:4px 10px;cursor:pointer">✕ CLOSE</button>
-    </div>
-    <img id="preview-modal-img" src="" alt="" style="max-width:85vw;max-height:80vh;object-fit:contain;display:block">
-  </div>
-</div>
-
 <footer>
-  <span>UGD // SPIKE: THE REEVES TRIALS // MAP COMMAND GM-MAP</span>
+  <span>UGD // SPIKE: THE REEVES TRIALS // DOCUMENT COMMAND GM-DOC</span>
   <span>■ GM EYES ONLY // CLEARANCE ALPHA ■</span>
 </footer>
 
 <script>
 // ═══════════════════════════════════════
-//  STATE
+//  STORAGE KEYS (shared with player_docs.html)
 // ═══════════════════════════════════════
+const REGISTRY_KEY = 'spike_doc_registry_v1';
+const FEATURED_KEY = 'spike_doc_featured_v1';
 
-const STORAGE_KEY    = 'spike_maps_v1';
-const DISPLAY_KEY    = 'spike_active_map_v1';
-const CONFIG_KEY     = 'spike_map_config_v1';
+let registry = { folders: ['Maps', 'Dossiers', 'Intel', 'Research Logs'], docs: [] };
+let currentFolder = null;
 
-let state = {
-  folders: ['RE-01 Research Lab'],
-  maps: [],
-};
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  load();
+  if (!registry.folders.length) registry.folders = ['Maps', 'Dossiers', 'Intel', 'Research Logs'];
+  currentFolder = registry.folders[0] || null;
+  renderAll();
+});
 
-let config = {
-  pin: '',
-  title: 'SPIKE: THE REEVES TRIALS',
-  bg: '#090a07',
-};
-
-let currentFolder   = null;
-let pendingMapId    = null;  // map to activate after PIN
-let pinBuffer       = '';
-let pinUnlocked     = false; // session-level: once GM enters PIN once, skip re-entry for a few seconds
-let pinCooldown     = null;
-
-// ═══════════════════════════════════════
-//  PERSISTENCE
-// ═══════════════════════════════════════
-
-function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
-  broadcastActiveMap();
-}
-
+// ── STORAGE ──
 function load() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) state = JSON.parse(raw);
-  } catch(e) {}
-  try {
-    const rawCfg = localStorage.getItem(CONFIG_KEY);
-    if (rawCfg) config = { ...config, ...JSON.parse(rawCfg) };
+    const r = localStorage.getItem(REGISTRY_KEY);
+    if (r) registry = JSON.parse(r);
   } catch(e) {}
 }
 
-function saveConfig() {
-  config.pin   = document.getElementById('cfg-pin').value.trim();
-  config.title = document.getElementById('cfg-title').value.trim();
-  config.bg    = document.getElementById('cfg-bg').value;
-  try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); } catch(e) {}
-  broadcastActiveMap();
-  const s = document.getElementById('cfg-saved');
-  s.textContent = '✓ SAVED';
-  s.style.color = 'var(--green)';
-  setTimeout(() => { s.textContent = ''; }, 2000);
+function save() {
+  try { localStorage.setItem(REGISTRY_KEY, JSON.stringify(registry)); } catch(e) {}
+  updateStatusBar();
 }
 
-function loadConfigUI() {
-  if (config.pin)   document.getElementById('cfg-pin').value   = config.pin;
-  if (config.title) document.getElementById('cfg-title').value = config.title;
-  if (config.bg)    document.getElementById('cfg-bg').value    = config.bg;
-}
-
-function broadcastActiveMap() {
-  // Push active map to the key the viewer reads
-  const activeMap = state.maps.find(m => m.active);
-  try {
-    localStorage.setItem(DISPLAY_KEY, JSON.stringify({
-      map:    activeMap || null,
-      config: { title: config.title, bg: config.bg },
-      ts:     Date.now()
-    }));
-  } catch(e) {}
-}
-
-// ═══════════════════════════════════════
-//  FOLDERS
-// ═══════════════════════════════════════
-
+// ── FOLDERS ──
 function addFolder() {
   const input = document.getElementById('new-folder-input');
-  const name  = input.value.trim();
-  if (!name) { input.focus(); return; }
-  if (state.folders.includes(name)) { input.value = ''; return; }
-  state.folders.push(name);
+  const name = input.value.trim();
+  if (!name || registry.folders.includes(name)) { input.focus(); return; }
+  registry.folders.push(name);
   if (!currentFolder) currentFolder = name;
-  save();
-  renderAll();
-  input.value = '';
+  save(); renderAll(); input.value = '';
 }
 
 function removeFolder(name) {
-  if (state.maps.some(m => m.folder === name)) {
-    if (!confirm(`Remove folder "${name}"? Maps in this folder will be moved to the first folder.`)) return;
-    const fallback = state.folders.find(f => f !== name) || 'Default';
-    state.maps.forEach(m => { if (m.folder === name) m.folder = fallback; });
+  const hasDocs = registry.docs.some(d => d.folder === name);
+  if (hasDocs) {
+    if (!confirm(`Remove "${name}"? Docs in this category will move to the first category.`)) return;
+    const fallback = registry.folders.find(f => f !== name) || registry.folders[0];
+    registry.docs.forEach(d => { if (d.folder === name) d.folder = fallback; });
   }
-  state.folders = state.folders.filter(f => f !== name);
-  if (currentFolder === name) currentFolder = state.folders[0] || null;
-  save();
-  renderAll();
+  registry.folders = registry.folders.filter(f => f !== name);
+  if (currentFolder === name) currentFolder = registry.folders[0] || null;
+  save(); renderAll();
 }
 
-// ═══════════════════════════════════════
-//  MAPS
-// ═══════════════════════════════════════
-
+// ── DOCUMENTS ──
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 
-function addMap() {
-  const name   = document.getElementById('new-map-name').value.trim();
-  const path   = document.getElementById('new-map-path').value.trim();
-  const folder = document.getElementById('new-map-folder').value;
-  const scale  = document.getElementById('new-map-scale').value;
-  if (!name || !path) {
-    alert('Map name and image path are required.');
-    return;
-  }
-  state.maps.push({ id: uid(), name, path, folder: folder || currentFolder || state.folders[0], scale, active: false });
-  save();
-  renderMapGrid();
-  document.getElementById('new-map-name').value = '';
-  document.getElementById('new-map-path').value = '';
+function randCode() {
+  return Array.from({length:8}, () => Math.floor(Math.random()*10)).join('');
 }
 
-function deleteMap(id) {
-  if (!confirm('Remove this map from the list?')) return;
-  state.maps = state.maps.filter(m => m.id !== id);
+function generateCode() {
+  const code = randCode();
+  document.getElementById('new-doc-code').value = code;
+  const pw = document.getElementById('code-preview-wrap');
+  const pc = document.getElementById('code-preview');
+  pw.style.display = 'block';
+  pc.textContent = code.slice(0,4) + ' ' + code.slice(4);
+}
+
+function addDocument() {
+  const name = document.getElementById('new-doc-name').value.trim();
+  const path = document.getElementById('new-doc-path').value.trim();
+  const code = document.getElementById('new-doc-code').value.replace(/\D/g,'');
+  if (!name) { alert('Document name required.'); return; }
+  if (!path) { alert('File path required.'); return; }
+  if (code.length !== 8) { alert('Access code must be exactly 8 digits.'); return; }
+  if (registry.docs.some(d => d.code === code)) {
+    if (!confirm('Another document already uses this code. Continue anyway?')) return;
+  }
+  registry.docs.push({
+    id: uid(), name, path, code,
+    folder: document.getElementById('new-doc-folder').value || registry.folders[0],
+    type: document.getElementById('new-doc-type').value,
+    mode: document.getElementById('new-doc-mode').value,
+    notes: document.getElementById('new-doc-notes').value.trim(),
+    active: false,
+  });
   save();
-  renderMapGrid();
+  ['new-doc-name','new-doc-path','new-doc-code','new-doc-notes'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('code-preview-wrap').style.display = 'none';
+  renderDocGrid();
   updateStatusBar();
+  setIOStatus('REGISTERED // ' + name, true);
 }
 
-function requestActivate(id) {
-  const map = state.maps.find(m => m.id === id);
-  if (!map) return;
+function deleteDoc(id) {
+  if (!confirm('Remove this document from the registry?')) return;
+  registry.docs = registry.docs.filter(d => d.id !== id);
+  // If it was featured, clear
+  try {
+    const f = JSON.parse(localStorage.getItem(FEATURED_KEY)||'{}');
+    if (f.id === id) localStorage.removeItem(FEATURED_KEY);
+  } catch(e){}
+  save(); renderDocGrid(); updateStatusBar();
+}
 
-  // If no PIN is set, activate immediately
-  if (!config.pin) {
-    activateMap(id);
-    return;
+function featureDoc(id) {
+  registry.docs.forEach(d => d.active = false);
+  const doc = registry.docs.find(d => d.id === id);
+  if (doc) {
+    doc.active = true;
+    try {
+      localStorage.setItem(FEATURED_KEY, JSON.stringify({
+        id: doc.id, name: doc.name, path: doc.path,
+        mode: doc.mode, code: doc.code, ts: Date.now()
+      }));
+    } catch(e){}
   }
+  save(); renderDocGrid(); updateStatusBar();
+}
 
-  // If already unlocked recently (within 30s), skip PIN
-  if (pinUnlocked) {
-    activateMap(id);
-    return;
+function unfeatureDoc() {
+  registry.docs.forEach(d => d.active = false);
+  try { localStorage.removeItem(FEATURED_KEY); } catch(e){}
+  save(); renderDocGrid(); updateStatusBar();
+}
+
+// ── EDIT ──
+function openEdit(id) {
+  const doc = registry.docs.find(d => d.id === id); if (!doc) return;
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-name').value = doc.name;
+  document.getElementById('edit-path').value = doc.path;
+  document.getElementById('edit-code').value = doc.code;
+  document.getElementById('edit-notes').value = doc.notes || '';
+  document.getElementById('edit-type').value = doc.type || 'DOCUMENT';
+  document.getElementById('edit-mode').value = doc.mode || 'iframe';
+  // Populate folder select
+  const sel = document.getElementById('edit-folder');
+  sel.innerHTML = registry.folders.map(f => `<option value="${esc(f)}"${f===doc.folder?' selected':''}>${esc(f)}</option>`).join('');
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); }
+
+function confirmEdit() {
+  const id = document.getElementById('edit-id').value;
+  const doc = registry.docs.find(d => d.id === id); if (!doc) { closeEdit(); return; }
+  const code = document.getElementById('edit-code').value.replace(/\D/g,'');
+  if (code.length !== 8) { alert('Code must be 8 digits.'); return; }
+  doc.name  = document.getElementById('edit-name').value.trim() || doc.name;
+  doc.path  = document.getElementById('edit-path').value.trim();
+  doc.code  = code;
+  doc.notes = document.getElementById('edit-notes').value.trim();
+  doc.type  = document.getElementById('edit-type').value;
+  doc.mode  = document.getElementById('edit-mode').value;
+  doc.folder= document.getElementById('edit-folder').value;
+  // If this is featured, update featured key too
+  if (doc.active) {
+    try { localStorage.setItem(FEATURED_KEY, JSON.stringify({id:doc.id,name:doc.name,path:doc.path,mode:doc.mode,code:doc.code,ts:Date.now()})); } catch(e){}
   }
-
-  // Show PIN modal
-  pendingMapId = id;
-  openPinModal();
+  save(); closeEdit(); renderDocGrid(); setIOStatus('SAVED // '+doc.name, true);
 }
 
-function activateMap(id) {
-  state.maps.forEach(m => m.active = false);
-  const map = state.maps.find(m => m.id === id);
-  if (map) map.active = true;
-  save();
-  renderMapGrid();
-  updateStatusBar();
-
-  // Grant brief unlock window so GM can switch quickly
-  pinUnlocked = true;
-  clearTimeout(pinCooldown);
-  pinCooldown = setTimeout(() => { pinUnlocked = false; }, 30000);
-}
-
-// ═══════════════════════════════════════
-//  PIN MODAL
-// ═══════════════════════════════════════
-
-function openPinModal() {
-  pinBuffer = '';
-  updatePinDisplay();
-  document.getElementById('pin-error').classList.remove('visible');
-  document.getElementById('pin-modal').classList.add('open');
-}
-
-function closePinModal() {
-  document.getElementById('pin-modal').classList.remove('open');
-  pendingMapId = null;
-  pinBuffer = '';
-}
-
-function pinKey(k) {
-  if (pinBuffer.length >= 4) return;
-  pinBuffer += k;
-  updatePinDisplay();
-  if (pinBuffer.length === 4) {
-    // Auto-confirm when 4 digits entered
-    setTimeout(pinConfirm, 120);
-  }
-}
-
-function pinBackspace() {
-  pinBuffer = pinBuffer.slice(0,-1);
-  updatePinDisplay();
-}
-
-function pinConfirm() {
-  if (pinBuffer === config.pin) {
-    closePinModal();
-    if (pendingMapId) activateMap(pendingMapId);
-  } else {
-    document.getElementById('pin-error').classList.add('visible');
-    pinBuffer = '';
-    updatePinDisplay();
-    // Shake effect
-    const modal = document.querySelector('.modal');
-    modal.style.transform = 'translateX(-8px)';
-    setTimeout(() => { modal.style.transform = 'translateX(8px)'; }, 80);
-    setTimeout(() => { modal.style.transform = ''; }, 160);
-  }
-}
-
-function updatePinDisplay() {
-  for (let i = 0; i < 4; i++) {
-    document.getElementById('pd' + i).classList.toggle('filled', i < pinBuffer.length);
-  }
-}
-
-// ═══════════════════════════════════════
-//  PREVIEW MODAL
-// ═══════════════════════════════════════
-
-function openPreview(id) {
-  const map = state.maps.find(m => m.id === id);
-  if (!map) return;
-  document.getElementById('preview-modal-name').textContent = map.name;
-  document.getElementById('preview-modal-img').src = map.path;
-  document.getElementById('preview-modal').classList.add('open');
-}
-
-function closePreview() {
-  document.getElementById('preview-modal').classList.remove('open');
-}
-
-// ═══════════════════════════════════════
-//  RENDER
-// ═══════════════════════════════════════
-
+// ── RENDER ──
 function renderAll() {
   renderFolderTabs();
   renderFolderList();
   renderFolderSelect();
-  renderMapGrid();
+  renderDocGrid();
   updateStatusBar();
 }
 
 function renderFolderTabs() {
   const tabs = document.getElementById('folder-tabs');
-  if (!state.folders.length) {
-    tabs.innerHTML = '<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:10px 16px">No locations yet — add one above.</div>';
+  if (!registry.folders.length) {
+    tabs.innerHTML = '<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:10px 16px">No categories — add one above.</div>';
     return;
   }
-  if (!currentFolder || !state.folders.includes(currentFolder)) currentFolder = state.folders[0];
-  tabs.innerHTML = state.folders.map(f =>
-    `<div class="folder-tab${f === currentFolder ? ' active' : ''}" onclick="setFolder('${escHtml(f)}')">${escHtml(f)}</div>`
+  if (!currentFolder || !registry.folders.includes(currentFolder)) currentFolder = registry.folders[0];
+  tabs.innerHTML = registry.folders.map(f =>
+    `<div class="folder-tab${f===currentFolder?' active':''}" onclick="setFolder('${esc(f)}')">${esc(f)}</div>`
   ).join('');
 }
 
 function renderFolderList() {
-  const list = document.getElementById('folder-list');
-  list.innerHTML = state.folders.map(f =>
-    `<div class="folder-chip">${escHtml(f)} <button onclick="removeFolder('${escHtml(f)}')" title="Remove folder">✕</button></div>`
+  document.getElementById('folder-list').innerHTML = registry.folders.map(f =>
+    `<div class="folder-chip">${esc(f)} <button onclick="removeFolder('${esc(f)}')" title="Remove">✕</button></div>`
   ).join('');
 }
 
 function renderFolderSelect() {
-  const sel1 = document.getElementById('new-map-folder');
-  sel1.innerHTML = state.folders.map(f => `<option value="${escHtml(f)}"${f === currentFolder ? ' selected' : ''}>${escHtml(f)}</option>`).join('');
+  const sel1 = document.getElementById('new-doc-folder');
+  sel1.innerHTML = registry.folders.map(f => `<option value="${esc(f)}"${f===currentFolder?' selected':''}>${esc(f)}</option>`).join('');
 }
 
 function setFolder(name) {
   currentFolder = name;
   renderFolderTabs();
-  renderMapGrid();
+  renderDocGrid();
 }
 
-function renderMapGrid() {
-  const grid = document.getElementById('map-grid');
-  const maps = state.maps.filter(m => m.folder === currentFolder);
-
-  if (!maps.length) {
-    grid.innerHTML = `
-      <div class="no-maps" style="grid-column:1/-1">
-        [ ] NO MAPS IN THIS LOCATION<br>
-        <span style="font-size:7px">Add maps using the form below. Image files go in your repository's <span style="color:var(--amber)">maps/</span> folder.</span>
-      </div>`;
+function renderDocGrid() {
+  const grid = document.getElementById('doc-grid');
+  const docs = registry.docs.filter(d => d.folder === currentFolder);
+  if (!docs.length) {
+    grid.innerHTML = `<div class="no-docs" style="grid-column:1/-1">[ ] NO DOCUMENTS IN THIS CATEGORY<br><span style="font-size:7px">Register a document using the form below.</span></div>`;
     return;
   }
-
-  grid.innerHTML = maps.map(m => {
-    const isActive = m.active;
+  grid.innerHTML = docs.map(d => {
+    const fmtCode = d.code ? d.code.slice(0,4)+' '+d.code.slice(4) : '????????';
     return `
-    <div class="map-card${isActive ? ' active-map' : ''}" id="mc-${m.id}">
-      ${isActive ? '<div class="map-active-badge">■ DISPLAYED</div>' : ''}
-      ${m.path
-        ? `<img class="map-thumb" src="${escHtml(m.path)}" alt="${escHtml(m.name)}"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-        : ''}
-      <div class="map-thumb-placeholder" style="display:${m.path ? 'none' : 'flex'}">
-        <div class="ph-icon">⬡</div>
-        <div class="ph-label">NO IMAGE</div>
+    <div class="doc-card${d.active?' active-doc':''}" id="dc-${d.id}">
+      <div class="doc-card-header">
+        <div class="doc-card-name">${esc(d.name)}</div>
+        <div class="doc-card-type">${esc(d.type||'DOC')}</div>
       </div>
-      <div class="map-info">
-        <div class="map-name">${escHtml(m.name)}</div>
-        <div class="map-meta">${escHtml(m.path)} &nbsp;·&nbsp; ${(m.scale || 'fit').toUpperCase()}</div>
+      <div class="doc-card-body">
+        ${d.active ? '<div class="active-badge">■ FEATURED TO PLAYERS</div>' : ''}
+        <div class="doc-code-label">ACCESS CODE</div>
+        <div class="doc-code-display">${fmtCode}</div>
+        <div class="doc-path">⬡ ${esc(d.path)}</div>
+        ${d.notes ? `<div class="doc-note-text">${esc(d.notes)}</div>` : ''}
       </div>
-      <div class="map-card-btns">
-        <button class="map-btn primary" onclick="requestActivate('${m.id}')">▶ DISPLAY</button>
-        <button class="map-btn" onclick="openPreview('${m.id}')">⬛ PREVIEW</button>
-        <button class="map-btn" onclick="deleteMap('${m.id}')">✕</button>
+      <div class="doc-card-btns">
+        <button class="btn sm green" onclick="featureDoc('${d.id}')" title="Push this document to all players as featured">${d.active?'★ FEATURED':'▶ FEATURE'}</button>
+        ${d.active ? `<button class="btn sm" onclick="unfeatureDoc()" title="Remove featured status">✕ UNFEATURE</button>` : ''}
+        <button class="btn sm amber" onclick="openEdit('${d.id}')">✎ EDIT</button>
+        <button class="btn sm red" onclick="deleteDoc('${d.id}')">✕</button>
       </div>
     </div>`;
   }).join('');
 }
 
 function updateStatusBar() {
-  const active = state.maps.find(m => m.active);
-  document.getElementById('active-map-name').textContent  = active ? active.name.toUpperCase() : 'NONE';
-  document.getElementById('active-folder-name').textContent = active ? active.folder.toUpperCase() : '—';
-  document.getElementById('active-map-status').className  = 'status-item' + (active ? ' active' : '');
+  const active = registry.docs.find(d => d.active);
+  document.getElementById('active-doc-name').textContent = active ? active.name.toUpperCase() : 'NONE';
+  document.getElementById('active-doc-status').className = 'status-item' + (active ? ' active' : '');
+  document.getElementById('doc-count').textContent = registry.docs.length;
 }
 
-// ═══════════════════════════════════════
-//  IMPORT / EXPORT
-// ═══════════════════════════════════════
-
+// ── IMPORT / EXPORT ──
 function exportData() {
-  const blob = new Blob([JSON.stringify({ version: 1, ...state }, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify({version:2,...registry},null,2)],{type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'SPIKE_Maps.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  setIOStatus('EXPORTED // ' + new Date().toLocaleTimeString());
+  a.download = 'SPIKE_Document_Registry.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  setIOStatus('EXPORTED', true);
 }
 
 function importData(evt) {
-  const file = evt.target.files[0];
-  if (!file) return;
+  const file = evt.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     try {
       const d = JSON.parse(e.target.result);
-      if (d.folders) state.folders = d.folders;
-      if (d.maps)    state.maps    = d.maps;
-      save();
-      renderAll();
-      setIOStatus('IMPORTED // ' + file.name);
-    } catch {
-      setIOStatus('ERROR: INVALID FILE');
-    }
+      if (d.folders) registry.folders = d.folders;
+      if (d.docs) registry.docs = d.docs;
+      save(); renderAll(); setIOStatus('IMPORTED // '+file.name, true);
+    } catch { setIOStatus('ERROR: INVALID FILE', false); }
   };
-  reader.readAsText(file);
-  evt.target.value = '';
+  reader.readAsText(file); evt.target.value = '';
 }
 
-function clearAllMaps() {
-  if (!confirm('Clear ALL maps and folders? This cannot be undone.')) return;
-  state = { folders: ['Default'], maps: [] };
-  currentFolder = 'Default';
-  save();
-  renderAll();
-  setIOStatus('CLEARED');
+function clearAll() {
+  if (!confirm('Clear ALL registered documents?')) return;
+  registry.docs = [];
+  try { localStorage.removeItem(FEATURED_KEY); } catch(e){}
+  save(); renderAll(); setIOStatus('CLEARED', false);
 }
 
-function setIOStatus(msg) {
+function setIOStatus(msg, ok) {
   const el = document.getElementById('io-status');
   el.textContent = msg;
+  el.style.color = ok ? 'var(--green)' : 'var(--red-b)';
   setTimeout(() => { el.textContent = ''; }, 3000);
 }
 
-// ═══════════════════════════════════════
-//  UTILITY
-// ═══════════════════════════════════════
-
-function escHtml(str) {
+function esc(str) {
   if (typeof str !== 'string') return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-// Storage change listener — react if another tab pushes an update
-window.addEventListener('storage', e => {
-  if (e.key === DISPLAY_KEY) updateStatusBar();
-});
-
-// Keyboard: press Enter in PIN modal when 4 digits filled
-document.addEventListener('keydown', e => {
-  const modal = document.getElementById('pin-modal');
-  if (!modal.classList.contains('open')) return;
-  if (e.key >= '0' && e.key <= '9') pinKey(e.key);
-  if (e.key === 'Backspace') pinBackspace();
-  if (e.key === 'Enter') pinConfirm();
-  if (e.key === 'Escape') closePinModal();
-});
-
-// ═══════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════
-
-window.addEventListener('DOMContentLoaded', () => {
-  load();
-  loadConfigUI();
-  if (!state.folders.length) state.folders = ['RE-01 Research Lab'];
-  currentFolder = state.folders[0];
-  renderAll();
-  broadcastActiveMap();
-});
 </script>
 
 </body>
