@@ -186,6 +186,8 @@ body::after {
 .qi.current.hostile { border-left-color: var(--red-bright); background: rgba(138,32,32,.08); border-color: var(--red); }
 .qi.dead      { opacity: .35; }
 .qi:hover:not(.current) { border-color: var(--border-hi); }
+.qi.dragging { opacity:.45; border-color: var(--amber); }
+.qi.drag-over { outline: 1px dashed var(--amber); }
 
 .qi-name {
   font-family: 'Bebas Neue', sans-serif;
@@ -1315,6 +1317,10 @@ select.f-input { appearance: none; cursor: pointer; }
             <div class="cmd-atk-field">
               <label>DEFENSE VALUE</label>
               <input id="cmd-atk-tn" type="number" value="6" style="width:58px">
+            </div>
+            <div class="cmd-atk-field">
+              <label>DAMAGE MOD</label>
+              <input id="cmd-atk-dmgmod" type="number" value="0" style="width:70px">
             </div>
             <div class="cmd-atk-field">
               <label>WEAPON CLASS</label>
@@ -2812,6 +2818,96 @@ window.addEventListener('DOMContentLoaded',()=>{
     renderCommandCenter();
   }
   startPresenceHeartbeat();
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let draggedIndex = null;
+
+  function refreshDragHandlers() {
+    document.querySelectorAll('.qi').forEach((el, idx) => {
+      el.setAttribute('draggable', 'true');
+
+      el.addEventListener('dragstart', e => {
+        draggedIndex = idx;
+        el.classList.add('dragging');
+      });
+
+      el.addEventListener('dragend', e => {
+        el.classList.remove('dragging');
+        document.querySelectorAll('.qi').forEach(q => q.classList.remove('drag-over'));
+      });
+
+      el.addEventListener('dragover', e => {
+        e.preventDefault();
+        el.classList.add('drag-over');
+      });
+
+      el.addEventListener('dragleave', () => {
+        el.classList.remove('drag-over');
+      });
+
+      el.addEventListener('drop', e => {
+        e.preventDefault();
+        el.classList.remove('drag-over');
+
+        if (typeof combatants === 'undefined') return;
+        const targetIndex = idx;
+        if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+        const moved = combatants.splice(draggedIndex, 1)[0];
+        combatants.splice(targetIndex, 0, moved);
+
+        if (typeof renderQueue === 'function') renderQueue();
+        if (typeof renderCommandCenter === 'function') renderCommandCenter();
+        refreshDragHandlers();
+      });
+    });
+  }
+
+  const observer = new MutationObserver(() => refreshDragHandlers());
+  const queue = document.getElementById('queue-scroll');
+  if (queue) observer.observe(queue, { childList: true, subtree: true });
+
+  refreshDragHandlers();
+
+  window.cmdCheckHit_original = window.cmdCheckHit;
+  if (window.cmdCheckHit_original) {
+    window.cmdCheckHit = function() {
+      window.cmdCheckHit_original();
+
+      const result = document.getElementById('cmd-atk-result');
+      const applyBtn = document.getElementById('cmd-apply-btn');
+      const dmgMod = parseInt(document.getElementById('cmd-atk-dmgmod')?.value || 0);
+
+      const text = result?.innerText || '';
+      const match = text.match(/DMG\s*(\d+)/i);
+
+      if (match) {
+        let dmg = parseInt(match[1]) + dmgMod;
+        if (dmg < 0) dmg = 0;
+        result.innerHTML += ` <span class="r-dmg">MODIFIED: ${dmg}</span>`;
+        applyBtn.style.display = 'inline-flex';
+        applyBtn.dataset.finalDamage = dmg;
+      }
+    };
+
+    window.cmdApplyDamage = function() {
+      const targetSel = document.getElementById('cmd-atk-target');
+      const dmg = parseInt(document.getElementById('cmd-apply-btn').dataset.finalDamage || 0);
+
+      if (typeof combatants === 'undefined') return;
+      const target = combatants.find(c => c.name === targetSel.value);
+      if (!target) return;
+
+      target.hp = Math.max(0, target.hp - dmg);
+
+      if (typeof renderQueue === 'function') renderQueue();
+      if (typeof renderCommandCenter === 'function') renderCommandCenter();
+    };
+  }
 });
 </script>
 
