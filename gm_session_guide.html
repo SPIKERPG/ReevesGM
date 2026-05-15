@@ -12,7 +12,7 @@
   --border: #1e2014; --border-hi: #2a2d1a;
   --text: #b8baa5; --text-dim: #555748; --text-hi: #dfe1cc;
   --green: #7a9a28; --green-dim: #4a5e18; --green-pale: #181e06;
-  --red: #8a2020; --red-bright: #c03030;
+  --red: #1a3f6e; --red-bright: #2e6db4;
   --amber: #b87820; --amber-dim: #6e4810; --amber-pale: #2a1e06;
   --blue: #4a7a9a; --blue-dim: #1a2a3a;
 }
@@ -32,7 +32,6 @@ body::after {
   pointer-events: none; z-index: 9000;
 }
 
-/* ── TOP BAND ── */
 .top-band {
   background: var(--red); padding: 3px 24px;
   display: flex; justify-content: space-between;
@@ -40,7 +39,6 @@ body::after {
   letter-spacing: .2em; color: #fff;
 }
 
-/* ── HEADER ── */
 .main-header {
   background: var(--surface); border-bottom: 2px solid var(--red);
   padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
@@ -52,7 +50,6 @@ body::after {
 .mh-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .4em; color: var(--text-hi); }
 .mh-sub { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .22em; color: var(--red-bright); margin-top: 3px; }
 
-/* ── NAV ── */
 nav {
   background: var(--surface2); border-bottom: 1px solid var(--border);
   display: flex; overflow-x: auto; padding: 0 28px;
@@ -67,12 +64,10 @@ nav a {
   border-right: 1px solid var(--border); white-space: nowrap; transition: all .15s;
 }
 nav a:first-child { border-left: 1px solid var(--border); }
-nav a:hover, nav a.active { color: var(--red-bright); background: rgba(138,32,32,.07); }
+nav a:hover, nav a.active { color: var(--red-bright); background: rgba(26,63,110,.07); }
 
-/* ── MAIN ── */
 main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 
-/* ── SECTION ── */
 .section { margin-bottom: 60px; }
 
 .section-head {
@@ -84,7 +79,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .sh-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: .28em; color: var(--text-hi); }
 .sh-line { flex: 1; height: 1px; background: var(--border); margin-bottom: 3px; }
 
-/* ── PANELS ── */
 .panel {
   background: var(--surface2); border: 1px solid var(--border-hi);
   border-left: 3px solid var(--green-dim); padding: 16px 18px; margin-bottom: 12px;
@@ -92,10 +86,9 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .panel.red { border-left-color: var(--red); }
 .panel.amber { border-left-color: var(--amber-dim); background: var(--amber-pale); }
 .panel.amber-plain { border-left-color: var(--amber-dim); }
-.panel.blue { border-left-color: var(--blue-dim); background: var(--blue-dim); }
 .panel.blue-plain { border-left-color: var(--blue); }
 .panel.quiet { border-left-color: var(--border-hi); background: var(--surface); }
-.panel.full-red { border-left-color: var(--red-bright); background: rgba(138,32,32,.05); }
+.panel.full-red { border-left-color: var(--red-bright); background: rgba(26,63,110,.05); }
 
 .panel-title {
   font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .2em;
@@ -113,12 +106,10 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .panel ul { padding-left: 16px; margin-top: 6px; }
 .panel li { font-size: 13px; margin-bottom: 5px; line-height: 1.5; }
 
-/* ── GRIDS ── */
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .mbr { margin-bottom: 14px; }
 
-/* ── GM DESIGN NOTE ── */
 .design-note {
   background: rgba(122,154,40,.06);
   border: 1px solid var(--green-dim);
@@ -133,7 +124,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .design-note p { font-size: 13.5px; color: var(--text-dim); line-height: 1.55; margin-bottom: 0; }
 .design-note strong { color: var(--text); }
 
-/* ── NPC CARD ── */
 .npc-card {
   background: var(--surface2); border: 1px solid var(--border-hi);
   border-top: 2px solid var(--red); margin-bottom: 12px; overflow: hidden;
@@ -183,7 +173,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
   padding-bottom: 3px; border-bottom: 1px solid var(--border);
 }
 
-/* ── LOCATION CARD ── */
 .location-card {
   background: var(--surface2); border: 1px solid var(--border-hi);
   border-left: 3px solid var(--red-bright);
@@ -213,7 +202,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .location-body p:last-child { margin-bottom: 0; }
 .location-body strong { color: var(--text-hi); }
 
-/* ── FIND BLOCK ── */
 .find-block {
   background: rgba(0,0,0,.28); border: 1px solid var(--border);
   border-left: 2px solid var(--green-dim);
@@ -226,7 +214,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .find-block p { font-size: 12.5px; color: var(--text); margin-bottom: 4px; line-height: 1.5; }
 .find-block p:last-child { margin-bottom: 0; }
 
-/* ── ROLL BLOCK ── */
 .roll-block {
   background: rgba(0,0,0,.22); border: 1px solid var(--border);
   border-left: 2px solid var(--amber-dim);
@@ -240,9 +227,8 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .roll-block p { font-size: 12.5px; color: var(--text-dim); margin: 0; line-height: 1.5; flex: 1; }
 .roll-block strong { color: var(--text); }
 
-/* ── SPIKE TRIGGER ── */
 .spike-trigger {
-  background: rgba(192,48,48,.07); border: 1px solid rgba(192,48,48,.25);
+  background: rgba(26,63,110,.07); border: 1px solid rgba(192,48,48,.25);
   border-left: 2px solid var(--red-bright);
   padding: 8px 12px; margin: 7px 0;
 }
@@ -253,7 +239,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .spike-trigger p { font-size: 12.5px; color: var(--text); margin: 0; line-height: 1.5; }
 .spike-trigger strong { color: var(--text-hi); }
 
-/* ── DOCUMENT FRAGMENT ── */
 .doc-fragment {
   background: var(--surface3); border: 1px solid var(--border-hi);
   border-left: 2px solid var(--text-dim);
@@ -263,47 +248,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 }
 .doc-fragment strong { color: var(--text); font-style: normal; }
 
-/* ── CAMPAIGN SPINAL ── */
-.spinal-item {
-  display: grid; grid-template-columns: 28px 1fr; gap: 12px;
-  margin-bottom: 10px; align-items: start;
-}
-.spinal-num {
-  font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--red);
-  line-height: 1; text-align: center;
-}
-.spinal-body-label { font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: .14em; color: var(--text-hi); margin-bottom: 2px; }
-.spinal-body-text { font-size: 13px; color: var(--text); line-height: 1.5; }
-
-/* ── NPC QUICK REF TABLE ── */
-.qr-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
-.qr-table th {
-  font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .16em;
-  color: var(--text-dim); text-align: left; padding: 5px 10px;
-  border-bottom: 1px solid var(--border-hi); background: var(--surface);
-}
-.qr-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.qr-table tr:last-child td { border-bottom: none; }
-.qr-table tr:hover td { background: rgba(255,255,255,.015); }
-.td-name { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .12em; color: var(--text-hi); }
-.td-spike-0  { color: #5a9a5a; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
-.td-spike-1  { color: #7ab07a; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
-.td-spike-3  { color: #c8b840; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
-.td-spike-11 { color: #e04040; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
-
-/* ── GLOSSARY TABLE ── */
-.gloss-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.gloss-table th {
-  font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .16em;
-  color: var(--text-dim); text-align: left; padding: 5px 10px;
-  border-bottom: 1px solid var(--border-hi); background: var(--surface);
-}
-.gloss-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 13px; }
-.gloss-table tr:last-child td { border-bottom: none; }
-.gloss-term { color: var(--amber); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: .08em; }
-.gloss-floor { color: var(--text-dim); font-size: 11px; }
-
-/* ── FLOOR BADGE ── */
 .floor-badge {
   display: inline-block;
   font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .16em;
@@ -316,7 +260,61 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .floor-badge.f4 { border-color: var(--red); color: var(--red-bright); }
 .floor-badge.f5 { border-color: var(--red-bright); color: #e04040; background: rgba(138,8,8,.08); }
 
-/* ── MILESTONE BOX ── */
+/* ─── ACCESS CODE CALLOUT ─── */
+.access-code-callout {
+  background: rgba(74,94,24,.12);
+  border: 1px solid var(--green-dim);
+  border-left: 4px solid var(--green);
+  padding: 14px 16px;
+  margin: 14px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.acc-icon {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: .08em;
+  color: var(--green);
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.acc-body {}
+.acc-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: .22em;
+  color: var(--green);
+  margin-bottom: 5px;
+}
+.acc-doc {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: .18em;
+  color: var(--text-hi);
+  margin-bottom: 4px;
+}
+.acc-code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 22px;
+  letter-spacing: .35em;
+  color: var(--green);
+  font-weight: 700;
+  background: rgba(0,0,0,.3);
+  padding: 4px 10px;
+  display: inline-block;
+  border: 1px solid var(--green-dim);
+  margin-bottom: 4px;
+}
+.acc-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
 .milestone-box {
   background: var(--green-pale); border: 1px solid var(--green-dim);
   border-left: 3px solid var(--green);
@@ -330,7 +328,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .milestone-box p:last-child { margin-bottom: 0; }
 .milestone-box strong { color: var(--text-hi); }
 
-/* ── TONE NOTE ── */
 .tone-box {
   border-top: 1px solid var(--border-hi); border-bottom: 1px solid var(--border-hi);
   padding: 14px 18px; margin-bottom: 14px; text-align: center;
@@ -344,7 +341,31 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
   color: var(--text-dim); margin-top: 7px;
 }
 
-/* ── MOBILE ── */
+.qr-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+.qr-table th { font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .16em; color: var(--text-dim); text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--border-hi); background: var(--surface); }
+.qr-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.qr-table tr:last-child td { border-bottom: none; }
+.td-name { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .12em; color: var(--text-hi); }
+.td-spike-0  { color: #5a9a5a; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+.td-spike-1  { color: #7ab07a; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+.td-spike-3  { color: #c8b840; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+.td-spike-11 { color: #e04040; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+
+.gloss-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.gloss-table th { font-family: 'Share Tech Mono', monospace; font-size: 7.5px; letter-spacing: .16em; color: var(--text-dim); text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--border-hi); background: var(--surface); }
+.gloss-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 13px; }
+.gloss-table tr:last-child td { border-bottom: none; }
+.gloss-term { color: var(--amber); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: .08em; }
+.gloss-floor { color: var(--text-dim); font-size: 11px; }
+
+.map-ref {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .16em;
+  color: var(--blue); border: 1px solid var(--blue-dim);
+  padding: 2px 8px; margin-bottom: 8px;
+}
+.map-ref::before { content: '⬡'; font-size: 9px; }
+
 @media (max-width: 700px) {
   .g2, .g3 { grid-template-columns: 1fr !important; }
   main { padding-left: 14px; padding-right: 14px; }
@@ -417,9 +438,8 @@ footer {
       <p>Nothing in RE-01 should confirm the central mystery. Players should leave Campaign 1 with <strong>dread, partial understanding, and a strong reason to go to Italy.</strong> They should not leave understanding what the Reset is, how it works, or who caused it.</p>
     </div>
     <div class="panel quiet">
-      <div class="panel-title">THE TWO KNOWN CONFLICTS</div>
-      <p><strong>PS-08 is not Mitchell.</strong> The body in PS-08 is a failed earlier candidate or a researcher. Mitchell is alive at Point Nemo. If players assume PS-08 is the Prime and conclude the system is defunct, navigate gently — the evidence is intentionally inconclusive.</p>
-      <p style="margin-bottom:0;"><strong>The comms jam</strong> blocks UGD relay frequencies specifically. If asked why the UGD never noticed: the facility has been too low-priority to actively scan, and the jam presents as equipment silence rather than active interference.</p>
+      <div class="panel-title">MAPS IN PLAY</div>
+      <p>Player-facing maps have been created for each area. Reference them during play and coordinate finds and encounters with the room layouts shown. Maps are: <strong>Approach, Floor 1, Floor 2, Floor 3, Floor 4,</strong> and Floor 5 sub-maps: <strong>Command, Corridor, Enclosures, Incinerator, Power, Security, Surgery, Tanks, END.</strong> The END map is the crux — that is where the dispersal occurred.</p>
     </div>
   </div>
 
@@ -446,6 +466,16 @@ footer {
   <div class="panel red mbr">
     <div class="panel-title red">■ WHAT THE PARTY IS TOLD</div>
     <p><em>"Research Establishment 01 was a Division IV-funded behavioral sciences facility in the former state of Indiana, United States. It was documented as pursuing aerosol therapy trials for SPIKE management and neurological treatment research. We have floor records for the upper two levels. The facility went dark at Year 0 and has not been reoccupied. Exterior scans indicate residual automated systems are still drawing on emergency power. Your objective is recovery and assessment: surviving documentation, structural status, outstanding risk factors. Return with whatever the facility contains."</em></p>
+  </div>
+
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">RE-01 Research Mandate Summary</div>
+      <div class="acc-code">2203·1946</div>
+      <div class="acc-note">Give this code when handing out briefing materials. It unlocks the sanitized Research Mandate Summary the players receive in-world — identical to what Walker provides.</div>
+    </div>
   </div>
 
   <div class="panel mbr">
@@ -515,7 +545,15 @@ footer {
     <p style="margin-bottom:0;">Two people at a café table are having a conversation. Their voices are normal. Nobody laughs. Not because anything sad is happening. Because nothing is funny enough to produce that particular response. A child stops at the memorial kiosk, reads three names, and continues walking — because that is what the child knows to do with such a list.</p>
   </div>
 
-  <div class="g2 mbr">
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — Fort Wayne Settlement</div>
+      <div class="acc-code">3309·1947</div>
+      <div class="acc-note">Issue when the party arrives in Fort Wayne. The map orients players to the settlement layout as they gather intel before heading to Diamond Hill.</div>
+    </div>
+  </div>
     <div class="location-card exterior">
       <div class="location-header">
         <div class="location-name">THE DISTRIBUTION CENTER</div>
@@ -525,7 +563,7 @@ footer {
         <p>UGD-managed, clean, efficient. Pre-Reset brand labels on some containers — a cereal brand, a cleaning product. These feel uncanny.</p>
         <div class="find-block">
           <div class="find-label">■ IF MENTIONING DIAMOND HILL</div>
-          <p>The clerk's expression doesn't change: <em>"Take enough water for four days. The facility is sealed. People who've gone in haven't always come out the same."</em> Stated as a logistics note.</p>
+          <p>The clerk's expression doesn't change. He provides standard preparedness guidance — sufficient water, reliable lighting, a means of communication. <em>"That area hasn't been serviced. Take what you need and account for contingencies."</em> He says it the way he says everything. He has no particular reason to say more.</p>
         </div>
       </div>
     </div>
@@ -544,19 +582,19 @@ footer {
   <div class="npc-card mbr">
     <div class="npc-header">
       <div>
-        <div class="npc-name">LENA VASEK</div>
+        <div class="npc-name">CAROL HENSLEY</div>
         <div class="npc-role">CIVILIAN RESIDENT // MEMORIAL SQUARE</div>
       </div>
       <div class="npc-spike s3">SPIKE 3 — SHAKEN</div>
     </div>
     <div class="npc-body">
       <p>Mid-40s. Standing near the memorial kiosk with the particular stillness of someone waiting for something they've forgotten they're waiting for. She doesn't know her readings are elevated. She checks her wand rarely.</p>
-      <div class="npc-says">"My brother's name is on the fourth panel. Matej. I know he was twelve years older than me. I know we lived in the same building until I was nine. I know that I was very close to him, according to the journals I kept before Year 0. I've read them several times."<br><br>A pause.<br><br>"They're quite detailed. I seem to have had very strong feelings about him. I can see that clearly in the writing. I can't find the feeling itself."</div>
-      <p>If anyone stays and listens: <em>"I thought coming here would help. I'm not sure what 'help' would mean exactly. I've been coming here for two years. Something keeps bringing me back. I don't know what to call that."</em></p>
+      <div class="npc-says">"My son's name is on this panel. Danny. He was eight years old, according to the records I have. I know that we lived together. I know he was mine. My journals from before are very detailed about him — drawings he made, things he said. I've read them many times."<br><br>A pause.<br><br>"They're quite clear about how I felt. I can see it in the handwriting, in the way I wrote his name. I can't locate that feeling. I've been coming here trying to find it. I don't know what I think will happen."</div>
+      <p>If anyone stays and listens: <em>"I understand this is a normal outcome. Everyone lost someone. Most people seem to have moved forward. I'm not sure why I keep coming back here."</em></p>
       <p>She is not asking for anything. She will thank whoever spoke to her — with careful precision, not warmth — and turn back to the kiosk.</p>
       <div class="spike-trigger">
         <div class="spike-trigger-label">■ SPIKE TRIGGER // GM DISCRETION</div>
-        <p>A party member who engages with Lena honestly — not to gather information, but as a human being speaking to another human being — may make a SPIKE Save at <strong>TN 9</strong>. The trigger isn't the content. It's the gap: the distance between what she's describing and what she should be feeling, and what that says about the world they live in.</p>
+        <p>A party member who engages with Carol honestly — not to gather information, but as a human being speaking to another human being — may make a SPIKE Save at <strong>TN 9</strong>. The trigger isn't the content. It's the gap: the distance between what she's describing and what she should be feeling, and what that says about the world they live in.</p>
       </div>
     </div>
   </div>
@@ -571,8 +609,8 @@ footer {
     </div>
     <div class="npc-body">
       <p>50s. Large. The kind of person who has stayed in one place while the world changed around him.</p>
-      <div class="npc-says">"Diamond Hill. Yeah. People went in, first couple years. Shelter-seekers, mostly — the facility was intact, had power, walls that held. Some came back. Some didn't. The ones that came back... they were elevated. Bad elevated. We stopped tracking them after a while."</div>
-      <p><strong>On recent activity:</strong> <em>"There was a group, three years ago. Five of them. One of them never came back. Brandon. Good man, before. He's still in there somewhere. Comes up to the fence sometimes. Won't come out."</em> Tommy has been out there a few times, tried to call him. Brandon just stands there, then goes back inside.</p>
+      <div class="npc-says">"Diamond Hill. Yeah. People went in, first couple years. Shelter-seekers, mostly — the facility was intact, had power, walls that held. Some came back elevated, bad elevated. We stopped tracking them after a while."</div>
+      <p><strong>On recent activity:</strong> <em>"There was a group, three years ago. Five of them. One of them never came back. Brandon. Good man, before. Nobody who's gone in there has made it out since — not that I know of. I've stood at the fence a few times. Tried calling for him. Nothing comes back."</em> He lets the silence hold, then moves on.</p>
       <p>He offers the party an extra round before they leave. He doesn't explain why.</p>
     </div>
   </div>
@@ -592,22 +630,38 @@ footer {
     <p><strong>The birdsong stops approximately 200 meters from the perimeter. There is no obvious reason for this.</strong></p>
   </div>
 
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — RE-01 Approach</div>
+      <div class="acc-code">4400·1948</div>
+      <div class="acc-note">Issue when the party first sights the fence line. Shows the perimeter, turret positions, and the single point of entry. Good for planning the breach.</div>
+    </div>
+  </div>
+    <p>Refer to the <strong>Approach</strong> player-facing map. The perimeter fence line is shown in full. The two active turret positions are marked at the main entrance — this is the only point of access into the facility. The fence line shows evidence of breach attempts along the north run.</p>
+  </div>
+
   <div class="g2">
     <div class="location-card exterior">
       <div class="location-header">
         <div class="location-name">THE PERIMETER FENCE</div>
       </div>
       <div class="location-body">
-        <p>Chain-link, topped with wire. Electrification dead — cut or climb. Exception: turret posts at the southeast and southwest corners are still drawing power. Rubber/concussive rounds, non-lethal, but a direct hit suppresses and disorients. They track movement above the knee.</p>
+        <p>Chain-link, topped with wire. Electrification dead — the fence itself can be cut or climbed. <strong>However: the main entrance is protected by two active turret posts, still drawing on emergency power.</strong> Rubber/concussive rounds, non-lethal, but a direct hit suppresses and disorients. They track movement above the knee across the entrance approach. There is no secondary entrance — this is the only way in.</p>
         <p>The fence has been repaired multiple times along the north side — new sections spliced into old, four different attempts visible, <strong>each cut from the inside.</strong></p>
+        <div class="roll-block">
+          <div class="roll-tag">TECH TN 11</div>
+          <p>The turrets can be disabled by severing their power feed. The conduit runs along the exterior of the building to a junction box behind the east turret post. A successful roll bypasses both simultaneously. Failure triggers a burst — the operative nearest the entrance takes a hit.</p>
+        </div>
       </div>
     </div>
     <div class="location-card exterior">
       <div class="location-header">
-        <div class="location-name">NORTH ACCESS DOOR</div>
+        <div class="location-name">THE MAIN ENTRANCE</div>
       </div>
       <div class="location-body">
-        <p>A maintenance door set into the building's foundation, through a gap in the north fence that has been broken outward repeatedly. The door is unlocked. Opens onto a utility corridor connecting to Floor 1's administrative wing.</p>
+        <p>The primary entrance door is unlocked — the electronic lock lost power years ago. The door opens into the administrative vestibule connecting to Floor 1.</p>
         <div class="roll-block">
           <div class="roll-tag">AWARENESS TN 9</div>
           <p>The door frame has scratch marks at varying heights — concentrated around mid-chest, then lower, as though someone checked this door regularly for a long time. <strong>The most recent marks are closer to the ground.</strong></p>
@@ -627,8 +681,20 @@ footer {
 
   <div class="floor-badge f1">■ FLOOR 1 // THE PUBLIC FACE</div>
 
-  <div class="panel quiet mbr">
-    <p>Emergency lighting — half operational. Air sealed-facility stale: the absence of weather, seasons, anything variable. The building is intact. Floor 1 should feel, initially, like what the briefing described. <strong>The wrongness is in the details, not the structure.</strong></p>
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — RE-01 Floor 1</div>
+      <div class="acc-code">5512·1949</div>
+      <div class="acc-note">Issue as the party steps inside. This is what the briefing floor plans covered — the sanitized, UGD-visible level. The stairwell and locked lower door are both marked.</div>
+    </div>
+  </div> Air sealed-facility stale: the absence of weather, seasons, anything variable. The building is intact. Floor 1 should feel, initially, like what the briefing described. <strong>The wrongness is in the details, not the structure.</strong></p>
+  </div>
+
+  <div class="panel quiet mbr" style="border-left-color:var(--blue)">
+    <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 1</div>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 1</strong> player-facing map. Coordinate find locations with rooms shown. The stairwell to Floor 2 and the keypad-locked lower stairwell door are both marked.</p>
   </div>
 
   <div class="location-card floor1 mbr">
@@ -638,7 +704,7 @@ footer {
     <div class="location-body">
       <div class="find-block">
         <div class="find-label">■ FIND</div>
-        <p>Sign-in log at reception. Last entry: <strong>TAMSIN VORKE, CONTRACT TECHNICIAN. Sign-in time: 6:14 AM. No sign-out.</strong></p>
+        <p>Sign-in log at reception. Last entry: <strong>ASHLEY VORK, CONTRACT TECHNICIAN. Sign-in time: 6:14 AM. No sign-out.</strong></p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — SUPPLY ROOM</div>
@@ -647,11 +713,12 @@ footer {
       <div class="find-block">
         <div class="find-label">■ FIND — ADMINISTRATION OFFICES</div>
         <p>Personnel transfer notices signed only with Reeves' initials: E.R. At regular intervals. No destination listed. One file cabinet tab (missed on first pass, or revealed after Floor 5's emotional weight): <strong>"IDEOLOGICAL REVIEW — PENDING."</strong> Cabinet is empty. Handwritten note on the tab: <em>"Unsuitable for continuation. Removed."</em></p>
-        <p>Delivery manifests filed under HVAC MAINTENANCE from supplier AP Logistics — eleven shipments across 14 months, labeled as HVAC components. The weights and dimensions don't match any HVAC equipment in the building.</p>
       </div>
       <div class="find-block">
-        <div class="find-label">■ FIND — AP LOGISTICS (IF INVESTIGATED)</div>
-        <p>One manifest has a handwritten notation: <strong>"AP Logistics contact: Alan Prater, Regional Director."</strong> No other details. The name means nothing to the players now.</p>
+        <div class="find-label">■ FIND — WALL NOTICE (VISIBLE IN CORRIDOR)</div>
+        <p>A printed notice tacked to the corridor bulletin board between administration and the lab wing. Not hidden. Not filed. Just posted, the way you'd post a weather advisory.</p>
+        <div class="doc-fragment">"NOTICE — DR. MATTEO CALAFIORI'S FACILITY — Calafiori Research Station, isolated hill site, Liguria, Italy — has gone silent. Fire reported at the facility. Total loss of structure confirmed by aerial survey. All personnel unaccounted for."</div>
+        <p>It is undated. It has not been taken down. Nobody removed it when the facility was evacuated. <strong>Reeves knew. He left it on the wall anyway.</strong></p>
       </div>
     </div>
   </div>
@@ -661,10 +728,11 @@ footer {
       <div class="location-name">COMMUNICATIONS ROOM</div>
     </div>
     <div class="location-body">
-      <p>Radio equipment. Active jamming — still running on emergency power.</p>
+      <p>Radio equipment. Active jamming — still running on emergency power. A small note is taped to the primary console:</p>
+      <div class="doc-fragment"><strong>"DO NOT TOUCH — R."</strong></div>
       <div class="roll-block">
         <div class="roll-tag">TECH TN 11</div>
-        <p>The system wasn't designed to prevent all communication. It was designed to prevent outbound communication <strong>to UGD infrastructure specifically.</strong> Internal frequencies work. A technician's log: final entry reads <em>"Jamming configuration locked per Dr. R. directive. Frequency exclusion confirmed. Tested and functional."</em> No further entries.</p>
+        <p>The system was intentionally converted from standard communications equipment into a localized jamming array. It targets outbound UGD relay frequencies specifically — internal short-range comms still function. A technician's log wedged behind the console: final entry reads <em>"Jamming configuration locked per Dr. R. directive. Frequency exclusion confirmed. Tested and functional."</em> The date on the final log entry is approximately two days before the Reset would have occurred — the players will have to determine this themselves through cross-referencing dates found elsewhere in the facility. No further entries.</p>
       </div>
     </div>
   </div>
@@ -677,7 +745,7 @@ footer {
       <p>Tables still set. Meals abandoned mid-morning. Whatever happened, it wasn't at mealtime — people left during the working day. Some trays overturned. Most haven't.</p>
       <div class="find-block">
         <div class="find-label">■ FIND — PERSONAL NOTEBOOK (SIGNED K.)</div>
-        <div class="doc-fragment">"Something happened in the lower wing last night. Vorke won't say what. R. said equipment failure but they ran the fans all night and the air smelled wrong. I'm going to ask him directly tomorrow."</div>
+        <div class="doc-fragment">"Something happened in the lower wing last night. Vork won't say what. R. said equipment failure but they ran the fans all night and the air smelled wrong. I'm going to ask him directly tomorrow."</div>
         <p>There is no entry for the following day.</p>
       </div>
     </div>
@@ -707,8 +775,20 @@ footer {
 
   <div class="floor-badge f2">■ FLOOR 2 // THE OFFICIAL RESEARCH, AND SOMETHING ELSE BEGINNING</div>
 
-  <div class="panel quiet mbr">
-    <p>Floor 2 has more power than Floor 1 — the generator prioritizes lab equipment. Fluorescent overhead lighting, most of it still working. The spaces are larger. The research is the same as Floor 1, until it isn't. The atmosphere shifts mid-floor: labs transition from clinical to technical-industrial. Documentation begins using terminology that doesn't appear in any briefing material.</p>
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — RE-01 Floor 2</div>
+      <div class="acc-code">6607·1950</div>
+      <div class="acc-note">Issue when the party descends to Floor 2. The freight elevator (marked MAINTENANCE ACCESS) and the server room are shown here — the first sign there is more to this building than the briefing documents.</div>
+    </div>
+  </div> — the generator prioritizes lab equipment. Fluorescent overhead lighting, most of it still working. The spaces are larger. The research is the same as Floor 1, until it isn't. The atmosphere shifts mid-floor: labs transition from clinical to technical-industrial. Documentation begins using terminology that doesn't appear in any briefing material.</p>
+  </div>
+
+  <div class="panel quiet mbr" style="border-left-color:var(--blue)">
+    <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 2</div>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 2</strong> player-facing map. The freight elevator and server room are marked. Animal wing is accessible off the main corridor.</p>
   </div>
 
   <div class="location-card floor2 mbr">
@@ -734,6 +814,12 @@ footer {
         <div class="find-label">■ FIND — RESEARCH SUMMARY (PINNED)</div>
         <p>A laminated summary pinned to the wall describes outcomes from "aerosol delivery trials" in terms of "integration efficacy" and "semantic continuity preservation." The language is technical and assumes shared knowledge the reader doesn't have. No definition of what was being integrated, or why continuity needed preserving.</p>
       </div>
+      <div class="find-block">
+        <div class="find-label">■ FIND — SUPPLY TRANSFER MEMO (DR. GUMEDE)</div>
+        <p>An internal receipt, filed neatly with standard lab paperwork. A small nanite shipment received from <strong>Dr. Ayakha Gumede's facility in South Africa</strong> — listed as a standard inter-researcher materials transfer under the UGD's collaborative research program. The quantity is modest. The documentation is complete and unremarkable. This was sanctioned cooperation.</p>
+        <div class="doc-fragment">"Shipment received from Dr. A. Gumede, South African facility — nanite components, research grade. Count: 600 units. Transfer logged under collaborative materials agreement. Stored per protocol."</div>
+        <p>The players have a name — Gumede — one of the four on Garcia's list. The memo gives them no reason to find this suspicious. That is correct. It wasn't suspicious at the time.</p>
+      </div>
     </div>
   </div>
 
@@ -758,8 +844,20 @@ footer {
 
   <div class="floor-badge f3">■ FLOOR 3 // WHERE THE RESEARCH CHANGES</div>
 
-  <div class="panel quiet mbr">
-    <p>Floor 3 is not on the briefing documents. The air is different — circulated differently, processed. The aesthetic shifts: fluorescent lighting replaced by task lighting in specific zones only. The walls are lined with equipment that has no analog on the floors above. Something industrial happened here.</p>
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — RE-01 Floor 3</div>
+      <div class="acc-code">7703·1951</div>
+      <div class="acc-note">Issue when the party steps off the freight elevator onto Floor 3. This floor does not appear in the briefing documents. The map will make that visible immediately.</div>
+    </div>
+  </div> The air is different — circulated differently, processed. The aesthetic shifts: fluorescent lighting replaced by task lighting in specific zones only. The walls are lined with equipment that has no analog on the floors above. Something industrial happened here.</p>
+  </div>
+
+  <div class="panel quiet mbr" style="border-left-color:var(--blue)">
+    <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 3</div>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 3</strong> player-facing map. The research archive, storage bays, and restricted corridor are marked.</p>
   </div>
 
   <div class="location-card floor3 mbr">
@@ -769,22 +867,35 @@ footer {
     <div class="location-body">
       <div class="find-block">
         <div class="find-label">■ FIND — CALAFIORI CORRESPONDENCE</div>
-        <p>Letters referencing the Italian facility in Genoa. The tone escalates from collegial to heated. Calafiori's method is described as "incendiary correction" — he disagrees with Reeves' approach. Reeves' responses are measured, cold, and do not engage with the ethical objections.</p>
-        <p>A burned notice, tucked into the back of a drawer: <em>"The Calafiori facility — Genoa, Italy — has gone silent. Fire reported at the facility approximately six weeks ago. Total loss of structure and personnel. No survivors recovered."</em></p>
-        <p>The fire occurred before RE-01 went dark. Reeves knew his Italian counterpart was gone. <strong>He kept working anyway.</strong></p>
+        <p>Letters referencing a research station in the hills outside Genoa, Italy — an isolated site, not in the city itself. The tone escalates from collegial to heated over the course of several exchanges. Calafiori's method is described as "incendiary correction" — he disagrees with Reeves' approach, argues it is philosophically wrong, not merely different. Reeves' responses are measured, cold, and do not engage with the ethical objections at all.</p>
+        <p>The fire notice from Floor 1 is in this archive as well — filed in a folder alongside Calafiori's letters, as though Reeves kept them together. He kept working anyway. <strong>He filed the news of his colleague's death in the same folder as their correspondence and continued.</strong></p>
       </div>
       <div class="find-block">
-        <div class="find-label">■ FIND — GUMEDE NANITE MEMO</div>
-        <div class="doc-fragment">"Nanite shipment received from Dr. Gumede (South African facility). Count: 4,800 units. Storage temperature verified. Awaiting integration protocol. Preliminary analysis confirms Gumede's design specifications — these are significantly smaller than our prototype batch. Recalibration application potential: unknown. Further consultation with Gumede's team recommended before deployment."</div>
-        <p>The players do not know what nanites are or why they matter. They have a name: Gumede. One of the four on Garcia's list.</p>
+        <div class="find-label">■ FIND — AP LOGISTICS CORRESPONDENCE</div>
+        <p>Found in a separate locked cabinet (TECH TN 11 or keycard from this floor's office). Multiple letters and manifests referencing <strong>AP Logistics</strong> — a private supply company that arranged shipments to RE-01 for over a year. The tone is businesslike but the content is strange: the manifests describe HVAC components, but the weights and dimensions match no HVAC equipment in the building.</p>
+        <p>Deeper in the cabinet: <strong>a letter signed "A. Prater, AP Logistics."</strong> The tone is pressured. The final letter reads:</p>
+        <div class="doc-fragment">"The timeline cannot slip further. The WHO sessions are not going to produce anything we can use. If you want this to happen, it happens on our schedule."</div>
+        <p>Reeves' draft response is handwritten in the margin: <em>"Agreed. Initiating."</em> The name Prater means nothing to the players. The crates in the building do not contain HVAC components.</p>
       </div>
     </div>
   </div>
 
   <div class="floor-badge f4">■ FLOOR 4 // BRANDON COLE</div>
 
-  <div class="panel quiet mbr">
-    <p>Floor 4 is maintenance infrastructure — pipes, conduit, mechanical systems for the floors above and below. Emergency lighting only. Some sections are in complete darkness. The air recycler runs louder here. And somewhere in the walls or ceilings of this floor, something moves.</p>
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — RE-01 Floor 4</div>
+      <div class="acc-code">8809·1952</div>
+      <div class="acc-note">Issue when the party descends to Floor 4. The maintenance corridor layout will help players track their position — and Brandon Cole's — in the dark. Hold off until they've actually stepped down.</div>
+    </div>
+  </div> — pipes, conduit, mechanical systems for the floors above and below. Emergency lighting only. Some sections are in complete darkness. The air recycler runs louder here. And somewhere in the walls or ceilings of this floor, something moves.</p>
+  </div>
+
+  <div class="panel quiet mbr" style="border-left-color:var(--blue)">
+    <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 4</div>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 4</strong> player-facing map. The maintenance corridors are shown. Brandon Cole can be encountered in any of the dark maintenance runs — he moves between them and has done so for years.</p>
   </div>
 
   <div class="npc-card consumed mbr">
@@ -793,31 +904,24 @@ footer {
         <div class="npc-name">BRANDON COLE</div>
         <div class="npc-role">CIVILIAN // TRAPPED IN RE-01 — THREE YEARS</div>
       </div>
-      <div class="npc-spike s11">SPIKE 11 — CONSUMED</div>
+      <div class="npc-spike s11">SPIKE 10–11 — SPIKED / CONSUMED</div>
     </div>
     <div class="npc-body">
-      <p>He is not an NPC to interview. He is a person in the final stages of neurological collapse. When the party locates him — in the animal wing, on Floor 4, or if he finds them — he recognizes human presence and destabilizes immediately. He backs against the wall. Climbs. Tries to get above eye level. Makes sounds before language arrives.</p>
+      <p>He is not an NPC to interview. He is a person in the final stages of neurological collapse, and a physical threat. When the party locates him — anywhere on Floor 4 — he recognizes human presence and destabilizes immediately. He is fast. He is not rational. He does not want to communicate; he wants the stimulus to stop.</p>
       <div class="npc-says consumed-voice">
-        "THE DRONES WENT UP — I SAW —"<br><br>
-        "DON'T LET THEM — DON'T LET THEM —"<br><br>
-        "THE TANKS WERE EMPTY — THEY WERE EMPTY AND THEN THEY WEREN'T —"<br><br>
-        "IT'S STILL RUNNING. IT'S STILL RUNNING DOWN THERE. I CAN HEAR IT."
+        "GET AWAY — GET AWAY GET AWAY —"<br><br>
+        "NO — STOP — I CAN'T — YOU'RE NOT — STOP —"<br><br>
+        "YOU WEREN'T SUPPOSED TO — I TOLD THEM — WHY ARE YOU IN HERE —"<br><br>
+        "PLEASE — PLEASE JUST — I CAN'T — PLEASE —"
       </div>
+      <p>His words carry no useful information. He is not hiding anything. He simply does not have coherent memory anymore. The sounds he makes are the sounds of a person who has been alone in a dark building for three years with nothing but the weight of everything a human being is supposed to feel and no way to process any of it.</p>
       <div class="spike-trigger">
         <div class="spike-trigger-label">■ SPIKE TRIGGER — PROXIMITY TN 11 (DISADVANTAGE IF SPIKE 5+)</div>
-        <p>Any party member at SPIKE 5+ within 10 meters of Brandon must make a SPIKE Save at the start of their turn. This is emotional contagion — proximity to someone at CONSUMED level is dangerous.</p>
+        <p>Any party member at SPIKE 5+ within 10 meters of Brandon must make a SPIKE Save at the start of their turn. This is emotional contagion — proximity to someone at this level is dangerous. He will also attack if operatives close within CLOSE range. Treat as a hostile encounter at GM discretion — he is not an enemy, but he cannot distinguish friend from threat.</p>
       </div>
       <div class="npc-sub-label">GROUNDING BRANDON</div>
-      <p>Possible but extremely difficult. <strong>d20 + MIND vs TN 14, at Disadvantage. One attempt per operative.</strong> Success does not restore him — it produces approximately 90 seconds of fractured lucidity. In that window he can answer questions, though not in linear sequence. He will not come out of the building. He does not believe he can survive outside it anymore. He may not be wrong.</p>
-      <p>If grounded: he looks at whoever did it for a long moment. Then: <em>"You shouldn't have come down here."</em> Not as a threat. As a medical assessment.</p>
-      <div class="npc-sub-label">WHAT HE KNOWS (LUCID)</div>
-      <p>He entered RE-01 three years ago with four others looking for shelter. The other four left within a week. Brandon stayed — something in the building kept pulling him back. He has been in the sub-levels for most of the last two years. He knows the facility the way animals know territory: by feel, by sound, by pattern.</p>
-      <ul>
-        <li>The tanks on Floor 5 were emptied "all at once, a long time ago" — drones carried whatever was in them upward and outward. He watched from the vents.</li>
-        <li>Something is still running on Floor 5. Not mechanical. He can't describe it better than that.</li>
-        <li>He has been in PS-08. He stopped going after the first few times. <em>"There's someone in there. Or there was."</em></li>
-        <li>On Alan Prater: the name makes him flinch. He's seen it on crates. <em>"Those weren't HVAC parts."</em></li>
-      </ul>
+      <p>Possible but extremely difficult. <strong>d20 + MIND vs TN 14, at Disadvantage. One attempt per operative.</strong> Success produces approximately 60–90 seconds of fractured, barely coherent calm. He does not know anything useful. He has forgotten most of what he saw. He cannot tell them about the tanks, the drones, the crates, or the lower floors — those facts have dissolved. What he can do is stop screaming, long enough for someone to look at him clearly. He looks back. That is all.</p>
+      <p>He will not leave. He cannot be helped here. The party should understand this by the time they find him, even if they don't say it out loud.</p>
     </div>
   </div>
 
@@ -833,23 +937,45 @@ footer {
 
   <div class="floor-badge f5">■ FLOOR 5 // WHERE THE RESEARCH ALWAYS ENDED</div>
 
-  <div class="panel full-red mbr">
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — Floor 5: Corridor</div>
+      <div class="acc-code">9904·0005</div>
+      <div class="acc-note">Issue the moment the party steps off the elevator onto Floor 5. The corridor map shows the layout and branching paths. Hold the sub-area maps until each zone is reached — they land harder one at a time.</div>
+    </div>
+  </div>
     <div class="panel-title red">■ GM NOTE — HOW TO RUN FLOOR 5</div>
     <p>Floor 5 should feel like stepping into the inside of something's mind. The scale is wrong for a sub-basement. The ceiling is higher than it should be. The space opens in ways that contradict the building's footprint above. The emergency lighting here is red — a design decision, not a fault.</p>
-    <p style="margin-bottom:0;">Play it slowly. Let the party move through the space before putting language to anything. The discoveries should arrive in silence first.</p>
+    <p style="margin-bottom:0;">Play it slowly. Let the party move through the space before putting language to anything. The discoveries should arrive in silence first. Refer to the Floor 5 sub-maps — each zone corresponds to a discrete area. The END map is the last stop. That is where it ended.</p>
+  </div>
+
+  <div class="panel quiet mbr" style="border-left-color:var(--blue)">
+    <div class="panel-title" style="color:var(--blue)">MAPS // FLOOR 5</div>
+    <p style="margin-bottom:0;">Seven sub-maps cover Floor 5: <strong>Corridor, Tanks, Power, Security, Surgery, Command, Incinerator, Enclosures, END.</strong> Use them sequentially as the party moves through. END is the dispersal origin point — run it last.</p>
+  </div>
+
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
+      <div class="acc-doc">Map — Floor 5: Tanks &nbsp;/&nbsp; Map — Floor 5: Power &nbsp;/&nbsp; Map — Floor 5: Security &nbsp;/&nbsp; Map — Floor 5: END</div>
+      <div class="acc-code" style="font-size:16px;letter-spacing:.2em">1019·2005 &nbsp;·&nbsp; 2048·0226 &nbsp;·&nbsp; 3072·0419 &nbsp;·&nbsp; 8192·0000</div>
+      <div class="acc-note">Issue these as the party moves through the production wing. Tanks (1019·2005) when they first see the tank arrays. Power and Security as they access those utility sub-zones. END last — when they reach the dispersal manifold. That map should be the final thing they see on Floor 5.</div>
+    </div>
   </div>
 
   <div class="location-card floor5 mbr">
     <div class="location-header">
-      <div class="location-name">THE PRODUCTION FLOOR</div>
-      <div class="location-tag">PRIMARY FIND</div>
+      <div class="location-name">TANKS — THE PRODUCTION FLOOR</div>
+      <div class="location-tag">PRIMARY FIND // TANKS MAP</div>
     </div>
     <div class="location-body">
-      <p>Enormous tank arrays — twelve in total, each the size of a shipping container. All empty. Drain manifolds still connected to industrial dispersal systems that route upward through the building and outward to the roof. The tanks have been cleaned thoroughly. No residue.</p>
-      <p><strong>Stenciled on each tank:</strong> BACTERIAL SUSPENSION — NEUROLOGICAL APPLICATION SERIES — DR. E. REEVES IV</p>
+      <p>Enormous tank arrays — twelve in total, each the size of a shipping container. All empty. Drain manifolds still connected to industrial dispersal systems that route upward through the building and outward to the roof. The tanks have been cleaned thoroughly. No residue. No labeling on the tanks themselves beyond a stenciled identification series and the initials <strong>E.R. IV</strong>.</p>
       <div class="find-block">
-        <div class="find-label">■ FIND — DISPERSAL LOG</div>
-        <p>A single laminated sheet bolted to the wall above the primary valve manifold. A dispersal record. Twelve tanks. One event. Date: Year 0, Day 1. Duration: 6 hours, 14 minutes. Distribution method: HIGH-ALTITUDE DRONE RELAY. Coverage zone: GLOBAL. Outcome field is blank.</p>
+        <div class="find-label">■ FIND — DISPERSAL LOG // END MAP</div>
+        <p>A single laminated sheet bolted to the wall above the primary valve manifold in the END area. A dispersal record. Twelve tanks. One event. Date: Year 0, Day 1. Duration: 6 hours, 14 minutes. Distribution method: HIGH-ALTITUDE DRONE RELAY. Coverage zone: GLOBAL. Outcome field is blank.</p>
       </div>
       <div class="spike-trigger">
         <div class="spike-trigger-label">■ SPIKE TRIGGER — COMPREHENSION TN 13</div>
@@ -858,10 +984,20 @@ footer {
     </div>
   </div>
 
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODES</div>
+      <div class="acc-doc">Map — Floor 5: Command &nbsp;·&nbsp; Reeves Personnel Dossier</div>
+      <div class="acc-code" style="font-size:16px;letter-spacing:.2em">5120·1961 &nbsp;·&nbsp; 1104·2048</div>
+      <div class="acc-note">Issue the Command map (5120·1961) when the party reaches the glass partition. Issue the Reeves Dossier (1104·2048) when they open his desk or begin reading the research journals — it's the in-world document version of what they're finding. The dossier landing alongside the journals is the moment the picture snaps into focus.</div>
+    </div>
+  </div>
+
   <div class="location-card floor5 mbr">
     <div class="location-header">
-      <div class="location-name">REEVES' LABORATORY</div>
-      <div class="location-tag">PRIMARY FIND</div>
+      <div class="location-name">COMMAND — REEVES' LABORATORY</div>
+      <div class="location-tag">PRIMARY FIND // COMMAND MAP</div>
     </div>
     <div class="location-body">
       <p>A private workspace set apart from the production floor by a glass partition — floor to ceiling, clean, intact. Reeves' desk is ordered. His work is filed. The man was methodical to the end.</p>
@@ -869,44 +1005,53 @@ footer {
         <div class="find-label">■ FIND — PRIMARY RESEARCH JOURNALS</div>
         <p>Twelve volumes. The early volumes describe legitimate research. The later volumes describe the Reset — not by that name. He calls it <strong>THE RECALIBRATION.</strong> The language is technical and proud. The emotional register across all twelve volumes is consistent: measured, certain, and entirely without doubt.</p>
         <p>Volume 11 contains a single sentence, underlined twice, that doesn't match the register of anything around it:</p>
-        <div class="doc-fragment">"The Prime Signal must originate from a living source. Synthetic generation is possible for short durations but experiences rapid entropy. Sustained global application requires a sustained biological anchor."</div>
-        <p>This is all the players need. They will not understand what a Prime Signal is. They should not. The word <strong>anchor</strong> should land.</p>
+        <div class="doc-fragment">"The anchor must originate from a living source. Synthetic generation is possible for short durations but experiences rapid entropy. Sustained global application requires a sustained biological anchor."</div>
+        <p>The players will not understand what this means. They should not. The word <strong>anchor</strong> should land.</p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — THE ITALY FILE</div>
-        <p>A single manila folder labeled <strong>CALAFIORI — GENOA.</strong> Inside: two photographs of the Italian facility, pre-fire. An address. A handwritten note: <em>"Incendiary approach — theoretically sound, practically irreversible. His conclusions re: emotional cauterization are consistent with my own re: baseline dampening. Different vectors. Same destination."</em></p>
-        <p>The address is Genoa, Italy. The fire destroyed the building. The research — and whoever survived — may still be findable.</p>
+        <p>A single manila folder labeled <strong>CALAFIORI — LIGURIA.</strong> Inside: two photographs of an isolated research station in the hills — bare concrete, narrow windows, surrounded by scrubland. An address outside Genoa. A handwritten note from Reeves:</p>
+        <div class="doc-fragment">"Incendiary approach — theoretically sound, practically irreversible. His conclusions re: emotional cauterization are consistent with my own re: baseline dampening. Different vectors. Same destination."</div>
+        <p>The address is in the hills outside Genoa, Italy. That region is a post-war wasteland, largely uninhabited. Supplies to the lab were flown in during its operational period. Whatever is there now — or whoever survived — may still be findable.</p>
       </div>
-      <div class="find-block">
-        <div class="find-label">■ FIND — PRATER CORRESPONDENCE (PARTIAL)</div>
-        <p>Three letters signed A.P. Tone is businesslike, then increasingly pressured. The final letter: <em>"The timeline cannot slip further. The WHO sessions are not going to produce anything we can use. If you want this to happen, it happens on our schedule."</em> Reeves' draft response, handwritten in the margin: <em>"Agreed. Initiating."</em></p>
-      </div>
+    </div>
+  </div>
+
+  <div class="access-code-callout">
+    <div class="acc-icon">⬡</div>
+    <div class="acc-body">
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODES</div>
+      <div class="acc-doc">Map — Floor 5: Surgery &nbsp;·&nbsp; Map — Floor 5: Incinerator &nbsp;·&nbsp; Map — Floor 5: Enclosures</div>
+      <div class="acc-code" style="font-size:16px;letter-spacing:.2em">4096·1984 &nbsp;·&nbsp; 6144·1944 &nbsp;·&nbsp; 7168·0318</div>
+      <div class="acc-note">Issue Surgery (4096·1984) and Incinerator (6144·1944) as those sub-zones are entered. Save Enclosures (7168·0318) until the party actually reaches the PS wing corridor — seeing the numbered doors on the map before they see them in person will heighten the dread. PS-08 should be the last door they check.</div>
     </div>
   </div>
 
   <div class="location-card floor5 mbr">
     <div class="location-header">
-      <div class="location-name">THE PS WING</div>
-      <div class="location-tag">PRIMARY FIND</div>
+      <div class="location-name">ENCLOSURES — THE PS WING</div>
+      <div class="location-tag">PRIMARY FIND // ENCLOSURES MAP</div>
     </div>
     <div class="location-body">
-      <p>A corridor of eight chambers. Numbered PS-01 through PS-08. Each chamber is approximately four meters square, sealed with heavy glass doors. Observation windows. Interior monitoring equipment, still drawing minimal power. Each chamber has a subject nameplate. PS-01 through PS-07 are empty — cleaned, sealed, unremarkable except for the scale of their containment infrastructure, which is far beyond what any aerosol therapy trial would require.</p>
+      <p>A long corridor of twenty chambers, numbered <strong>PS-01 through PS-20</strong> on the enclosures map. Each chamber is approximately four meters square, sealed with heavy glass doors. Observation windows. Interior monitoring equipment, still drawing minimal power. Each chamber has a subject nameplate mounted beside the door. The chambers contain simple cots — no desks, no furnishings beyond the bare minimum. PS-01 through PS-07 and PS-09 through PS-20 are empty — cleaned, sealed, unremarkable except for the scale of their containment infrastructure, which is far beyond what any aerosol therapy trial would require.</p>
+      <p>References to <strong>PS-08</strong> in documents found on upper floors should orient the party toward the correct chamber.</p>
       <p><strong>PS-08 is not empty.</strong></p>
       <div class="find-block">
         <div class="find-label">■ PS-08</div>
-        <p>The nameplate reads: <strong>MITCHELL, C. — PS-08 — PRIME CANDIDATE.</strong></p>
-        <p>The glass door is broken from the inside — shattered outward into the corridor. The chamber beyond is intact: bed, monitoring equipment, a small desk. On the desk: a series of etchings scratched into the surface with what appears to have been a pen nib. Hundreds of them. Geometric patterns that don't resolve into anything recognizable. Along the base of the wall: more etchings, lower and lower as they progress around the room, ending near the floor in the far corner.</p>
-        <p>A single piece of paper on the floor near the broken glass:</p>
-        <div class="doc-fragment">"Even at the end of the world, humanity cannot resist a flair for the dramatic."</div>
-        <p>No signature. No date. Whether Mitchell wrote it, or Reeves, or someone else entirely, the document does not say. <strong>The players should not know.</strong></p>
+        <p>The nameplate reads: <strong>MITCHELL, C. — PS-08 — PRIMARY CANDIDATE.</strong></p>
+        <p>The glass door is broken from the inside — shattered outward into the corridor. The chamber beyond contains a simple cot, standard monitoring equipment, and nothing else.</p>
+        <p>In the far corner of the chamber, near the floor: <strong>there is a mostly decomposed body.</strong> It is unidentifiable. The state of decomposition is consistent with five years' time in a sealed, climate-controlled environment. Multiple bullet holes in the wall above the cot. The glass was broken outward. The body is inside.</p>
+        <p><strong>The identity of the body is intentionally unresolvable.</strong> Do not offer clarification. The nameplate says Mitchell. The body cannot be identified. Both facts are true. Let them sit together.</p>
+      </div>
+      <div class="find-block">
+        <div class="find-label">■ FIND — FLOOR ETCHING</div>
+        <p>In the corner of the chamber, opposite the body, scratched directly into the concrete floor with something small and sharp. It appears to have been done hastily.</p>
+        <div class="doc-fragment">even at the end of the world, humanity cannot resist a flair for the dramatic</div>
+        <p>The only other etchings in the floor are fourty-two tick marks, seemingly signifying days. No signature anywhere.</p>
       </div>
       <div class="spike-trigger">
         <div class="spike-trigger-label">■ SPIKE TRIGGER — PS-08 ENTRY TN 11</div>
-        <p>Entering the chamber: optional save for any operative. The trigger is not a body — there is no body. It is the etchings. The sheer volume of them. The implication of the time they required, and what state of mind produced them.</p>
-      </div>
-      <div class="roll-block">
-        <div class="roll-tag">INVESTIGATION TN 9</div>
-        <p>The etchings near the floor are different from the rest — not geometric. They are letters, scratched smaller and smaller as they approach the corner. They read: <strong>PRATER — HARDWARE — THE DRONES.</strong> Then a single word, repeated: <strong>STILL. STILL. STILL.</strong></p>
+        <p>Entering the chamber: optional save for any operative. The trigger is the combination: the nameplate, the body, the bullet holes, the broken glass from the inside, the etching in the corner. Each detail is individually manageable. Together, they accumulate into something the mind cannot comfortably file.</p>
       </div>
     </div>
   </div>
@@ -932,14 +1077,20 @@ footer {
     <p>Tommy doesn't ask what they found. He asks about Brandon. Whatever the party tells him, his response is the same: he processes it and then pours them a drink without asking if they want one. <em>"He was a good man before."</em> He said that already. He says it again. It means something different now.</p>
   </div>
 
+  <div class="panel quiet mbr">
+    <div class="panel-title">REMOTE REPORT TO WALKER</div>
+    <p>The party contacts Walker via short-range transmission from outside the facility's jamming radius. They give a brief summary — lower floors discovered, documentation recovered, personnel situation encountered. Walker receives it professionally. <em>"Understood. Return to Copenhagen. We'll schedule a full debrief."</em> Nothing more. He schedules it the way he schedules everything.</p>
+    <div class="design-note" style="margin-top:10px; margin-bottom:0;">
+      <div class="design-note-label">■ GM NOTE</div>
+      <p>This exchange should feel like filing a report with a machine. The party has just seen the room where the world was changed. Walker says "understood" and books a conference room. <strong>The institutional indifference is the horror.</strong></p>
+    </div>
+  </div>
+
   <div class="panel red mbr">
     <div class="panel-title red">THE DEBRIEF — COPENHAGEN</div>
     <p>Director Walker receives the report professionally. He thanks the party. He schedules a documentation review. He does not ask follow-up questions about the lower floors until prompted, and when prompted: <em>"We'll need to flag that for a structural assessment team."</em> He means it. He has no idea what he's flagging.</p>
     <p>The journals, the dispersal log, the Calafiori file — all submitted. Walker reviews none of it in front of the party. It will go to Science Division. Garcia may receive it. That is a later session's thread.</p>
-    <div class="design-note">
-      <div class="design-note-label">■ GM NOTE — THE DEBRIEF TONE</div>
-      <p>The debrief should feel anticlimactic by design. The party has just seen the inside of the facility where the world was changed. They are now sitting in a conference room describing it to a man who is filing it. <strong>The institutional indifference is the horror.</strong></p>
-    </div>
+    <p><strong>Following the debrief, depending on the party's SPIKE levels, Walker may recommend — or quietly require — that operatives with elevated readings complete a round of recalibration sessions with the Division IV wellness team before their next commission.</strong> This is framed as standard post-field protocol, not punishment. The wellness team is pleasant, efficient, and entirely unremarkable. Whether operatives comply or find a way around it is a choice to discuss at the table.</p>
   </div>
 
 </section>
@@ -961,7 +1112,6 @@ footer {
       <li>Gain a new Skill (Trained, +2)</li>
       <li>Upgrade a Trained Skill to Specialized (+3)</li>
       <li>Gain a Trait (see Player's Guide — max 6)</li>
-      <li>Increase max COMPOSURE by +1</li>
     </ul>
   </div>
 
@@ -972,8 +1122,8 @@ footer {
 
   <div class="panel quiet">
     <div class="panel-title">THE HOOK FORWARD</div>
-    <p>The Calafiori file contains an address in Genoa. The fire destroyed the building three years before RE-01 went dark. Calafiori's research — incendiary therapy, "emotional cauterization" — was consistent with Reeves' approach by Reeves' own assessment. <strong>Something survived that fire, or someone did. Reeves knew it, and kept working anyway.</strong></p>
-    <p>The players may pursue this themselves. If not, Garcia will make contact between sessions — a short message, nothing more: <em>"The Genoa address. I looked it up. The building was rebuilt. Different name now. You might want to go."</em></p>
+    <p>The Calafiori file contains an address in the hills outside Genoa, in a region that is largely a post-war wasteland. The fire destroyed the building years before RE-01 went dark. Calafiori's research — incendiary therapy, "emotional cauterization" — was consistent with Reeves' approach by Reeves' own assessment. <strong>Something survived that fire, or someone did. Reeves knew it, and kept working anyway.</strong></p>
+    <p>The players may pursue this themselves, citing the Italy file. If not, Garcia will make contact between sessions — a short message, nothing more: <em>"The address in that file. The area is listed as uninhabited. A flyover confirms ruins, no active structures. You might still want to go."</em></p>
   </div>
 
 </section>
@@ -999,7 +1149,7 @@ footer {
           <td class="td-name">WALKER</td>
           <td>UGD Director IV</td>
           <td class="td-spike-0">0 — SERENE</td>
-          <td>Delivers briefing. Believes the cover story. Not hostile, not useful.</td>
+          <td>Delivers briefing. Believes the cover story. Not hostile, not useful. Anticlimactic debrief by design.</td>
         </tr>
         <tr>
           <td class="td-name">GARCIA</td>
@@ -1008,22 +1158,22 @@ footer {
           <td>Passes the four-researcher list. Hook to Italy between sessions if needed.</td>
         </tr>
         <tr>
-          <td class="td-name">VASEK, LENA</td>
+          <td class="td-name">HENSLEY, CAROL</td>
           <td>Fort Wayne resident</td>
           <td class="td-spike-3">3 — SHAKEN</td>
-          <td>Demonstrates the Reset's emotional gap. Optional SPIKE trigger TN 9.</td>
+          <td>Demonstrates the Reset's emotional gap. Lost her son Danny. Optional SPIKE trigger TN 9.</td>
         </tr>
         <tr>
           <td class="td-name">GARZA, TOMMY</td>
           <td>Fort Wayne bartender</td>
           <td class="td-spike-1">1 — STABLE</td>
-          <td>Intel on Diamond Hill and Brandon Cole. Emotional anchor on return.</td>
+          <td>Intel on Diamond Hill and Brandon Cole. Emotional anchor on return. Nobody who's gone in since Brandon has made it out.</td>
         </tr>
         <tr>
           <td class="td-name">COLE, BRANDON</td>
           <td>Civilian — RE-01</td>
-          <td class="td-spike-11">11 — CONSUMED</td>
-          <td>Proximity hazard TN 11 (SPIKE 5+). Grounding: d20+MIND TN 14, Disadvantage, one attempt per operative. Confirms tanks, drones, Prater, Floor 5 activity. Will not leave.</td>
+          <td class="td-spike-11">10–11 — SPIKED / CONSUMED</td>
+          <td>Physical threat. Proximity hazard TN 11 (SPIKE 5+). Grounding: d20+MIND TN 14, Disadvantage, one attempt per operative. Knows nothing useful — memory is gone. Will not leave.</td>
         </tr>
       </tbody>
     </table>
@@ -1031,20 +1181,15 @@ footer {
 
   <div class="panel quiet mbr">
     <div class="panel-title">TERMINOLOGY PLAYERS WILL ENCOUNTER</div>
-    <table class="qr-table">
+    <table class="gloss-table">
       <thead>
         <tr><th>TERM</th><th>WHERE FOUND</th><th>WHAT TO DO WITH IT</th></tr>
       </thead>
       <tbody>
         <tr>
           <td class="gloss-term">PS-SERIES</td>
-          <td class="gloss-floor">Floors 2–5</td>
-          <td>Don't explain. PS-08 nameplate: MITCHELL, C. — PRIME CANDIDATE. That is all they get.</td>
-        </tr>
-        <tr>
-          <td class="gloss-term">PRIME SIGNAL</td>
-          <td class="gloss-floor">Floor 5, journals</td>
-          <td>One sentence. "Must originate from a living source." Do not expand.</td>
+          <td class="gloss-floor">Floors 1–5</td>
+          <td>Don't explain. PS-08 nameplate: MITCHELL, C. — PRIMARY CANDIDATE. The body in the chamber is unidentifiable. Let both facts exist.</td>
         </tr>
         <tr>
           <td class="gloss-term">SEMANTIC CONTINUITY</td>
@@ -1057,24 +1202,29 @@ footer {
           <td>Reeves' name for the Reset. Let players make the connection themselves.</td>
         </tr>
         <tr>
+          <td class="gloss-term">ANCHOR</td>
+          <td class="gloss-floor">Floor 5, journals</td>
+          <td>The word from Volume 11. "Must originate from a living source." Do not expand. The word should land. Campaign 2 begins to answer it.</td>
+        </tr>
+        <tr>
           <td class="gloss-term">HARDWARE</td>
-          <td class="gloss-floor">PS-08 etchings</td>
-          <td>A word scratched in a wall. No context. No explanation. Campaign 4 answers it.</td>
+          <td class="gloss-floor">PS-08 floor etching</td>
+          <td>Scratched into concrete. No context. No explanation. Campaign 4 answers it.</td>
         </tr>
         <tr>
           <td class="gloss-term">ALAN PRATER</td>
-          <td class="gloss-floor">Floors 1, 4, 5</td>
-          <td>A name on logistics paperwork. Brandon flinches at it. PS-08 etchings include it. Nothing more is known.</td>
+          <td class="gloss-floor">Floor 3</td>
+          <td>Name on the AP Logistics correspondence. Signed a pressured letter to Reeves. The name means nothing to players yet. Do not give it weight — let it sit as a loose thread.</td>
         </tr>
         <tr>
           <td class="gloss-term">CALAFIORI</td>
-          <td class="gloss-floor">Floors 3, 5</td>
-          <td>Italian researcher. Fire destroyed his facility. Italy file has the Genoa address — Campaign 2 hook.</td>
+          <td class="gloss-floor">Floors 1, 3, 5</td>
+          <td>Italian researcher. Fire destroyed his isolated station in the hills outside Genoa. The Italy file in Reeves' lab has the location. Campaign 2 hook.</td>
         </tr>
         <tr>
           <td class="gloss-term">GUMEDE</td>
-          <td class="gloss-floor">Floor 3</td>
-          <td>South African researcher. Sent nanites to Reeves. One of Garcia's four names. Campaign 3 destination.</td>
+          <td class="gloss-floor">Floor 2</td>
+          <td>South African researcher. Sent a small nanite shipment to Reeves under sanctioned collaboration. One of Garcia's four names. Nothing suspicious on its face. Campaign 3 destination.</td>
         </tr>
       </tbody>
     </table>
@@ -1084,20 +1234,19 @@ footer {
     <div class="panel quiet">
       <div class="panel-title">SPIKE TRIGGERS — SUMMARY</div>
       <ul>
-        <li><strong>Lena Vasek:</strong> Honest human engagement. TN 9, GM discretion.</li>
-        <li><strong>Brandon Cole:</strong> Proximity at SPIKE 5+. TN 11, Disadvantage. Each turn.</li>
-        <li><strong>Dispersal Log:</strong> Understanding its meaning. TN 13.</li>
-        <li><strong>PS-08 Chamber:</strong> Observing the etchings. TN 11, optional.</li>
-        <li><strong>Brandon — Grounding:</strong> d20+MIND TN 14, Disadvantage, once per operative. ~90 seconds lucid on success.</li>
+        <li><strong>Carol Hensley:</strong> Honest human engagement. TN 9, GM discretion.</li>
+        <li><strong>Brandon Cole:</strong> Proximity at SPIKE 5+. TN 11, Disadvantage. Each turn. Also presents as physical threat at close range.</li>
+        <li><strong>Dispersal Log (END map):</strong> Understanding its meaning. TN 13.</li>
+        <li><strong>PS-08 Chamber:</strong> Entering and processing what's inside. TN 11, optional.</li>
       </ul>
     </div>
     <div class="panel quiet">
       <div class="panel-title">THE THREE ITALY THREADS</div>
       <p>Players should leave with at least one. Ideally all three. They do not need to understand what they mean yet.</p>
       <ul>
-        <li><strong>Calafiori correspondence</strong> (Floor 3) — Letters + burned notice of the fire. Genoa address in the Italy file on Floor 5.</li>
-        <li><strong>Reeves' Italy file</strong> (Floor 5) — Photographs, address, Reeves' handwritten assessment of Calafiori's methods.</li>
-        <li><strong>Garcia's four-researcher list</strong> (Briefing) — Calafiori (Italy) is one of four. Garcia can reiterate between sessions if needed.</li>
+        <li><strong>Calafiori correspondence</strong> (Floor 3) — Letters establishing the connection. Fire notice from Floor 1 cross-referenced.</li>
+        <li><strong>Reeves' Italy file</strong> (Floor 5, Command map) — Photographs, location, Reeves' assessment of Calafiori's methods. Address in the hills outside Genoa.</li>
+        <li><strong>Garcia's four-researcher list</strong> (Briefing) — Calafiori (Italy) is one of four. Garcia can surface the address between sessions if needed.</li>
       </ul>
     </div>
   </div>
@@ -1105,10 +1254,11 @@ footer {
   <div class="panel quiet">
     <div class="panel-title">CONTINUITY NOTES FOR GM</div>
     <ul>
-      <li><strong>PS-08 is not Mitchell.</strong> Mitchell is alive at Point Nemo as of Year 7. PS-08 is a failed earlier candidate or researcher. The evidence is deliberately inconclusive — do not disambiguate in play.</li>
-      <li><strong>The comms jam</strong> blocks UGD relay frequencies specifically. If asked why the UGD never noticed: the facility was too low-priority to actively scan; the jam presents as equipment silence, not active interference.</li>
-      <li><strong>Brandon Cole will not leave.</strong> This is final. If players attempt extraction by force: he becomes violent, retreats to the sub-levels. He has been here three years. The building is where he lives now.</li>
+      <li><strong>PS-08 body is unidentifiable.</strong> The nameplate says Mitchell. The body cannot be identified. Do not disambiguate in play — the ambiguity is the point. Players should not be able to confirm or rule out Mitchell's fate from this room alone.</li>
+      <li><strong>The comms jam</strong> is localized to the facility and the surrounding area. The facility has been low priority — no one had reason to actively scan for signal from this site. The jam presents as silence, not interference. The players should be the first to discover it.</li>
+      <li><strong>Brandon Cole will not leave.</strong> This is final. If players attempt extraction by force, he becomes violent and retreats to the deeper maintenance runs. He has been here three years. He cannot be saved in this campaign.</li>
       <li><strong>Floors 3–5</strong> are not on the UGD briefing documents. Walker doesn't know they exist. This is not a conspiracy on Walker's part — the plans he has are the plans he was given.</li>
+      <li><strong>The Calafiori site</strong> is an isolated research station in the hills of Liguria, Italy — not in the city of Genoa. The surrounding area is post-war wasteland. Supplies were flown in during the facility's active period. Whatever remains there is not easily accessible and not expected to be inhabited.</li>
     </ul>
   </div>
 
