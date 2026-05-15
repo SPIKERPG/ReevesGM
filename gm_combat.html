@@ -2872,42 +2872,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (queue) observer.observe(queue, { childList: true, subtree: true });
 
   refreshDragHandlers();
-
-  window.cmdCheckHit_original = window.cmdCheckHit;
-  if (window.cmdCheckHit_original) {
-    window.cmdCheckHit = function() {
-      window.cmdCheckHit_original();
-
-      const result = document.getElementById('cmd-atk-result');
-      const applyBtn = document.getElementById('cmd-apply-btn');
-      const dmgMod = parseInt(document.getElementById('cmd-atk-dmgmod')?.value || 0);
-
-      const text = result?.innerText || '';
-      const match = text.match(/DMG\s*(\d+)/i);
-
-      if (match) {
-        let dmg = parseInt(match[1]) + dmgMod;
-        if (dmg < 0) dmg = 0;
-        result.innerHTML += ` <span class="r-dmg">MODIFIED: ${dmg}</span>`;
-        applyBtn.style.display = 'inline-flex';
-        applyBtn.dataset.finalDamage = dmg;
-      }
-    };
-
-    window.cmdApplyDamage = function() {
-      const targetSel = document.getElementById('cmd-atk-target');
-      const dmg = parseInt(document.getElementById('cmd-apply-btn').dataset.finalDamage || 0);
-
-      if (typeof combatants === 'undefined') return;
-      const target = combatants.find(c => c.name === targetSel.value);
-      if (!target) return;
-
-      target.hp = Math.max(0, target.hp - dmg);
-
-      if (typeof renderQueue === 'function') renderQueue();
-      if (typeof renderCommandCenter === 'function') renderCommandCenter();
-    };
-  }
 });
 </script>
 
