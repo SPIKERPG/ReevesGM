@@ -209,223 +209,79 @@ footer {
   letter-spacing: .12em; color: var(--text-dim);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 @media (max-width: 600px) {
-
-  /* Hide the full header blocks */
-  .top-band,
-  .header-band,
-  .header-main,
-  .main-header,
-  .header { display: none !important; }
-
-  /* Compact title bar injected by JS */
+  .top-band, .header-band, .header-main, .main-header, .header { display: none !important; }
   #mobile-title-bar {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background: var(--surface, #111309);
+    display: flex !important; align-items: center; justify-content: center;
+    flex-direction: column; background: var(--surface, #111309);
     border-bottom: 1px solid var(--border-hi, #303520);
-    padding: 8px 14px 6px;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 9001;
+    padding: 8px 14px 6px; text-align: center; position: sticky; top: 0; z-index: 9001;
   }
-
   #mobile-title-bar .mtb-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: .35em;
-    color: var(--text-hi, #dfe1cc);
-    line-height: 1;
+    font-family: 'Bebas Neue', sans-serif; font-size: 18px;
+    letter-spacing: .35em; color: var(--text-hi, #dfe1cc); line-height: 1;
   }
-
   #mobile-title-bar .mtb-sub {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 7px;
-    letter-spacing: .18em;
-    color: var(--text-dim, #626554);
-    margin-top: 3px;
-    line-height: 1.3;
+    font-family: 'Share Tech Mono', monospace; font-size: 7px;
+    letter-spacing: .18em; color: var(--text-dim, #626554); margin-top: 3px; line-height: 1.3;
   }
-
-  /* Nav sticks right below the title bar */
-  nav,
-  .nav,
-  .page-tabs {
-    position: sticky !important;
-    top: 0 !important;   /* JS will set this to title bar height */
-    z-index: 9000 !important;
-  }
+  nav, .nav, .page-tabs { position: sticky !important; top: 0 !important; z-index: 9000 !important; }
 }
 
-
 @media (max-width: 600px) {
-  /* Remove sticky from header and nav — let everything scroll naturally */
-  .top-band,
-  .header-band,
-  .header-main,
-  .main-header,
-  .header,
-  nav,
-  .nav,
-  .page-tabs {
-    position: static !important;
-    top: auto !important;
-  }
-
-  /* Hide the JS-injected compact title bar if present */
+  .top-band, .header-band, .header-main, .main-header, .header,
+  nav, .nav, .page-tabs { position: static !important; top: auto !important; }
   #mobile-title-bar { display: none !important; }
 }
 
-
 /* ══════════════════════════════════════
-   READABILITY — bump up small text globally
+   READABILITY
 ══════════════════════════════════════ */
+.field-label, .section-label, .sub-label, .attr-label, .skill-label, .sheet-label,
+.block-label, .panel-title, .scat-name, .mini-lbl, .vital-lbl, .attr-lbl,
+.card-doc-id, .skill-hint, .trait-cat-head, .step-label, .zone-name, .tag,
+.loc-tag, .npc-role, .enemy-tier, .tl-date, .sh-num, .sec-num,
+.save-toolbar-label, .save-status { font-size: 10px !important; }
 
-/* Mono label sizes up slightly everywhere */
-.field-label, .section-label, .sub-label,
-.attr-label, .skill-label, .sheet-label,
-.block-label, .panel-title, .scat-name,
-.mini-lbl, .vital-lbl, .attr-lbl,
-.card-doc-id, .skill-hint, .trait-cat-head,
-.step-label, .zone-name, .tag,
-.loc-tag, .npc-role, .enemy-tier,
-.tl-date, .sh-num, .sec-num,
-.save-toolbar-label, .save-status {
-  font-size: 10px !important;
-}
+p, li, td, .step-text, .trait-fx, .flaw-body, .react-fx, .ms-fx, .beh-desc, .loc-body,
+.npc-body, .cc-body, .panel p, .tl-body li, .tl-body p, .data-table td { font-size: 16px !important; }
 
-/* Body text up to 16px everywhere it was smaller */
-p, li, td, .step-text, .trait-fx, .flaw-body,
-.react-fx, .ms-fx, .beh-desc, .loc-body,
-.npc-body, .cc-body, .panel p, .tl-body li,
-.tl-body p, .data-table td { font-size: 16px !important; }
-
-/* Skill/trait names up */
-.sk-name, .trait-name, .flaw-name,
-.react-name, .ms-name, .bhv-name,
+.sk-name, .trait-name, .flaw-name, .react-name, .ms-name, .bhv-name,
 .beh-title, .attack-name { font-size: 16px !important; }
 
-/* ══════════════════════════════════════
-   MOBILE: single column, natural scroll
-══════════════════════════════════════ */
 @media (max-width: 700px) {
-
-  /* Collapse ALL two/three/four-col grids to single column */
-  .g2, .g3, .g4,
-  .col-wrap, .notes-grid,
-  .identity-row, .vitals-row,
-  .attr-row, .two-col,
-  .trait-slots, .flaw-slots,
-  .lv-grid, .permission-grid,
-  .skill-cat, .enemy-grid,
-  .npc-grid, .loc-grid,
-  .beh-grid, .behavior-grid,
-  .dice-pair, .tn-row,
-  .zone-row, .f-group, .f-group3, .f-group5,
-  .cover-meta, .operative-grid,
-  .hostile-grid, .quick-rack,
+  .g2, .g3, .g4, .col-wrap, .notes-grid, .identity-row, .vitals-row,
+  .attr-row, .two-col, .trait-slots, .flaw-slots, .lv-grid, .permission-grid,
+  .skill-cat, .enemy-grid, .npc-grid, .loc-grid, .beh-grid, .behavior-grid,
+  .dice-pair, .tn-row, .zone-row, .f-group, .f-group3, .f-group5,
+  .cover-meta, .operative-grid, .hostile-grid, .quick-rack,
   .reaction-roster, .roller-layout {
-    grid-template-columns: 1fr !important;
-    display: flex !important;
-    flex-direction: column !important;
+    grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important;
   }
-
-  /* But keep attr dots row horizontal */
-  .attr-dots, .spike-pips, .spike-track,
-  .spike-labels, .stepper-pips,
-  .init-vitals, .reaction-pips,
-  .tracker-rxn-pips, .spike-pip,
-  .reactions-pips, .btn-row,
-  .die-rack, .attr-row { 
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
+  .attr-dots, .spike-pips, .spike-track, .spike-labels, .stepper-pips,
+  .init-vitals, .reaction-pips, .tracker-rxn-pips, .spike-pip,
+  .reactions-pips, .btn-row, .die-rack, .attr-row {
+    display: flex !important; flex-direction: row !important; flex-wrap: wrap !important;
   }
-
-  /* attr-row specifically — keep as grid but 3-col */
-  .attr-row {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  /* Make sure panels don't overflow */
-  .panel, .block, .vital-box,
-  .note-block, .slot, .hostile-card,
-  .enemy-card, .npc-card, .loc-card,
-  .campaign-card, .credit-block,
-  .contract-block, .tool-card { width: 100% !important; }
-
-  /* Un-sticky everything — natural scroll */
-  .top-band, .header-band, .header-main,
-  .main-header, .header, nav, .nav,
-  .page-tabs, .party-tabs-bar {
-    position: static !important;
-    top: auto !important;
-  }
-
-  /* Fix zone row to wrap nicely */
-  .zone-row {
-    flex-wrap: wrap !important;
-  }
+  .attr-row { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; }
+  .panel, .block, .vital-box, .note-block, .slot, .hostile-card, .enemy-card,
+  .npc-card, .loc-card, .campaign-card, .credit-block, .contract-block, .tool-card { width: 100% !important; }
+  .top-band, .header-band, .header-main, .main-header, .header, nav, .nav,
+  .page-tabs, .party-tabs-bar { position: static !important; top: auto !important; }
+  .zone-row { flex-wrap: wrap !important; }
   .zone-box { width: 100% !important; border-right: 1px solid var(--border) !important; border-top: none !important; }
   .zone-box:first-child { border-top: 1px solid var(--border) !important; }
-
-  /* Skill rows — keep horizontal layout internally */
   .skill-row { flex-wrap: nowrap !important; }
-
-  /* Cover meta pills — wrap */
   .cover-meta { flex-wrap: wrap !important; }
   .cm-item { border-right: none !important; border-bottom: 1px solid var(--border-hi) !important; width: 100% !important; padding: 6px 0 !important; }
-
-  /* Larger tap targets for buttons */
-  .btn, .save-btn, .btn-sm, .type-btn,
-  .nav-tab, .tab { min-height: 40px !important; font-size: 11px !important; }
-
-  /* Padding breathing room */
+  .btn, .save-btn, .btn-sm, .type-btn, .nav-tab, .tab { min-height: 40px !important; font-size: 11px !important; }
   main, .main, .page { padding-left: 14px !important; padding-right: 14px !important; }
-
-  /* Hide the JS-injected compact title bar */
   #mobile-title-bar { display: none !important; }
-
-  /* Bigger cover title */
   .cover-spike { font-size: 56px !important; }
-
-  /* Die rack — 2 columns on mobile */
-  .die-rack {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    flex-direction: unset !important;
-  }
-
-  /* Behavior grid — 1 col */
-  .beh-grid, .behavior-grid {
-    grid-template-columns: 1fr !important;
-    display: grid !important;
-    flex-direction: unset !important;
-  }
-
-  /* Spike labels — keep horizontal */
-  .spike-labels {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-    flex-direction: unset !important;
-  }
+  .die-rack { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; flex-direction: unset !important; }
+  .beh-grid, .behavior-grid { grid-template-columns: 1fr !important; display: grid !important; flex-direction: unset !important; }
+  .spike-labels { display: grid !important; grid-template-columns: repeat(7, 1fr) !important; flex-direction: unset !important; }
 }
-
 </style>
 </head>
 <body>
@@ -467,6 +323,17 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   <div class="panel red mbr">
     <div class="panel-title red">■ FULL SPOILER CONTENT — DO NOT DISPLAY DURING ACTIVE SESSIONS</div>
     <p>This timeline contains classified information including true identities, mystery reveals, branching outcomes, and information players must not access before the appropriate campaign moments. Use for prep only.</p>
+  </div>
+
+  <div class="panel amber mbr">
+    <div class="panel-title amber">■ SPIKE STORM SEQUENCE — CAMPAIGN 1 // GM REFERENCE</div>
+    <p>Three distinct Storm events occur during or immediately before Campaign 1. Keep them clearly separated in prep and play.</p>
+    <ul>
+      <li><strong>STORM ONE — THE CATALYST (approx. one week before session 1):</strong> A worldwide SPIKE Storm of significant duration and intensity. Casualties confirmed across multiple UGD districts. Origin unknown. This event directly prompted the UGD to expedite the RE-01 investigation — Reeves' file, deprioritised for five years of rebuilding, was pulled and actioned within days. All operatives are aware of the Storm; it is the reason they are standing in the briefing room. <em>Baseline SPIKE shift: +5 to all affected populations. Resolves before session 1 begins.</em></li>
+      <li><strong>STORM TWO — THE PRECURSOR (during facility exploration, GM discretion):</strong> A brief, milder tremor felt while the party is inside RE-01. Not a full Storm — more like the building pressure before one. Lights flicker. Readings spike momentarily. The wrongness is physical before it is understood. <em>Baseline SPIKE shift: +3 to all party members. Resolves within minutes.</em></li>
+      <li><strong>STORM THREE — THE MAIN EVENT (Fort Wayne, on party's return):</strong> The full Storm the Timeline records as the "first SPIKE Storm of Year 5" witnessed by the party in a populated area. Lasts approximately one hour. Ordinary Reset citizens experience the hour as something deeply wrong that they cannot name. <em>Baseline SPIKE shift: +5 to all in range. Dissipates without explanation.</em></li>
+    </ul>
+    <p style="margin-bottom:0"><strong>Note:</strong> The +3 and +5 figures are baseline shifts — every person in range rises by that amount regardless of their current level. A Stable operative at SPIKE 1 hit by the Precursor rises to SPIKE 4 (Shaken) immediately. Manage this carefully; the Precursor alone should produce interesting roleplay pressure without overwhelming the party before they've seen the facility.</p>
   </div>
 
   <div class="timeline">
@@ -532,6 +399,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
           <li>Collaboration begins instantly; resources and methods shared between the four</li>
           <li>Reeves begins animal trials on monkeys — claims small-area aerosolized SPIKE treatment (true nature concealed)</li>
           <li><strong>[CLASSIFIED]</strong> Reeves is still secretly working on the Reset proposal, looping in an outside terrorist faction (Alan Prater) for resources and expertise</li>
+          <li><strong>[CLASSIFIED]</strong> Gumede collaborates openly with Reeves early in this period, including a sanctioned nanite materials transfer to RE-01. She is not yet suspicious — the cooperation is genuine and UGD-approved at this stage.</li>
         </ul>
       </div>
     </div>
@@ -547,6 +415,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
           <li>Collaboration breaks down as Gumede and Qi disagree with the ethics of Reeves and Calafiori</li>
           <li>Dr. Qi requests LEO satellites from UGD — launches them to monitor his lab premises as unrest grows</li>
           <li>Pressure mounts; all four researchers intensify their own work</li>
+          <li><strong>[CLASSIFIED]</strong> Gumede and Qi grow privately alarmed by the direction of Reeves and Calafiori's research. Gumede begins to regret her earlier cooperation. The nanite transfer she authorised now concerns her — she does not know how Reeves intends to use it.</li>
         </ul>
       </div>
     </div>
@@ -561,13 +430,13 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <p><strong style="color:var(--red-bright)">This is the setting of SPIKE: Hardware. Full spoiler content.</strong></p>
         <ul>
           <li>Gumede and Qi learn collaboration between Calafiori and Reeves goes deeper than known</li>
-          <li>A conscientious objector in Calafiori's lab reports contact between Reeves and "Alan Prater"</li>
+          <li>A conscientious objector — a horrified subordinate within Calafiori's lab — contacts Gumede directly, sharing what she knows of the research's true direction and of Reeves' contact with "Alan Prater." This is the bridge between the Italian lab and Gumede's decision to act.</li>
           <li>UGD deems Qi's methods too slow; begins pulling funding</li>
           <li>UGD grows suspicious of Reeves' pivot from rejected Reset to "genome sequencing"</li>
-          <li><strong>The Italian lab goes dark</strong> — monitoring system shows a major fire (in reality: arson by a horrified subordinate, not accident)</li>
+          <li><strong>The Italian lab goes dark</strong> — monitoring system shows a major fire. The subordinate, unable to stop what she had set in motion by reporting to Gumede, commits arson and destroys the lab rather than allow the research to be completed or recovered. She leaves behind notes, audio logs, and a link to Gumede and Qi in a locked safe.</li>
           <li>Reeves' human trials reveal Prime Signal must come from a living human — synthetic sources quickly experience entropy</li>
           <li>A team is dispatched by the UGD Chairman to investigate Reeves' lab; Calafiori's lab and team deemed lost</li>
-          <li><strong>The South African lab is "taken over by terrorists and destroyed"</strong> — in reality, Gumede directed her own robots to prevent her technology reaching Reeves</li>
+          <li><strong>The South African lab is "taken over by terrorists and destroyed"</strong> — in reality, Gumede, now fully aware of what Reeves is building and unwilling to let her robotics and nanite expertise be used to deliver it, directs her own robots to repel and destroy the facility. Her sacrifice is deliberate and tactical. The "terrorist attack" narrative is accepted without investigation.</li>
           <li>Reeves builds nanite production tanks — enough bacterial nanites for the remaining global population</li>
           <li>The UGD-commissioned team arrives and investigates — and may be too late to stop what's in motion</li>
         </ul>
@@ -595,16 +464,33 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       </div>
       <div class="tl-body">
         <ul>
-          <li>The world wakes up. Society resumes. The Reset is celebrated, though not understood.</li>
-          <li>Dr. Reeves and his team vanish — theorized to have become martyrs of their work. His lab's blast doors remain sealed; turrets active.</li>
-          <li>The UGD Chairman reported missing along with two other members — no alarms raised</li>
-          <li><strong>[CLASSIFIED]</strong> The Control seizes the Chairman during the Quiet Period. His security credentials used to monitor UGD data and redirect recovered tech and weaponry.</li>
+          <li>The world wakes up. Society resumes. The Reset is celebrated, though not understood. The UGD takes institutional credit for commissioning the research that made it possible — in their Reset-dulled state, they believe this unreservedly. Reeves is publicly theorized to have become a martyr of his own work, a view the UGD does not examine closely.</li>
+          <li>Dr. Reeves and his team vanish — his lab's blast doors remain sealed; turrets active. Entry attempts fail.</li>
+          <li>The UGD Chairman is reported missing from Day 1 of Year 1, along with two other members. His absence is noted, but the post-Reset world has tens of millions of missing persons and no infrastructure to locate them. WWIII-era missing persons are still unresolved. His absence is eventually accepted; a new Chairman is appointed after some months, but no investigation is opened.</li>
+          <li><strong>[CLASSIFIED]</strong> The Control seizes the Chairman during the Quiet Period. His security credentials are used to monitor UGD data and redirect recovered tech and weaponry to the Control's stockpile.</li>
           <li>Art, music, media become purely aesthetic and soothing — anything evoking complex negative emotion labeled "degenerate" and destroyed</li>
           <li>Economy becomes state-managed rationing and distribution</li>
           <li>Pre-Reset technology maintained by manuals — true innovation is gone; advanced tech confiscated by UGD, ends up in Control's hands</li>
           <li>The Immune (Reset-resistant fraction) cause unease in those around them — targeted by UGD; nearly eliminated by Year 5</li>
           <li>Grievers appear — individuals who know factually they suffered loss, but cannot feel it. Often found in public distress.</li>
           <li>Nanite decay begins — mesh cannot replicate effectively in sub-ideal conditions; mutation has begun to occur</li>
+          <li><strong>Standard UGD operative equipment established:</strong> All field operatives issued standard uniform and a subcutaneous SPIKE monitoring implant — reads the operative's own SPIKE level continuously and can be used to evaluate others at close range, replacing the need for a handheld wand in the field. Wands remain in civilian use.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-entry minor">
+      <div class="tl-header" onclick="toggleEntry(this)">
+        <div class="tl-date">2051 — YEAR 2/3</div>
+        <div class="tl-label">FORT WAYNE — LAKE DISAPPEARANCES</div>
+        <div class="tl-toggle">▶</div>
+      </div>
+      <div class="tl-body">
+        <ul>
+          <li>Fort Wayne settlement establishes itself as a functional post-Reset community. A local body of water draws recreational visits — one of the few non-functional, non-productive activities Reset citizens engage in. The pattern of going to the lake is habit more than pleasure.</li>
+          <li>Over a period of months, several individuals from Fort Wayne go out toward the lake area and do not return. Not reported as an emergency — missing persons are a fact of post-Reset life, and post-Reset citizens lack the emotional urgency to mount searches. They are simply noted as absent.</li>
+          <li>Brandon Cole goes out with a small group of four others. The others return; Brandon does not. Tommy Garza notes his absence. Cole has, in fact, found or stumbled into the perimeter of RE-01 — which is not on any post-Reset map and is effectively invisible from the road — and has been trapped inside since. Three years of isolation and proximity to residual SPIKE-inducing stimuli from the facility have driven him to SPIKE 10–11 by the time the party arrives.</li>
+          <li><strong>[GM NOTE]</strong> The facility is not marked, signposted, or on any post-Reset survey. The UGD has its coordinates from pre-Reset records. Ordinary citizens have no reason to know it exists. The lake trips bring people into the general area; RE-01 itself is encountered only by accident or by those with coordinates.</li>
         </ul>
       </div>
     </div>
@@ -616,13 +502,22 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <div class="tl-toggle">▼</div>
       </div>
       <div class="tl-body open">
+        <div class="tl-sub-head">PRE-SESSION — THE CATALYST STORM</div>
         <ul>
-          <li>Society rebuilt enough to restore a basic global communications network</li>
-          <li>Nations disbanded; global administration remains under UGD. Former Chairman still missing — no urgency.</li>
-          <li>First SPIKE Storm sweeps through the world — an hour of waves of unexplained anxiety, sadness, anger. Chaos until it dissipates.</li>
-          <li>Party commissioned for off-the-books investigation of Reeves' defunct Indiana lab</li>
-          <li>They find: research logs, evidence of human testing, SPIKED scavengers, Charles Mitchell's containment dome (labeled by name), undeniable link to Calafiori's lab in Italy</li>
+          <li>Society has rebuilt enough to restore a basic global communications network</li>
+          <li>Nations disbanded; global administration remains under UGD. Former Chairman's absence long since accepted; replacement in place.</li>
+          <li><strong>Approximately one week before session 1:</strong> The first major SPIKE Storm of the post-Reset era sweeps the world. Duration and intensity significantly exceed any prior anomalous reading. Casualties confirmed. The Prime Signal is clearly degrading or being interfered with — but the UGD does not yet understand the mechanism. <em>Baseline SPIKE shift: +5. Resolves, but the UGD cannot guarantee it will not recur.</em></li>
+          <li>The Storm forces the UGD to confront a question they have avoided for five years: they do not actually understand how the Reset works, only that it did. Reeves' research — deprioritised in favour of rebuilding — is suddenly the most urgent file in Division IV. The party is commissioned within days. The mission is off-the-books because the UGD does not want to signal institutional panic.</li>
+        </ul>
+        <div class="tl-sub-head">SESSION 1 — IN THE FIELD</div>
+        <ul>
+          <li>Party commissioned for off-the-books investigation of Reeves' defunct Indiana lab. Briefed at UGD HQ Copenhagen. Issued standard operative equipment including subcutaneous SPIKE implants if not already carrying them.</li>
+          <li>Fort Wayne: settlement closest to RE-01. Party gathers local intelligence. The lake disappearances are known locally; Brandon Cole's absence is one of several such incidents over the past few years.</li>
+          <li><strong>Precursor Storm tremor during facility exploration (GM discretion — recommend Floor 3 or 4):</strong> Brief, disorienting. SPIKE readings spike without warning and settle. Feels like static under the skin. <em>Baseline SPIKE shift: +3.</em></li>
+          <li>Party explores RE-01: research logs, evidence of human testing, SPIKED scavengers, Charles Mitchell's containment dome (labeled by name — the body within cannot be confirmed as Mitchell), undeniable link to Calafiori's lab in Italy</li>
           <li>Information found but not yet understood — <em>the picture is incomplete by design</em></li>
+          <li><strong>Return to Fort Wayne — the Main Storm:</strong> The full Storm hits while the party is in or returning to Fort Wayne. One hour. Reset citizens experience it as profound wrongness they cannot name or categorise. Carol Hensley's grief may surface. Tommy Garza may go flat and quiet. The town becomes briefly, terribly alive. <em>Baseline SPIKE shift: +5.</em></li>
+          <li><strong>[GM NOTE — PS-08]:</strong> The containment dome labeled MITCHELL, C. — PS-08 — PRIMARY CANDIDATE in RE-01's enclosure wing is Charles Mitchell's trial containment space from the pre-Reset research period. The body inside cannot be identified. Players should be given every opportunity to assume it is or is not Mitchell — no confirmation is available or should be offered. The GM knows it is his dome. Whether the body is his is a question that remains open until Hardware.</li>
         </ul>
       </div>
     </div>
@@ -631,16 +526,16 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="tl-header" onclick="toggleEntry(this)">
         <div class="tl-date">2055 — YEAR 6</div>
         <div class="tl-label">SPIKE: WHISPERED ECHOES // CAMPAIGN 2</div>
-        <div class="tl-toggle">▼</div>
+        <div class="tl-toggle">▶</div>
       </div>
       <div class="tl-body">
         <ul>
-          <li>Storms worsen and increase in frequency</li>
+          <li>Storms worsen and increase in frequency — the catalyst Storm was not an isolated event</li>
           <li>Party travels to Italy; discovers the Purified (survivors of Calafiori's incendiary methods — no emotional capacity whatsoever)</li>
           <li>Discovers Calafiori saw SPIKE not as a condition to manage but a disease to cure — his methods were "burning out the emotional centers"</li>
-          <li><strong>Pivotal choice:</strong> Give Calafiori's findings to the UN (feeding the Control's reach) OR destroy them (players must SPIKE and make Saving Throws)</li>
+          <li><strong>Pivotal choice:</strong> Give Calafiori's findings to the UGD (feeding the Control's reach) OR destroy them (players must SPIKE and make Saving Throws)</li>
           <li>Successful saves on destruction → one step closer to Awakening. Failed saves → destructive behavior, eventual new character creation.</li>
-          <li>Ends with team returning to UN</li>
+          <li>Ends with team returning to UGD</li>
         </ul>
       </div>
     </div>
@@ -649,14 +544,14 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="tl-header" onclick="toggleEntry(this)">
         <div class="tl-date">2055–56 — YEAR 6-7</div>
         <div class="tl-label">SPIKE: DRONE REBELLION // CAMPAIGN 3</div>
-        <div class="tl-toggle">▼</div>
+        <div class="tl-toggle">▶</div>
       </div>
       <div class="tl-body">
         <ul>
           <li>Mesh network begins failing in parts of Asia — targeted and deliberate by the Control (presented publicly as equipment failure)</li>
-          <li>PCs break from UN control and seek Gumede's laboratory to learn about the other faction within the four scientists</li>
+          <li>PCs break from UGD control and seek Gumede's laboratory to learn about the other faction within the four scientists</li>
           <li>Individual SPIKE events become more common; whispers of an "Awakening" movement reach the party</li>
-          <li>Gumede drones reveal extent of pre-Reset cooperation between Gumede and Qi</li>
+          <li>Gumede drones reveal extent of pre-Reset cooperation between Gumede and Qi — including her early collaboration with Reeves, her growing alarm, the subordinate's contact, and her decision to destroy her own lab</li>
           <li>Party begins piecing together that the Prime Signal comes from a living human</li>
           <li>First opportunity for a party member to Awaken — guided by an NPC</li>
           <li>Prime Signal coverage slowly starts collapsing globally</li>
@@ -670,7 +565,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="tl-header" onclick="toggleEntry(this)">
         <div class="tl-date">2056 — YEAR 7</div>
         <div class="tl-label">SPIKE: THE LOST TRANSMISSION // CAMPAIGN 4</div>
-        <div class="tl-toggle">▼</div>
+        <div class="tl-toggle">▶</div>
       </div>
       <div class="tl-body">
         <ul>
@@ -690,7 +585,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <div class="tl-header" onclick="toggleEntry(this)">
         <div class="tl-date">2056–57 — YEAR 7/8</div>
         <div class="tl-label">SPIKE: CURE // CAMPAIGN 5 — THE FINALE</div>
-        <div class="tl-toggle">▼</div>
+        <div class="tl-toggle">▶</div>
       </div>
       <div class="tl-body">
         <ul>
@@ -743,28 +638,28 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <td>Research logs, Calafiori's notes, Gumede drone recordings, Qi's satellite data</td>
       </tr>
       <tr>
-        <td class="td-hi">Charles Mitchell</td>
-        <td>Former hardware store employee; psychopath; sole source of Prime Signal. Single point of failure for entire system.</td>
-        <td class="td-r">Name in Reeves Trials; role in Drone Rebellion; full truth in Lost Transmission</td>
+        <td class="td-hi">Charles Mitchell / PS-08</td>
+        <td>PS-08 in RE-01 is Mitchell's pre-Reset trial containment dome. The body within cannot be identified. Whether Mitchell survived to become the Prime, died in the facility, or was replaced is intentionally unresolvable until Hardware. The GM knows the dome is his. Players should not receive confirmation either way.</td>
+        <td class="td-r">Name in Reeves Trials; role in Drone Rebellion; full truth in Lost Transmission / Hardware</td>
         <td>Containment dome label → partial understanding → Gumede recordings → Hardware reveals full scope</td>
       </tr>
       <tr>
         <td class="td-hi">The Italian lab fire</td>
-        <td>Arson by a horrified subordinate — not an accident. Notes, audio logs, and links to Gumede/Qi hidden in a locked safe.</td>
+        <td>Arson by a horrified subordinate within Calafiori's lab — not an accident. The subordinate had already contacted Gumede with what she knew. Notes, audio logs, and links to Gumede/Qi hidden in a locked safe within the ruins.</td>
         <td class="td-r">Whispered Echoes</td>
         <td>Physical investigation of Calafiori's ruins; the subordinate's locked safe</td>
       </tr>
       <tr>
         <td class="td-hi">The South African "terrorist attack"</td>
-        <td>Gumede directed her own robots to destroy the facility — to prevent her technology reaching Reeves</td>
+        <td>Gumede directed her own robots to destroy the facility. She had initially collaborated with Reeves, including a nanite materials transfer. After the subordinate's contact and her own growing alarm, she destroyed the lab to prevent her technology reaching him. Her early cooperation is a character beat revealed via drone recordings in Campaign 3.</td>
         <td class="td-r">Drone Rebellion</td>
-        <td>Surviving Gumede drones; their journal recordings reveal the truth</td>
+        <td>Surviving Gumede drones; their journal recordings reveal the full arc including the nanite transfer, the turn, and the destruction</td>
       </tr>
       <tr>
         <td class="td-hi">The UGD Chairman's disappearance</td>
-        <td>Captured by the Control during the Quiet Period. His credentials used for UGD backdoor access to monitor and redirect.</td>
+        <td>Captured by the Control during the Quiet Period (5-7 days of global unconsciousness). His credentials used for UGD backdoor access. His absence was noted from Day 1 of Year 1 but not urgently actioned — the post-Reset world had tens of millions of missing persons and no infrastructure to locate them. A replacement was eventually appointed after some months without investigation.</td>
         <td class="td-r">Lost Transmission / Hardware</td>
-        <td>Players encounter the backdoor evidence in the Chinese lab; confirmed in Hardware</td>
+        <td>Players encounter backdoor evidence in the Chinese lab; confirmed in Hardware</td>
       </tr>
       <tr>
         <td class="td-hi">Dr. Qi's state</td>
@@ -789,6 +684,12 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
         <td>A tiny fraction developing emotional awareness beyond the Reset's suppression. Both hope and threat to the Control.</td>
         <td class="td-r">Whispered Echoes (whispers); Drone Rebellion (confirmation)</td>
         <td>NPC encounters; Gumede drone recordings; the Control's reaction to them</td>
+      </tr>
+      <tr>
+        <td class="td-hi">Why the mission exists at all</td>
+        <td>The catalyst Storm approximately one week before session 1 forced the UGD to confront that they do not understand how the Reset works. Five years of deprioritisation ended overnight. The RE-01 file was pulled and actioned within days. The party exists because the UGD is afraid, in the flat, institutional way a Reset organisation can be afraid, and because the Storm proved that SPIKE can return.</td>
+        <td class="td-r">Implied at briefing; confirmed by Storm sequence during Campaign 1</td>
+        <td>Walker's expedited commission; the Storm the party witnesses on return to Fort Wayne</td>
       </tr>
     </tbody>
   </table>
@@ -827,21 +728,21 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
     <div class="npc-card ally">
       <div class="npc-name">DR. QI</div>
       <div class="npc-role">PSYCHOTHERAPEUTICS & MEDICINE // CHINA</div>
-      <div class="npc-body">Survived the Reset; serves as Custodian-archivist of his own sterile, empty lab. Polite, helpful, utterly vacant. Launched LEO satellites before the Reset — still in orbit, containing data pointing to Point Nemo. During a SPIKE Storm, fractured lucidity emerges. Can be Awakened with empathic action from PCs. Collaborated with Gumede and grew suspicious of Reeves.</div>
+      <div class="npc-body">Survived the Reset; serves as Custodian-archivist of his own sterile, empty lab. Polite, helpful, utterly vacant. Launched LEO satellites before the Reset — still in orbit, containing data pointing to Point Nemo. During a SPIKE Storm, fractured lucidity emerges. Can be Awakened with empathic action from PCs. Collaborated with Gumede and grew deeply suspicious of Reeves and Calafiori.</div>
       <div class="npc-status reset">ALIVE — RESET — CHINA LAB</div>
     </div>
 
     <div class="npc-card ally">
       <div class="npc-name">DR. GUMEDE</div>
       <div class="npc-role">ROBOTICS & NANITES // SOUTH AFRICA</div>
-      <div class="npc-body">Directed her own robots to destroy her lab — preventing her technology from reaching Reeves. Her surviving drones carry recordings of her journal and the full extent of pre-Reset scientific cooperation. Collaborated with Qi; shared concerns about Reeves and Calafiori. Her sacrifice was tactical and deliberate.</div>
+      <div class="npc-body">Initially cooperated with Reeves, including a sanctioned nanite materials transfer to RE-01. As the research's true direction became clear, and after receiving direct contact from Calafiori's horrified subordinate, she turned against him — directing her own robots to destroy her facility and prevent her technology reaching him. Her surviving drones carry her journal and the full arc of her cooperation, alarm, and sacrifice.</div>
       <div class="npc-status missing">STATUS UNKNOWN — PRESUMED RESET</div>
     </div>
 
     <div class="npc-card">
       <div class="npc-name">DR. CALAFIORI</div>
       <div class="npc-role">INCENDIARY THERAPY // ITALY</div>
-      <div class="npc-body">Sold the UGD on "cauterizing a mental wound." Secretly collaborated with Reeves beyond what the UGD knew. His methods created the Purified — individuals with no emotional capacity. His subordinate's arson destroyed the lab; the subordinate left behind notes, audio logs, and a link to Gumede and Qi in a locked safe. His research notes survive among the Purified.</div>
+      <div class="npc-body">Sold the UGD on "cauterizing a mental wound." Secretly collaborated with Reeves beyond what the UGD knew. His methods created the Purified — individuals with no emotional capacity. A horrified subordinate within his lab eventually contacted Gumede, then committed arson rather than allow the research to be recovered. The subordinate left behind notes, audio logs, and a link to Gumede and Qi in a locked safe. His research notes survive among the Purified.</div>
       <div class="npc-status missing">FATE UNKNOWN — PRESUMED DEAD OR RESET</div>
     </div>
   </div>
@@ -859,19 +760,19 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
     <div class="loc-card" style="border-left-color:var(--red)">
       <div class="loc-name">REEVES' LAB — INDIANA</div>
       <div class="loc-tag">CAMPAIGN 1 // THE REEVES TRIALS</div>
-      <div class="loc-body">A UGD-monitored gene therapy facility in reality housing Reeves' secret Reset project. Animal testing chambers, human trial domes, nanite production tanks. Exterior blast doors sealed, motion-sensing turrets active since the Reset. Contains research logs, SPIKED scavengers, and Charles Mitchell's labeled containment dome.</div>
+      <div class="loc-body">A UGD-monitored gene therapy facility in reality housing Reeves' secret Reset project. Animal testing chambers, human trial domes, nanite production tanks. Not marked on any post-Reset map — operatives are given coordinates, not a map. Exterior blast doors sealed, motion-sensing turrets active since the Reset. Contains research logs, SPIKED scavengers, and Charles Mitchell's labeled containment dome (PS-08) — body present, identity unconfirmable.</div>
     </div>
 
     <div class="loc-card" style="border-left-color:var(--amber-dim)">
       <div class="loc-name">CALAFIORI'S LAB — ITALY</div>
       <div class="loc-tag">CAMPAIGN 2 // WHISPERED ECHOES</div>
-      <div class="loc-body">Deliberately burned by a horrified subordinate in 2048. Ruins contain: the Purified (survivors of incendiary therapy with no emotional capacity), the subordinate's notes and audio logs, and a locked safe linking to Gumede and Qi. Research notes survive in fragments. A site of quiet, clinical horror.</div>
+      <div class="loc-body">Deliberately burned by a horrified subordinate in 2048 — the same subordinate who had already contacted Gumede. Ruins contain: the Purified (survivors of incendiary therapy with no emotional capacity), the subordinate's notes and audio logs, and a locked safe linking to Gumede and Qi. Research notes survive in fragments. A site of quiet, clinical horror.</div>
     </div>
 
     <div class="loc-card" style="border-left-color:var(--green-dim)">
       <div class="loc-name">GUMEDE'S LAB — SOUTH AFRICA</div>
       <div class="loc-tag">CAMPAIGN 3 // DRONE REBELLION</div>
-      <div class="loc-body">Officially destroyed by terrorists; in reality destroyed by Gumede herself. Surviving robots carry recordings of her journal and the pre-Reset scientific cooperation. The "terrorist attack" narrative holds until Drone Rebellion. The lab's surviving systems provide the first concrete evidence of the Prime Signal's living-human requirement.</div>
+      <div class="loc-body">Officially destroyed by terrorists; in reality destroyed by Gumede herself after a period of initial cooperation with Reeves and a late-breaking turn against him. Surviving robots carry recordings of her journal — including the nanite transfer, her growing alarm, the subordinate's contact, and her decision to destroy the lab. The lab's surviving systems provide the first concrete evidence of the Prime Signal's living-human requirement.</div>
     </div>
 
     <div class="loc-card" style="border-left-color:var(--blue-dim)">
@@ -889,7 +790,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
     <div class="loc-card" style="border-left-color:var(--amber-dim)">
       <div class="loc-name">UGD HEADQUARTERS — COPENHAGEN</div>
       <div class="loc-tag">CAMPAIGN 5 // CURE — BRANCH P FINALE</div>
-      <div class="loc-body">Former Ørestad district, Copenhagen, Denmark. Central seat of global governance. Staffed primarily by pre-Reset members with no memory of what caused the Reset. Bureaucratic and largely unaware that the former Chairman's backdoor credentials are still active. Final destination for Branch P — Prater's endgame plays out here.</div>
+      <div class="loc-body">Former Ørestad district, Copenhagen, Denmark. Central seat of global governance. Staffed primarily by pre-Reset members with no memory of what caused the Reset — they believe the UGD commissioned the research and the Reset was its outcome. Bureaucratic and largely unaware that the former Chairman's backdoor credentials are still active. Final destination for Branch P — Prater's endgame plays out here.</div>
     </div>
   </div>
 </section>
@@ -906,6 +807,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
     <div class="panel">
       <div class="panel-title">THE UGD</div>
       <p>The United Global Directorate — reorganized from the 127-nation UN. Monolithic; no other major organization exists as of Year 5. Made up primarily of pre-Reset members. Main focus: cleanup, rebuilding, containing SPIKE outbreaks and advanced tech. Acts quickly and sometimes coldly. Tends toward bureaucracy but is logical and effective.</p>
+      <p>The UGD takes institutional credit for the Reset — in their Reset-dulled state, they have accepted without scrutiny that Reeves' commissioned research produced it. They celebrated it. Five years of peace confirmed it. The catalyst Storm is the first thing to make them question whether they understand what they celebrated.</p>
       <p style="margin-bottom:0"><strong>Hidden vulnerability:</strong> The former Chairman's backdoor credentials remain active, allowing the Control to monitor internal reports and redirect recovered tech and weaponry. UGD leadership is unaware.</p>
     </div>
     <div class="panel amber">
@@ -942,13 +844,14 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
     <ul>
       <li>The world was ravaged by WWIII roughly a decade ago — hundreds of millions died from war, famine, disease, and societal collapse</li>
       <li>A global psychological phenomenon called SPIKE emerged — a catastrophic uptick in mental illness and violent behavior</li>
-      <li>A cure was found and implemented — known simply as "the Reset." Humanity knew peace almost overnight</li>
-      <li>Nobody quite knows how or why the Reset worked. Fewer still care to find out.</li>
+      <li>A cure was found and implemented — known simply as "the Reset." The UGD commissioned the research. Dr. Reeves delivered it, at the apparent cost of his own life. Humanity knew peace almost overnight.</li>
+      <li>Nobody quite knows the mechanism by which the Reset worked. The UGD knows it worked because it did. That has been sufficient for five years.</li>
       <li>The world is run by the UGD — a reorganized version of the UN. Nations no longer exist as independent states.</li>
-      <li>The SPIKE Scale (0–11) is a diagnostic tool used by handheld wands and implants — a common part of everyday life</li>
+      <li>All UGD operatives carry a subcutaneous SPIKE monitoring implant — reads their own level continuously and can evaluate others at close range. Handheld wands remain in wider civilian use.</li>
+      <li>Approximately one week ago, a SPIKE Storm swept the world. Casualties confirmed. Origin unknown. This is why the party is here.</li>
       <li>It is Year 5. A basic global communications network has just been restored.</li>
-      <li>Players are UGD operatives, commissioned to conduct an off-the-books investigation of a defunct research lab in Indiana — formerly belonging to a Dr. Reeves</li>
-      <li>The UGD's stated goal: understand what happened during the research period, and whether any useful data remains</li>
+      <li>Players are UGD operatives, commissioned to conduct an off-the-books investigation of a defunct research lab in Indiana — formerly belonging to a Dr. Reeves. The commission was expedited. No one has said the word "panic."</li>
+      <li>The UGD's stated goal: understand what happened during the research period, and whether any useful data remains — specifically, anything that could explain or prevent a recurrence of the Storm.</li>
     </ul>
   </div>
 
@@ -963,6 +866,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
       <li>That the Reset was not a purely humanitarian solution — it was a power grab</li>
       <li>That the world's current stability is the result of a single psychopath's brainwaves being broadcast globally</li>
       <li>That the system is already failing, slowly and quietly, in sub-ideal conditions across the planet</li>
+      <li>That the Storms are a symptom of that failure — and will get worse</li>
     </ul>
   </div>
 </section>
@@ -983,7 +887,6 @@ function toggleEntry(header) {
   toggle.textContent = isOpen ? '▶' : '▼';
 }
 
-// Nav active
 const sections = document.querySelectorAll('.section');
 const links = document.querySelectorAll('nav a');
 const io = new IntersectionObserver(entries => {
@@ -1006,8 +909,6 @@ sections.forEach(s => io.observe(s));
   window.addEventListener('resize', fix);
 })();
 </script>
-
-
 
 </body>
 </html>
