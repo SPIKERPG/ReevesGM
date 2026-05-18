@@ -62,13 +62,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .qi-step.plus:hover{border-color:var(--green-dim);color:var(--green)}
 .qi-v{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-hi);min-width:26px;text-align:center}
 .qi-bottom{display:flex;align-items:center;gap:4px}
-
-/* ─── REACTION PIPS (queue) ─── */
-.qi-rxn-pips{display:flex;gap:3px;align-items:center}
-.qi-rxn{width:10px;height:10px;border:1px solid var(--amber);background:rgba(184,120,32,.22);cursor:pointer;flex-shrink:0;position:relative}
+.qi-rxn{width:10px;height:10px;border:1px solid var(--amber);background:rgba(184,120,32,.22);cursor:pointer;flex-shrink:0}
 .qi-rxn.used{background:var(--surface);border-color:var(--border-hi)}
-.qi-rxn:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--amber-dim);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.1em;padding:2px 6px;white-space:nowrap;pointer-events:none;z-index:100}
-
 .qi-rm{margin-left:auto;background:none;border:none;color:var(--text-dim);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:10px;padding:0 2px}
 .qi-rm:hover{color:var(--red-bright)}
 .queue-footer{border-top:1px solid var(--border-hi);padding:8px;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
@@ -120,30 +115,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .cmd-step.plus:hover{border-color:var(--green-dim);color:var(--green);background:rgba(122,154,40,.08)}
 .cmd-spike-pips{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:4px}
 .cmd-spike-pip{width:10px;height:10px;border:1px solid var(--border-hi);border-radius:50%;cursor:pointer;flex-shrink:0}
-
-/* ─── REACTIONS PANEL (command center) ─── */
-.cmd-reactions{background:var(--surface2);border:1px solid var(--border-hi)}
-.cmd-reactions-head{background:var(--surface);border-bottom:1px solid var(--border-hi);padding:6px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.cmd-reactions-lbl{font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--amber)}
-.cmd-reactions-count{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text-dim)}
-.cmd-reactions-count strong{font-size:13px}
-.cmd-reactions-count strong.all-gone{color:var(--red-bright)}
-.cmd-reactions-count strong.full{color:var(--green)}
-.cmd-reactions-count strong.partial{color:var(--amber)}
-.cmd-long-rest-btn{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.18em;background:transparent;border:1px solid var(--border-hi);color:var(--text-dim);padding:3px 9px;cursor:pointer;transition:all .1s}
-.cmd-long-rest-btn:hover{border-color:var(--green-dim);color:var(--green);background:rgba(122,154,40,.08)}
-.cmd-reactions-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
-.cmd-rxn-btn{background:transparent;border:none;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:9px 12px;cursor:pointer;text-align:left;transition:background .12s;display:flex;align-items:center;gap:8px}
-.cmd-rxn-btn:nth-child(2n){border-right:none}
-.cmd-rxn-btn:nth-child(n+3){border-bottom:none}
-.cmd-rxn-btn:hover:not(.rxn-spent){background:rgba(184,120,32,.08)}
-.cmd-rxn-btn.rxn-spent{cursor:default;opacity:.45}
-.cmd-rxn-btn.rxn-spent .rxn-pip{background:var(--surface);border-color:var(--border-hi)}
-.rxn-pip{width:10px;height:10px;border:1.5px solid var(--amber);background:rgba(184,120,32,.3);flex-shrink:0;transition:all .12s}
-.rxn-name{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text-hi);line-height:1.1}
-.rxn-desc{font-size:11px;color:var(--text-dim);line-height:1.3;margin-top:2px}
-/* ─── END REACTIONS PANEL ─── */
-
 .cmd-actions{background:var(--surface2);border:1px solid var(--border-hi);padding:10px 12px}
 .cmd-actions-lbl{font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--text-dim);margin-bottom:8px}
 .cmd-action-row{display:flex;gap:7px;flex-wrap:wrap;align-items:flex-start}
@@ -257,14 +228,13 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
   .roster-layout{grid-template-columns:1fr}
   .atk-fields{grid-template-columns:1fr 1fr}
   .cmd-stats{grid-template-columns:1fr 1fr}
-  .cmd-reactions-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div class="top-band"><span>&#9632; UGD DIV IV // GM COMMAND // COMBAT SUITE &#9632;</span><span>GM-05 // TACTICAL OPERATIONS</span><span>&#9632; GM EYES ONLY &#9632;</span></div>
 <div class="header">
-  <div class="header-left">GM-05 // REV.05<br>CLEARANCE ALPHA</div>
+  <div class="header-left">GM-05 // REV.04<br>CLEARANCE ALPHA</div>
   <div class="header-center"><h1>COMBAT SUITE</h1><div class="hsub">&#9632; INITIATIVE // HOSTILES // NPCS &#9632;</div></div>
   <div class="header-right">YEAR 5 POST-RESET<br>INDIANA OPERATION</div>
 </div>
@@ -342,20 +312,6 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
           <div class="cmd-stat-btns"><button class="cmd-step minus" onclick="cmdAdjSpike(-1)">&#8722;</button><button class="cmd-step plus" onclick="cmdAdjSpike(+1)">+</button></div>
         </div>
       </div>
-
-      <!-- ══ REACTIONS PANEL ══ -->
-      <div class="cmd-reactions" id="cmd-reactions-panel">
-        <div class="cmd-reactions-head">
-          <span class="cmd-reactions-lbl">&#9632; REACTIONS &mdash; 2 PER LONG REST</span>
-          <span class="cmd-reactions-count" id="rxn-count-display"><strong class="full">2</strong>/2 available</span>
-          <button class="cmd-long-rest-btn" onclick="cmdLongRest()" title="Restore all reactions (Long Rest)">&#8635; LONG REST</button>
-        </div>
-        <div class="cmd-reactions-grid" id="cmd-rxn-grid">
-          <!-- populated by refreshReactions() -->
-        </div>
-      </div>
-      <!-- ══ END REACTIONS PANEL ══ -->
-
       <div class="cmd-actions">
         <div class="cmd-actions-lbl">&#9632; ACTIONS THIS TURN &mdash; CLICK TO MARK USED</div>
         <div class="cmd-action-row">
@@ -516,31 +472,6 @@ let _atkTargetId=null,_atkLastHit=false,_atkLastDamage=0;
 
 const BEHAVIORS=['','SHATTER POINT \u2014 Spike Save. Success: act normally. Fail: +1 Spike.','EMOTIONAL BLEED \u2014 All CLOSE allies: Spike Save TN 14 or +1 Spike. \u22121 all your rolls.','MISPLACED TRUST \u2014 Latch onto nearest creature as ally regardless of reality.','VIOLENT OUTBURST \u2014 Attack nearest creature with full Action.','PARANOID BREAK \u2014 All others hostile until end of turn. No Assist.','PANIC RESPONSE \u2014 Must flee using movement. Cannot move toward enemies.','RECKLESS ADVANCE \u2014 Move toward nearest threat. Adv next attack; attacks vs you have Adv.','DISASSOCIATION \u2014 \u22122 all rolls. No Reactions.','FREEZE \u2014 Lose Action. Minor only.','COLLAPSE \u2014 Fall prone. Lose Action. Minor only. +1 COMPOSURE at end of turn.','SENSORY OVERLOAD \u2014 Disadv all rolls. Must reposition. If unable: \u22122 all.','ERRATIC ACTION \u2014 Roll 1d10: 1\u20133 wrong target, 4\u20136 drop item, 7\u201310 act normally.','ECHO LOOP \u2014 Repeat last meaningful action. If impossible: lose Action.','TARGET LOCK \u2014 Adv vs one target, Disadv vs all others. Must pursue.','COMPULSIVE FIXATION \u2014 GM assigns task. Must focus. +1 related actions.','EMOTIONAL SURGE \u2014 +2 to attack. If miss: +1 Spike.','CONTROL SNAP \u2014 Spike Save. Success: normal. Fail: +1 Spike, \u22122 all.','HYPER-FOCUS \u2014 GM defines task. +2 related. No unrelated actions.','MOMENT OF CLARITY \u2014 Act normally. Spike \u22121.','FRACTURED CLARITY \u2014 Adv all rolls this turn. Spike \u22121 for turn then resets.'];
 
-/* ─── REACTION DEFINITIONS ─── */
-const RXN_DEFS=[
-  {key:'overwatch',    name:'OVERWATCH',     desc:'If Aimed last turn — shoot enemy entering line of sight (ranged)'},
-  {key:'counterattack',name:'COUNTERATTACK', desc:'If attacked in melee — immediate return strike'},
-  {key:'protect',      name:'PROTECT',       desc:'Take a hit meant for an adjacent ally'},
-  {key:'brace',        name:'BRACE',         desc:'Reduce final damage from the triggering hit by 2'},
-];
-
-function emptyReactions(){return{overwatch:false,counterattack:false,protect:false,brace:false};}
-
-/* Migrate old array-style reactions to named object */
-function migrateReactions(c){
-  if(!c.reactions||Array.isArray(c.reactions)){
-    const old=c.reactions||[false,false];
-    c.reactions=emptyReactions();
-    if(old[0])c.reactions.overwatch=true;
-    if(old[1])c.reactions.counterattack=true;
-  }
-}
-
-function rxnAvailable(c){
-  if(!c.reactions)return 2;
-  return RXN_DEFS.filter(r=>!c.reactions[r.key]).length;
-}
-
 function spikeColor(n){n=parseInt(n)||0;if(n===0)return'#a0c848';if(n<=2)return'#b8baa5';if(n<=5)return'#b87820';if(n<=7)return'#d06020';if(n<=9)return'#c03030';if(n===10)return'#e04040';return'#ff2020';}
 function spikeLabel(n){n=parseInt(n)||0;if(n===0)return'SERENE';if(n<=2)return'STABLE';if(n<=5)return'SHAKEN';if(n<=7)return'CRACKED';if(n<=9)return'OVERLOADED';if(n===10)return'SPIKED';return'CONSUMED';}
 
@@ -548,7 +479,7 @@ function saveState(){try{localStorage.setItem(STORAGE_COMBAT,JSON.stringify({com
 function loadState(){
   try{const h=localStorage.getItem(STORAGE_HOSTILE);if(h)hostileRoster=JSON.parse(h)||[];}catch(e){}
   try{const n=localStorage.getItem(STORAGE_NPC);if(n)npcRoster=JSON.parse(n)||[];}catch(e){}
-  try{const c=localStorage.getItem(STORAGE_COMBAT);if(c){const d=JSON.parse(c);combatants=(d.combatants||[]).map(cx=>{const m={resolve:1,mind:1,defense:6,...cx,actionUsed:false,minorUsed:false,aimed:false};migrateReactions(m);return m;});currentTurnIdx=d.currentTurnIdx??-1;encounterActive=d.encounterActive??false;}}catch(e){}
+  try{const c=localStorage.getItem(STORAGE_COMBAT);if(c){const d=JSON.parse(c);combatants=(d.combatants||[]).map(cx=>({resolve:1,mind:1,defense:6,...cx,actionUsed:false,minorUsed:false,aimed:false}));currentTurnIdx=d.currentTurnIdx??-1;encounterActive=d.encounterActive??false;}}catch(e){}
 }
 
 function switchPage(n){['encounter','hostiles','npcs'].forEach(p=>{document.getElementById('page-'+p).classList.toggle('active',p===n);document.getElementById('ntab-'+p).classList.toggle('active',p===n);});}
@@ -571,7 +502,7 @@ function importOperative(pi,si,cd,slot){
   const compCur=slot.sessionComp!==undefined?slot.sessionComp:(cd.compCurrent??5);
   const compMax=cd.compMax??(5+resolve);
   const spike=slot.sessionSpike!==undefined?slot.sessionSpike:(parseInt(cd.currentSpike)||0);
-  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor:0,defense:6,resolve,mind,spike,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
+  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor:0,defense:6,resolve,mind,spike,reactions:[false,false],status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
   saveState();renderQueue();loadPartyTracker();
 }
 
@@ -581,7 +512,7 @@ function addCombatant(){
   const name=document.getElementById('add-name').value.trim();if(!name){document.getElementById('add-name').focus();return;}
   const hp=parseInt(document.getElementById('add-hp').value)||12,hpMax=parseInt(document.getElementById('add-hpmax').value)||hp;
   const comp=parseInt(document.getElementById('add-comp').value)||5,compMax=parseInt(document.getElementById('add-compmax').value)||comp;
-  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,spike:0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false});
+  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,spike:0,reactions:[false,false],status:'alive',actionUsed:false,minorUsed:false,aimed:false});
   ['add-name','add-hp','add-hpmax','add-comp','add-compmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   saveState();renderQueue();
 }
@@ -594,64 +525,7 @@ function adjComp(id,d){const c=combatants.find(x=>x.id===id);if(!c)return;c.comp
 function adjSpike(id,d){const c=combatants.find(x=>x.id===id);if(!c)return;c.spike=Math.min(11,Math.max(0,(c.spike||0)+d));saveState();renderQueue();if(getCurrent()?.id===id)refreshSpike();broadcastSync(c);}
 function setSpike(id,v){const c=combatants.find(x=>x.id===id);if(!c)return;c.spike=Math.min(11,Math.max(0,v));saveState();renderQueue();if(getCurrent()?.id===id)refreshSpike();broadcastSync(c);}
 function cycleStatus(id){const c=combatants.find(x=>x.id===id);if(!c)return;const s=['alive','down','dead'];c.status=s[(s.indexOf(c.status)+1)%s.length];saveState();renderQueue();if(getCurrent()?.id===id)renderCommandCenter();}
-
-/* ─── REACTION FUNCTIONS ─── */
-/* Queue-level: toggle a reaction by index (backward compat with two pips in queue) */
-function toggleReaction(id,rxnKey){
-  const c=combatants.find(x=>x.id===id);if(!c)return;
-  migrateReactions(c);
-  c.reactions[rxnKey]=!c.reactions[rxnKey];
-  saveState();renderQueue();
-  if(getCurrent()?.id===id)refreshReactions();
-}
-
-/* Command-center: toggle a named reaction for the current combatant */
-function cmdToggleReaction(key){
-  const c=getCurrent();if(!c)return;
-  migrateReactions(c);
-  const avail=rxnAvailable(c);
-  if(!c.reactions[key]&&avail===0)return; // all spent, can't mark another used
-  c.reactions[key]=!c.reactions[key];
-  saveState();renderQueue();refreshReactions();
-  addLog({label:`${c.name}: ${c.reactions[key]?'spent':'restored'} ${key.toUpperCase()}`,total:null});
-}
-
-/* Long Rest for current combatant — restores all reactions, SPIKE -2, HP/COMP to max */
-function cmdLongRest(){
-  const c=getCurrent();if(!c)return;
-  c.reactions=emptyReactions();
-  c.spike=Math.max(0,(c.spike||0)-2);
-  c.hp=c.hpMax;
-  c.comp=c.compMax;
-  saveState();renderQueue();refreshVitals();refreshSpike();refreshReactions();
-  addLog({label:`${c.name}: Long Rest — reactions restored, SPIKE \u22122, HP/COMP full`,total:null});
-}
-
-/* Refresh just the reactions panel in the command center */
-function refreshReactions(){
-  const c=getCurrent();
-  const grid=document.getElementById('cmd-rxn-grid');
-  const countEl=document.getElementById('rxn-count-display');
-  if(!c||!grid)return;
-  migrateReactions(c);
-  const avail=rxnAvailable(c);
-  const spent=4-avail;
-
-  // Update count display
-  let cls=avail===4?'full':avail===0?'all-gone':'partial';
-  if(countEl)countEl.innerHTML=`<strong class="${cls}">${avail}</strong>/4 available`;
-
-  // Build buttons
-  grid.innerHTML=RXN_DEFS.map(r=>{
-    const isSpent=c.reactions[r.key];
-    return `<button class="cmd-rxn-btn${isSpent?' rxn-spent':''}" onclick="cmdToggleReaction('${r.key}')" ${isSpent?'title="Click to restore"':avail===0?'title="No reactions remaining" disabled':''}>
-      <div class="rxn-pip"></div>
-      <div><div class="rxn-name">${r.name}</div><div class="rxn-desc">${r.desc}</div></div>
-    </button>`;
-  }).join('');
-}
-
-/* ─── END REACTION FUNCTIONS ─── */
+function toggleReaction(id,idx){const c=combatants.find(x=>x.id===id);if(!c)return;if(!c.reactions)c.reactions=[false,false];c.reactions[idx]=!c.reactions[idx];saveState();renderQueue();}
 
 function startEncounter(){if(!combatants.length){alert('Add combatants first.');return;}encounterActive=true;currentTurnIdx=0;resetTurnState(0);saveState();renderQueue();renderCommandCenter();updateNavInfo();document.getElementById('btn-start').style.display='none';document.getElementById('btn-next').style.display='';document.getElementById('cmd-wrap').style.display='flex';document.getElementById('cmd-empty').style.display='none';}
 function nextTurn(){if(!encounterActive||!combatants.length)return;let next=(currentTurnIdx+1)%combatants.length,safety=0;while(combatants[next].status==='dead'&&safety<combatants.length){next=(next+1)%combatants.length;safety++;}currentTurnIdx=next;resetTurnState(next);saveState();renderQueue();renderCommandCenter();updateNavInfo();}
@@ -663,14 +537,8 @@ function renderQueue(){
   const scroll=document.getElementById('queue-scroll');
   if(!combatants.length){scroll.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:7.5px;color:var(--text-dim);text-align:center;padding:20px;letter-spacing:.14em">NO COMBATANTS<br>ADD BELOW</div>';return;}
   scroll.innerHTML=combatants.map((c,i)=>{
-    migrateReactions(c);
     const isCur=encounterActive&&i===currentTurnIdx,sc=spikeColor(c.spike||0);
-    const avail=rxnAvailable(c);
-    /* Show 4 named pips in queue, each coloured by spent/available */
-    const rxnPips=RXN_DEFS.map(r=>{
-      const spent=c.reactions[r.key];
-      return `<div class="qi-rxn${spent?' used':''}" data-tip="${r.name.charAt(0)+r.name.slice(1).toLowerCase()}" onclick="toggleReaction('${c.id}','${r.key}');event.stopPropagation()" title="${r.name}${spent?' (spent — click to restore)':' (available — click to spend)'}"></div>`;
-    }).join('');
+    const rxn=(c.reactions||[false,false]).map((u,ri)=>`<div class="qi-rxn${u?' used':''}" onclick="toggleReaction('${c.id}',${ri});event.stopPropagation()" title="Reaction ${ri+1}"></div>`).join('');
     let tc=c.type;if(c.trackerRef)tc='tracker';
     return `<div class="qi ${tc}${isCur?' current':''}${c.status==='dead'?' dead':''}" id="qi-${c.id}" draggable="true">
       <div class="qi-top">${isCur?'<span class="qi-arrow">\u25b6</span>':''}<div class="qi-dot ${c.status}" onclick="cycleStatus('${c.id}');event.stopPropagation()"></div><div class="qi-name">${escHtml(c.name)}</div><div class="qi-badge">${c.type.toUpperCase()}</div></div>
@@ -679,7 +547,7 @@ function renderQueue(){
         <div class="qi-vg"><span class="qi-vl">CMP</span><button class="qi-step minus" onclick="adjComp('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v">${c.comp}/${c.compMax}</span><button class="qi-step plus" onclick="adjComp('${c.id}',+1);event.stopPropagation()">+</button></div>
         <div class="qi-vg"><span class="qi-vl" style="color:${sc}">SP</span><button class="qi-step minus" onclick="adjSpike('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v" style="color:${sc}">${c.spike||0}</span><button class="qi-step plus" onclick="adjSpike('${c.id}',+1);event.stopPropagation()">+</button></div>
       </div>
-      <div class="qi-bottom"><div class="qi-rxn-pips">${rxnPips}</div><button class="qi-rm" onclick="removeCombatant('${c.id}');event.stopPropagation()" title="Remove">\u00d7</button></div>
+      <div class="qi-bottom">${rxn}<button class="qi-rm" onclick="removeCombatant('${c.id}');event.stopPropagation()" title="Remove">\u00d7</button></div>
     </div>`;
   }).join('');
   combatants.forEach((c,i)=>{const el=document.getElementById('qi-'+c.id);if(el)el.addEventListener('click',()=>{if(encounterActive){currentTurnIdx=i;saveState();renderQueue();renderCommandCenter();}});});
@@ -708,7 +576,7 @@ function renderCommandCenter(){
   document.getElementById('cmd-name').textContent=c.name;
   document.getElementById('cmd-badge').textContent=c.type.toUpperCase()+(c.npcRole?' // '+c.npcRole.slice(0,14).toUpperCase():'');
   const st=document.getElementById('cmd-status');st.className='cmd-status-el '+c.status;st.textContent=c.status.toUpperCase();
-  refreshVitals();refreshSpike();refreshActionPips();refreshReactions();
+  refreshVitals();refreshSpike();refreshActionPips();
   const targetSel=document.getElementById('atk-target');
   const targets=combatants.filter(x=>x.id!==c.id&&x.status!=='dead');
   targetSel.innerHTML=targets.map(t=>`<option value="${t.id}">${escHtml(t.name)} [HP:${t.hp} ARM:${t.armor||0} DEF:${t.defense||6}]</option>`).join('');
@@ -815,7 +683,7 @@ function saveHostile(){const name=document.getElementById('h-name').value.trim()
 function clearHostileForm(){['h-name','h-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});['h-hp','h-comp','h-armor','h-defense','h-resolve','h-mind'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[10,5,0,6,1,1][i];});document.getElementById('attacks-builder').innerHTML=`<div class="atk-build-row"><div><label class="f-label">NAME</label><input class="f-input sm" placeholder="e.g. Service Pistol"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">\u00d7</button></div></div>`;}
 function addAtkRow(){const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">\u00d7</button></div>`;document.getElementById('attacks-builder').appendChild(row);}
 function removeAtkRow(btn){const r=document.querySelectorAll('#attacks-builder .atk-build-row');if(r.length<=1)return;btn.closest('.atk-build-row').remove();}
-function deployOne(id){const h=hostileRoster.find(x=>x.id===id);if(!h)return;combatants.push({id:uid(),name:h.name,type:'hostile',hp:h.hp,hpMax:h.hp,comp:h.comp,compMax:h.comp,armor:h.armor||0,defense:h.defense||6,resolve:h.resolve||1,mind:h.mind||1,spike:0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,hostileRef:h.id,hostileAtks:h.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
+function deployOne(id){const h=hostileRoster.find(x=>x.id===id);if(!h)return;combatants.push({id:uid(),name:h.name,type:'hostile',hp:h.hp,hpMax:h.hp,comp:h.comp,compMax:h.comp,armor:h.armor||0,defense:h.defense||6,resolve:h.resolve||1,mind:h.mind||1,spike:0,reactions:[false,false],status:'alive',actionUsed:false,minorUsed:false,aimed:false,hostileRef:h.id,hostileAtks:h.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
 function deployAllHostiles(){if(!hostileRoster.length){alert('No hostiles in roster.');return;}hostileRoster.forEach(h=>deployOne(h.id));}
 function deleteHostile(id){hostileRoster=hostileRoster.filter(h=>h.id!==id);try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e){}renderHostileRoster();}
 function saveRosterToFile(){if(!hostileRoster.length){setRS('EMPTY',false);return;}const blob=new Blob([JSON.stringify({version:1,hostiles:hostileRoster},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SPIKE_Hostiles.json';a.click();URL.revokeObjectURL(a.href);setRS('EXPORTED',true);}
@@ -833,7 +701,7 @@ function addNpcAtkRow(){const row=document.createElement('div');row.className='a
 function removeNpcAtkRow(btn){const r=document.querySelectorAll('#npc-attacks-builder .atk-build-row');if(r.length<=1)return;btn.closest('.atk-build-row').remove();}
 function saveNpc(){const name=document.getElementById('n-name').value.trim();if(!name){document.getElementById('n-name').focus();return;}npcRoster.push({id:uid(),name,role:document.getElementById('n-role').value.trim(),hp:parseInt(document.getElementById('n-hp').value)||8,comp:parseInt(document.getElementById('n-comp').value)||5,armor:parseInt(document.getElementById('n-armor').value)||0,defense:parseInt(document.getElementById('n-defense').value)||6,resolve:parseInt(document.getElementById('n-resolve').value)||1,mind:parseInt(document.getElementById('n-mind').value)||1,spike:parseInt(document.getElementById('n-spike').value)||0,disposition:document.getElementById('n-disposition').value,notes:document.getElementById('n-notes').value.trim(),attacks:gatherAtkRows('npc-attacks-builder')});try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}clearNpcForm();renderNpcRoster();}
 function clearNpcForm(){['n-name','n-role','n-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});['n-hp','n-comp','n-armor','n-defense','n-resolve','n-mind','n-spike'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[8,5,0,6,1,1,0][i];});document.getElementById('n-disposition').value='neutral';document.getElementById('npc-attacks-builder').innerHTML=`<div class="atk-build-row"><div><label class="f-label">NAME</label><input class="f-input sm" placeholder="e.g. Baton"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeNpcAtkRow(this)">\u00d7</button></div></div>`;}
-function deployNpcOne(id){const n=npcRoster.find(x=>x.id===id);if(!n)return;combatants.push({id:uid(),name:n.name,type:'npc',hp:n.hp,hpMax:n.hp,comp:n.comp,compMax:n.comp,armor:n.armor||0,defense:n.defense||6,resolve:n.resolve||1,mind:n.mind||1,spike:n.spike||0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,npcRef:n.id,npcRole:n.role||'',npcAtks:n.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
+function deployNpcOne(id){const n=npcRoster.find(x=>x.id===id);if(!n)return;combatants.push({id:uid(),name:n.name,type:'npc',hp:n.hp,hpMax:n.hp,comp:n.comp,compMax:n.comp,armor:n.armor||0,defense:n.defense||6,resolve:n.resolve||1,mind:n.mind||1,spike:n.spike||0,reactions:[false,false],status:'alive',actionUsed:false,minorUsed:false,aimed:false,npcRef:n.id,npcRole:n.role||'',npcAtks:n.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
 function deployAllNpcs(){if(!npcRoster.length){alert('No NPCs in roster.');return;}npcRoster.forEach(n=>deployNpcOne(n.id));}
 function deleteNpc(id){npcRoster=npcRoster.filter(n=>n.id!==id);try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}renderNpcRoster();}
 function saveNpcRosterToFile(){if(!npcRoster.length){setNRS('EMPTY',false);return;}const blob=new Blob([JSON.stringify({version:1,npcs:npcRoster},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SPIKE_NPCs.json';a.click();URL.revokeObjectURL(a.href);setNRS('EXPORTED',true);}
