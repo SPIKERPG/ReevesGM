@@ -315,6 +315,23 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
   margin-top: 2px;
 }
 
+/* ─── MAP CODE TABLE ─── */
+.map-code-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 6px;
+}
+.map-code-table td {
+  padding: 4px 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.map-code-table tr:last-child td { border-bottom: none; }
+.map-code-table .mct-name { color: var(--text); letter-spacing: .1em; }
+.map-code-table .mct-code { color: var(--green); letter-spacing: .22em; font-weight: 700; white-space: nowrap; }
+
 .milestone-box {
   background: var(--green-pale); border: 1px solid var(--green-dim);
   border-left: 3px solid var(--green);
@@ -357,14 +374,6 @@ main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
 .gloss-table tr:last-child td { border-bottom: none; }
 .gloss-term { color: var(--amber); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: .08em; }
 .gloss-floor { color: var(--text-dim); font-size: 11px; }
-
-.map-ref {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: .16em;
-  color: var(--blue); border: 1px solid var(--blue-dim);
-  padding: 2px 8px; margin-bottom: 8px;
-}
-.map-ref::before { content: '⬡'; font-size: 9px; }
 
 @media (max-width: 700px) {
   .g2, .g3 { grid-template-columns: 1fr !important; }
@@ -439,13 +448,13 @@ footer {
     </div>
     <div class="panel quiet">
       <div class="panel-title">MAPS IN PLAY</div>
-      <p>Player-facing maps have been created for each area. Reference them during play and coordinate finds and encounters with the room layouts shown. Maps are: <strong>Approach, Floor 1, Floor 2, Floor 3, Floor 4,</strong> and Floor 5 sub-maps: <strong>Command, Corridor, Enclosures, Incinerator, Power, Security, Surgery, Tanks, END.</strong> The END map is the crux — that is where the dispersal occurred.</p>
+      <p>Player-facing maps have been created for each area. Reference them during play and coordinate finds and encounters with the room layouts shown. Maps are: <strong>Approach, Floor 1, Floor 2, Floor 3, Floor 4,</strong> and Floor 5 sub-maps: <strong>Entry + Security, Command, Corridor, Enclosures, Incinerator, Power, Surgery, Tanks, END.</strong> The END map is the crux — that is where the dispersal occurred.</p>
     </div>
   </div>
 
   <div class="panel amber mbr">
     <div class="panel-title amber">■ THE HARDEST THING TO EXECUTE</div>
-    <p>The instruction to "not explain what they find" is the most important and the hardest. When players find terminology they don't understand — <em>PS-series, semantic continuity, Hardware, recalibration</em> — resist the pull to clarify. The strangeness is the information. Exposition is a last resort. Atmosphere is the primary tool.</p>
+    <p>The instruction to "not explain what they find" is the most important and the hardest. When players find terminology they don't understand — <em>PS-series, integration threshold, Hardware</em> — resist the pull to clarify. The strangeness is the information. Exposition is a last resort. Atmosphere is the primary tool.</p>
   </div>
 </section>
 
@@ -484,7 +493,8 @@ footer {
       <li><strong>Floor plans for Floors 1 and 2</strong> — clinical, UGD-standard. Floor 2 shows a freight elevator marked MAINTENANCE ACCESS — LOWER LEVEL with no annotation beneath it. The plan ends there.</li>
       <li><strong>Research mandate summary</strong> — approved gene therapy research, aerosol treatment trials, EEG studies. Language is careful and institutional. Nothing overtly alarming.</li>
       <li><strong>Dossier on Dr. Elias Reeves</strong> — one page. Public-facing biography. No photograph. Notes his initial WHO proposal was "deprioritized" in favor of "a more targeted therapeutic approach." His pivot to gene therapy described as a natural continuation. No publications, no collaborators, no outcomes cited.</li>
-      <li><strong>SPIKE wands, standard issue</strong> — calibrated at 0.</li>
+      <li><strong>Implant calibration confirmation</strong> — operatives verify their subcutaneous SPIKE monitoring implants are reading correctly before departure. Personal SPIKE levels are always available without a roll.</li>
+      <li><strong>One shared field wand</strong> — issued to the party for evaluating others in the field. Useful for reading civilians, NPCs, and potential hostiles. The party decides who carries it.</li>
     </ul>
   </div>
 
@@ -542,7 +552,6 @@ footer {
     <div class="panel-title">SETTING // FORMER INDIANA, USA — EN ROUTE TO RE-01</div>
     <p>Fort Wayne is the closest settlement to Diamond Hill — the local name for RE-01's site. It functions. Distribution center, community hall, working infrastructure. People living their lives with consistent, moderate efficiency.</p>
     <p><strong>Something is off about it. Not wrong, exactly. Just quieter than it should be, given how many people are present.</strong></p>
-    <p style="margin-bottom:0;">Two people at a café table are having a conversation. Their voices are normal. Nobody laughs. Not because anything sad is happening. Because nothing is funny enough to produce that particular response. A child stops at the memorial kiosk, reads three names, and continues walking — because that is what the child knows to do with such a list.</p>
   </div>
 
   <div class="access-code-callout">
@@ -554,28 +563,29 @@ footer {
       <div class="acc-note">Issue when the party arrives in Fort Wayne. The map orients players to the settlement layout as they gather intel before heading to Diamond Hill.</div>
     </div>
   </div>
-    <div class="location-card exterior">
-      <div class="location-header">
-        <div class="location-name">THE DISTRIBUTION CENTER</div>
-        <div class="location-tag">INTEL // EQUIPMENT</div>
-      </div>
-      <div class="location-body">
-        <p>UGD-managed, clean, efficient. Pre-Reset brand labels on some containers — a cereal brand, a cleaning product. These feel uncanny.</p>
-        <div class="find-block">
-          <div class="find-label">■ IF MENTIONING DIAMOND HILL</div>
-          <p>The clerk's expression doesn't change. He provides standard preparedness guidance — sufficient water, reliable lighting, a means of communication. <em>"That area hasn't been serviced. Take what you need and account for contingencies."</em> He says it the way he says everything. He has no particular reason to say more.</p>
-        </div>
+
+  <div class="location-card exterior mbr">
+    <div class="location-header">
+      <div class="location-name">THE DISTRIBUTION CENTER</div>
+      <div class="location-tag">INTEL // EQUIPMENT</div>
+    </div>
+    <div class="location-body">
+      <p>UGD-managed, clean, efficient. Pre-Reset brand labels on some containers — a cereal brand, a cleaning product. These feel uncanny.</p>
+      <div class="find-block">
+        <div class="find-label">■ IF MENTIONING DIAMOND HILL</div>
+        <p>The clerk's expression doesn't change. He provides standard preparedness guidance — sufficient water, reliable lighting, a means of communication. <em>"That area hasn't been serviced. Take what you need and account for contingencies."</em> He says it the way he says everything. He has no particular reason to say more.</p>
       </div>
     </div>
-    <div class="location-card exterior">
-      <div class="location-header">
-        <div class="location-name">THE COMMUNITY HALL</div>
-        <div class="location-tag">INTEL // ATMOSPHERE</div>
-      </div>
-      <div class="location-body">
-        <p>Social space. Conversations are pleasant, specific, and almost entirely practical. One man is telling a story. When he reaches the end, listeners agree it was a good story. Nobody is delighted. <em>The correct response has occurred.</em></p>
-        <p>Tommy Garza tends bar. His information about Diamond Hill is the most useful the party will get before entering.</p>
-      </div>
+  </div>
+
+  <div class="location-card exterior mbr">
+    <div class="location-header">
+      <div class="location-name">THE COMMUNITY HALL</div>
+      <div class="location-tag">INTEL // ATMOSPHERE</div>
+    </div>
+    <div class="location-body">
+      <p>Social space. Two people at a table are having a conversation. Their voices are normal. Nobody laughs. Not because anything sad is happening. Because nothing is quite funny enough to produce that particular response. A man is telling a story. When he reaches the end, the others agree it was a good story. Nobody is delighted. <em>The correct response has occurred.</em></p>
+      <p>Tommy Garza tends bar. His information about Diamond Hill is the most useful the party will get before entering.</p>
     </div>
   </div>
 
@@ -588,7 +598,11 @@ footer {
       <div class="npc-spike s3">SPIKE 3 — SHAKEN</div>
     </div>
     <div class="npc-body">
-      <p>Mid-40s. Standing near the memorial kiosk with the particular stillness of someone waiting for something they've forgotten they're waiting for. She doesn't know her readings are elevated. She checks her wand rarely.</p>
+      <p>Mid-40s. Standing near the memorial kiosk with the particular stillness of someone waiting for something they've forgotten they're waiting for. She doesn't know her readings are elevated.</p>
+      <div class="design-note" style="margin-bottom:8px;">
+        <div class="design-note-label">■ GM NOTE — WHY SPIKE 3</div>
+        <p>Carol has been returning to the memorial daily since the Reset — her journals describe a son named Danny who died before Year 0, and she reads them and comes here trying to locate a feeling the Reset suppressed. The catalyst Storm a week ago pushed her up; daily exposure to the memorial keeps her from recovering. She has not taken a full rest in some time. Her elevation is the result of sustained, low-grade distress she cannot name or manage.</p>
+      </div>
       <div class="npc-says">"My son's name is on this panel. Danny. He was eight years old, according to the records I have. I know that we lived together. I know he was mine. My journals from before are very detailed about him — drawings he made, things he said. I've read them many times."<br><br>A pause.<br><br>"They're quite clear about how I felt. I can see it in the handwriting, in the way I wrote his name. I can't locate that feeling. I've been coming here trying to find it. I don't know what I think will happen."</div>
       <p>If anyone stays and listens: <em>"I understand this is a normal outcome. Everyone lost someone. Most people seem to have moved forward. I'm not sure why I keep coming back here."</em></p>
       <p>She is not asking for anything. She will thank whoever spoke to her — with careful precision, not warmth — and turn back to the kiosk.</p>
@@ -639,7 +653,10 @@ footer {
       <div class="acc-note">Issue when the party first sights the fence line. Shows the perimeter, turret positions, and the single point of entry. Good for planning the breach.</div>
     </div>
   </div>
-    <p>Refer to the <strong>Approach</strong> player-facing map. The perimeter fence line is shown in full. The two active turret positions are marked at the main entrance — this is the only point of access into the facility. The fence line shows evidence of breach attempts along the north run.</p>
+
+  <div class="panel quiet mbr" style="border-left-color:var(--blue)">
+    <div class="panel-title" style="color:var(--blue)">MAP // APPROACH</div>
+    <p style="margin-bottom:0;">Refer to the <strong>Approach</strong> player-facing map. The perimeter fence line is shown in full. The two active turret positions are marked at the main entrance — this is the only point of access into the facility. The fence line shows evidence of breach attempts along the north run.</p>
   </div>
 
   <div class="g2">
@@ -689,7 +706,10 @@ footer {
       <div class="acc-code">3091·8574</div>
       <div class="acc-note">Issue as the party steps inside. This is what the briefing floor plans covered — the sanitized, UGD-visible level. The stairwell and locked lower door are both marked.</div>
     </div>
-  </div> Air sealed-facility stale: the absence of weather, seasons, anything variable. The building is intact. Floor 1 should feel, initially, like what the briefing described. <strong>The wrongness is in the details, not the structure.</strong></p>
+  </div>
+
+  <div class="panel quiet mbr">
+    <p style="margin-bottom:0;">Air sealed-facility stale: the absence of weather, seasons, anything variable. The building is intact. Floor 1 should feel, initially, like what the briefing described. <strong>The wrongness is in the details, not the structure.</strong></p>
   </div>
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
@@ -712,7 +732,7 @@ footer {
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — ADMINISTRATION OFFICES</div>
-        <p>Personnel transfer notices signed only with Reeves' initials: E.R. At regular intervals. No destination listed. One file cabinet tab (missed on first pass, or revealed after Floor 5's emotional weight): <strong>"IDEOLOGICAL REVIEW — PENDING."</strong> Cabinet is empty. Handwritten note on the tab: <em>"Unsuitable for continuation. Removed."</em></p>
+        <p>Personnel transfer notices signed only with Reeves' initials: E.R. At regular intervals. No destination listed. One file cabinet tab: <strong>"IDEOLOGICAL REVIEW — PENDING."</strong> Cabinet is empty. Handwritten note on the tab: <em>"Unsuitable for continuation. Removed."</em></p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — WALL NOTICE (VISIBLE IN CORRIDOR)</div>
@@ -732,7 +752,7 @@ footer {
       <div class="doc-fragment"><strong>"DO NOT TOUCH — R."</strong></div>
       <div class="roll-block">
         <div class="roll-tag">TECH TN 11</div>
-        <p>The system was intentionally converted from standard communications equipment into a localized jamming array. It targets outbound UGD relay frequencies specifically — internal short-range comms still function. A technician's log wedged behind the console: final entry reads <em>"Jamming configuration locked per Dr. R. directive. Frequency exclusion confirmed. Tested and functional."</em> The date on the final log entry is approximately two days before the Reset would have occurred — the players will have to determine this themselves through cross-referencing dates found elsewhere in the facility. No further entries.</p>
+        <p>The system was intentionally converted from standard communications equipment into a localized jamming array. It targets outbound UGD relay frequencies specifically — internal short-range comms still function. A technician's log wedged behind the console: final entry reads <em>"Jamming configuration locked per Dr. R. directive. Frequency exclusion confirmed. Tested and functional."</em> The date on the final log entry is approximately two days before the Reset would have occurred — players will need to determine this through cross-referencing dates found elsewhere in the facility. No further entries.</p>
       </div>
     </div>
   </div>
@@ -783,7 +803,10 @@ footer {
       <div class="acc-code">6182·4037</div>
       <div class="acc-note">Issue when the party descends to Floor 2. The freight elevator (marked MAINTENANCE ACCESS) and the server room are shown here — the first sign there is more to this building than the briefing documents.</div>
     </div>
-  </div> — the generator prioritizes lab equipment. Fluorescent overhead lighting, most of it still working. The spaces are larger. The research is the same as Floor 1, until it isn't. The atmosphere shifts mid-floor: labs transition from clinical to technical-industrial. Documentation begins using terminology that doesn't appear in any briefing material.</p>
+  </div>
+
+  <div class="panel quiet mbr">
+    <p style="margin-bottom:0;">Emergency power is active throughout — the generator prioritizes lab equipment. Fluorescent overhead lighting, most of it still working. The spaces are larger. The research is the same as Floor 1, until it isn't. The atmosphere shifts mid-floor: labs transition from clinical to technical-industrial. Documentation begins using terminology that doesn't appear in any briefing material.</p>
   </div>
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
@@ -799,7 +822,7 @@ footer {
       <p>Standard neurological research equipment. EEG rigs. A gene sequencing lab with consumables still racked. The research documented here is legitimate — the aerosol therapy trials are real, the EEG baseline work is real. This is the version of RE-01 the UGD paid for.</p>
       <div class="find-block">
         <div class="find-label">■ FIND — LAB NOTEBOOKS</div>
-        <p>References to <strong>PS-series assessments</strong> that are not explained. Entries note "signal receptivity" as a measurement alongside standard neurological baselines. These terms appear without definition, like jargon whose meaning is assumed.</p>
+        <p>References to <strong>PS-series assessments</strong> that are not explained. Entries note "integration threshold" as a measurement alongside standard neurological baselines. The term is undefined, assumed as shared knowledge. It appears in multiple notebooks in the same matter-of-fact way — technical jargon from a context the party does not have.</p>
       </div>
     </div>
   </div>
@@ -812,7 +835,7 @@ footer {
       <p>Cages, cleaned. Medical waste containers, sealed. The animal trials ended well before the facility went dark — the wing was shut down and sanitized. What replaced the animal trials is not documented here.</p>
       <div class="find-block">
         <div class="find-label">■ FIND — RESEARCH SUMMARY (PINNED)</div>
-        <p>A laminated summary pinned to the wall describes outcomes from "aerosol delivery trials" in terms of "integration efficacy" and "semantic continuity preservation." The language is technical and assumes shared knowledge the reader doesn't have. No definition of what was being integrated, or why continuity needed preserving.</p>
+        <p>A laminated summary pinned to the wall describes outcomes from "aerosol delivery trials" in terms of "integration efficacy" and "baseline continuity preservation." The language is technical and assumes shared knowledge the reader doesn't have. No definition of what was being integrated, or what continuity was being preserved.</p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — SUPPLY TRANSFER MEMO (DR. GUMEDE)</div>
@@ -852,7 +875,10 @@ footer {
       <div class="acc-code">4815·6239</div>
       <div class="acc-note">Issue when the party steps off the freight elevator onto Floor 3. This floor does not appear in the briefing documents. The map will make that visible immediately.</div>
     </div>
-  </div> The air is different — circulated differently, processed. The aesthetic shifts: fluorescent lighting replaced by task lighting in specific zones only. The walls are lined with equipment that has no analog on the floors above. Something industrial happened here.</p>
+  </div>
+
+  <div class="panel quiet mbr">
+    <p style="margin-bottom:0;">The air is different — circulated differently, processed. The aesthetic shifts: fluorescent lighting replaced by task lighting in specific zones only. The walls are lined with equipment that has no analog on the floors above. Something industrial happened here.</p>
   </div>
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
@@ -868,14 +894,18 @@ footer {
       <div class="find-block">
         <div class="find-label">■ FIND — CALAFIORI CORRESPONDENCE</div>
         <p>Letters referencing a research station in the hills outside Genoa, Italy — an isolated site, not in the city itself. The tone escalates from collegial to heated over the course of several exchanges. Calafiori's method is described as "incendiary correction" — he disagrees with Reeves' approach, argues it is philosophically wrong, not merely different. Reeves' responses are measured, cold, and do not engage with the ethical objections at all.</p>
-        <p>The fire notice from Floor 1 is in this archive as well — filed in a folder alongside Calafiori's letters, as though Reeves kept them together. He kept working anyway. <strong>He filed the news of his colleague's death in the same folder as their correspondence and continued.</strong></p>
+        <p>The fire notice from Floor 1 is in this archive as well — filed in a folder alongside Calafiori's letters, as though Reeves kept them together. He kept working anyway. <strong>Reeves filed the news of his colleague's death in the same folder as their correspondence and continued.</strong></p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — AP LOGISTICS CORRESPONDENCE</div>
         <p>Found in a separate locked cabinet (TECH TN 11 or keycard from this floor's office). Multiple letters and manifests referencing <strong>AP Logistics</strong> — a private supply company that arranged shipments to RE-01 for over a year. The tone is businesslike but the content is strange: the manifests describe HVAC components, but the weights and dimensions match no HVAC equipment in the building.</p>
         <p>Deeper in the cabinet: <strong>a letter signed "A. Prater, AP Logistics."</strong> The tone is pressured. The final letter reads:</p>
         <div class="doc-fragment">"The timeline cannot slip further. The WHO sessions are not going to produce anything we can use. If you want this to happen, it happens on our schedule."</div>
-        <p>Reeves' draft response is handwritten in the margin: <em>"Agreed. Initiating."</em> The name Prater means nothing to the players. The crates in the building do not contain HVAC components.</p>
+        <p>Reeves' draft response is handwritten in the margin: <em>"Agreed. Initiating."</em></p>
+        <div class="design-note" style="margin-top:8px;margin-bottom:0;">
+          <div class="design-note-label">■ GM NOTE — HIGH VALUE FIND</div>
+          <p>This is one of the most significant discoveries on Floor 3. Do not rush past it. Prater's name means nothing to players yet — <strong>do not give it weight in delivery</strong>, let it sit as a loose thread. What matters is the pressure in the letter and the two-word response: "Agreed. Initiating." Players will not know what was initiated. That is correct. The crates in the building do not contain HVAC components.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -890,7 +920,10 @@ footer {
       <div class="acc-code">9273·5810</div>
       <div class="acc-note">Issue when the party descends to Floor 4. The maintenance corridor layout will help players track their position — and Brandon Cole's — in the dark. Hold off until they've actually stepped down.</div>
     </div>
-  </div> — pipes, conduit, mechanical systems for the floors above and below. Emergency lighting only. Some sections are in complete darkness. The air recycler runs louder here. And somewhere in the walls or ceilings of this floor, something moves.</p>
+  </div>
+
+  <div class="panel quiet mbr">
+    <p style="margin-bottom:0;">Mechanical sub-basement — pipes, conduit, mechanical systems for the floors above and below. Emergency lighting only. Some sections are in complete darkness. The air recycler runs louder here. And somewhere in the walls or ceilings of this floor, something moves.</p>
   </div>
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
@@ -920,7 +953,7 @@ footer {
         <p>Any party member at SPIKE 5+ within 10 meters of Brandon must make a SPIKE Save at the start of their turn. This is emotional contagion — proximity to someone at this level is dangerous. He will also attack if operatives close within CLOSE range. Treat as a hostile encounter at GM discretion — he is not an enemy, but he cannot distinguish friend from threat.</p>
       </div>
       <div class="npc-sub-label">GROUNDING BRANDON</div>
-      <p>Possible but extremely difficult. <strong>d20 + MIND vs TN 14, at Disadvantage. One attempt per operative.</strong> Success produces approximately 60–90 seconds of fractured, barely coherent calm. He does not know anything useful. He has forgotten most of what he saw. He cannot tell them about the tanks, the drones, the crates, or the lower floors — those facts have dissolved. What he can do is stop screaming, long enough for someone to look at him clearly. He looks back. That is all.</p>
+      <p>Possible but extremely difficult. <strong>d20 + MIND vs TN 14, at Disadvantage. One attempt per operative.</strong> Success produces approximately 60–90 seconds of fractured, barely coherent calm. He does not know anything useful. He has forgotten most of what he saw. He cannot tell them about the tanks, the lower floors, or anything that happened here — those facts have dissolved. What he can do is stop screaming, long enough for someone to look at him clearly. He looks back. That is all.</p>
       <p>He will not leave. He cannot be helped here. The party should understand this by the time they find him, even if they don't say it out loud.</p>
     </div>
   </div>
@@ -940,10 +973,10 @@ footer {
   <div class="access-code-callout">
     <div class="acc-icon">⬡</div>
     <div class="acc-body">
-      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
-      <div class="acc-doc">Map — Floor 5: Entry</div>
-      <div class="acc-code">6739·4852</div>
-      <div class="acc-note">Issue the moment the party steps off the elevator onto Floor 5. The entry map shows the arrival point and the corridor leading south toward Security. Hold all sub-area maps until each zone is reached — they land harder one at a time.</div>
+      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODES — ENTRY + SECURITY</div>
+      <div class="acc-doc">Map — Floor 5: Entry + Security</div>
+      <div class="acc-code">6739·4852 + 4061·9583</div>
+      <div class="acc-note">Issue both codes the moment the party steps off the elevator. Entry and Security are a single physical transition — the party passes through Security immediately upon arrival and has no choice about it. Issuing both at once prevents a second interruption for what is functionally one movement. After Security, the floor branches freely.</div>
     </div>
   </div>
 
@@ -953,9 +986,16 @@ footer {
   </div>
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
-    <div class="panel-title" style="color:var(--blue)">MAPS // FLOOR 5</div>
-    <p style="margin-bottom:6px;">Nine sub-maps cover Floor 5: <strong>Entry, Security, Tanks, Surgery, Power, Command, Incinerator, Enclosures, END.</strong> Issue them as the party reaches each zone. END is the dispersal origin point — hold it until last.</p>
-    <p style="margin-bottom:0;"><strong style="color:var(--text-hi)">Spatial sequence:</strong> Entry feeds directly south into Security — this is the first choke point the party passes through by necessity of layout. Beyond Security, the floor branches freely. The party can explore Tanks, Surgery, Power, Command, Incinerator, and Enclosures in any order. Do not railroad the sequence. Only Entry → Security is fixed by the physical space.</p>
+    <div class="panel-title" style="color:var(--blue)">MAPS // FLOOR 5 — OPEN EXPLORATION ZONES</div>
+    <p style="margin-bottom:8px;">After Security, the floor branches freely. Issue each map only when the party physically enters that zone. Do not hand them all at once. <strong>Hold the END map until after the party has been through Enclosures and PS-08.</strong></p>
+    <table class="map-code-table">
+      <tr><td class="mct-name">Tanks</td><td class="mct-code">1927·3046</td></tr>
+      <tr><td class="mct-name">Power</td><td class="mct-code">8350·2714</td></tr>
+      <tr><td class="mct-name">Surgery</td><td class="mct-code">7302·5948</td></tr>
+      <tr><td class="mct-name">Command</td><td class="mct-code">2584·7031</td></tr>
+      <tr><td class="mct-name">Incinerator</td><td class="mct-code">5190·8263</td></tr>
+      <tr><td class="mct-name">Enclosures</td><td class="mct-code">3847·6015</td></tr>
+    </table>
   </div>
 
   <div class="design-note mbr">
@@ -964,38 +1004,18 @@ footer {
     <div style="margin-top:10px;border:1px solid var(--border-hi);overflow:hidden;">
       <img src="documents/RE-01/5map.png" alt="Floor 5 Overview — GM Only" style="width:100%;display:block;filter:brightness(0.9);">
     </div>
-    <p style="margin-top:8px;margin-bottom:0;" class="dim">Zones visible: Entry (north, elevator arrival) → Security (chokepoint) → branches to Tanks (west), Surgery (far west), Power (east), Command (far east), END (far east beyond Command), Enclosures (south centre), Incinerator (south, below Enclosures). All zones are on the same underground level connected by the primary corridor.</p>
-  </div>
-
-  <div class="access-code-callout">
-    <div class="acc-icon">⬡</div>
-    <div class="acc-body">
-      <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
-      <div class="acc-doc">Map — Floor 5: Security</div>
-      <div class="acc-code">4061·9583</div>
-      <div class="acc-note">Issue Security (4061·9583) as the party passes through — this is the mandatory spatial chokepoint between Entry and the rest of the floor. After Security, the party can move freely. Issue remaining zone maps as each area is reached.</div>
-    </div>
-  </div>
-
-  <div class="access-code-callout">
-    <div class="acc-icon">⬡</div>
-    <div class="acc-body">
-      <div class="acc-label">■ ISSUE AS REACHED // FIELD VAULT CODES — OPEN EXPLORATION ZONES</div>
-      <div class="acc-doc">Map — Floor 5: Tanks &nbsp;·&nbsp; Map — Floor 5: Power &nbsp;·&nbsp; Map — Floor 5: Surgery &nbsp;·&nbsp; Map — Floor 5: Command &nbsp;·&nbsp; Map — Floor 5: Incinerator &nbsp;·&nbsp; Map — Floor 5: Enclosures</div>
-      <div class="acc-code" style="font-size:14px;letter-spacing:.18em;line-height:2">1927·3046 &nbsp;·&nbsp; 8350·2714 &nbsp;·&nbsp; 7302·5948 &nbsp;·&nbsp; 2584·7031 &nbsp;·&nbsp; 5190·8263 &nbsp;·&nbsp; 3847·6015</div>
-      <div class="acc-note">These zones are freely explorable after Security. Issue each map only when the party physically enters that area — do not hand them all at once. The order is the party's to choose. Hold the END map until after Enclosures and PS-08.</div>
-    </div>
+    <p style="margin-top:8px;margin-bottom:0;">Zones: Entry (north, elevator arrival) → Security (chokepoint) → branches to Tanks (west), Surgery (far west), Power (east), Command (far east), END (far east beyond Command), Enclosures (south centre), Incinerator (south, below Enclosures). All zones are on the same underground level connected by the primary corridor.</p>
   </div>
 
   <div class="location-card floor5 mbr">
     <div class="location-header">
       <div class="location-name">TANKS — THE PRODUCTION FLOOR</div>
-      <div class="location-tag">PRIMARY FIND // TANKS MAP</div>
+      <div class="location-tag">PRIMARY FIND // TANKS MAP — 1927·3046</div>
     </div>
     <div class="location-body">
       <p>Enormous tank arrays — twelve in total, each the size of a shipping container. All empty. Drain manifolds still connected to industrial dispersal systems that route upward through the building and outward to the roof. The tanks have been cleaned thoroughly. No residue. No labeling on the tanks themselves beyond a stenciled identification series and the initials <strong>E.R. IV</strong>.</p>
       <div class="find-block">
-        <div class="find-label">■ FIND — DISPERSAL LOG // END MAP</div>
+        <div class="find-label">■ FIND — DISPERSAL LOG // IN END AREA</div>
         <p>A single laminated sheet bolted to the wall above the primary valve manifold in the END area. A dispersal record. Twelve tanks. One event. Date: Year 0, Day 1. Duration: 6 hours, 14 minutes. Distribution method: HIGH-ALTITUDE DRONE RELAY. Coverage zone: GLOBAL. Outcome field is blank.</p>
       </div>
       <div class="spike-trigger">
@@ -1005,48 +1025,51 @@ footer {
     </div>
   </div>
 
-  <div class="access-code-callout">
-    <div class="acc-icon">⬡</div>
-    <div class="acc-body">
-      <div class="acc-label">■ ISSUE WHEN REACHED // FIELD VAULT CODE</div>
-      <div class="acc-doc">Map — Floor 5: Command</div>
-      <div class="acc-code">2584·7031</div>
-      <div class="acc-note">Issue when the party enters the Command wing. The map orients them within Reeves' glass-partitioned workspace before they start opening desk drawers and reading journals. This is one of the highest-value finds on the floor — the Italy file lives here.</div>
-    </div>
-  </div>
-
   <div class="location-card floor5 mbr">
     <div class="location-header">
       <div class="location-name">COMMAND — REEVES' LABORATORY</div>
-      <div class="location-tag">PRIMARY FIND // COMMAND MAP</div>
+      <div class="location-tag">PRIMARY FIND // COMMAND MAP — 2584·7031</div>
     </div>
     <div class="location-body">
       <p>A private workspace set apart from the production floor by a glass partition — floor to ceiling, clean, intact. Reeves' desk is ordered. His work is filed. The man was methodical to the end.</p>
       <div class="find-block">
-        <div class="find-label">■ FIND — PRIMARY RESEARCH JOURNALS</div>
-        <p>Twelve volumes. The early volumes describe legitimate research. The later volumes describe the Reset — not by that name. He calls it <strong>THE RECALIBRATION.</strong> The language is technical and proud. The emotional register across all twelve volumes is consistent: measured, certain, and entirely without doubt.</p>
-        <p>Volume 11 contains a single sentence, underlined twice, that doesn't match the register of anything around it:</p>
-        <div class="doc-fragment">"The anchor must originate from a living source. Synthetic generation is possible for short durations but experiences rapid entropy. Sustained global application requires a sustained biological anchor."</div>
-        <p>The players will not understand what this means. They should not. The word <strong>anchor</strong> should land.</p>
+        <div class="find-label">■ FIND — RESEARCH JOURNALS</div>
+        <p>A shelf of research volumes, neatly numbered. The party can examine them but they are dense and technical — written for an audience with years of shared context. What comes through is not a legible arc but a voice: <strong>certain, measured, entirely without doubt or remorse.</strong> Terminology is unexplained. Outcomes are noted without sentiment. The journals convey the shape of the man more clearly than any specific fact they contain.</p>
+        <p>Any operative spending time with the journals may make an Investigation TN 11 check. Success yields a single legible fragment — not an explanation, but a phrase, a measurement, a term that will mean something later. The GM should pick one that fits what has already been found without adding clarity. The journals are not a confession. They are a window into a mind.</p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — THE ITALY FILE</div>
         <p>A single manila folder labeled <strong>CALAFIORI — LIGURIA.</strong> Inside: two photographs of an isolated research station in the hills — bare concrete, narrow windows, surrounded by scrubland. An address outside Genoa. A handwritten note from Reeves:</p>
         <div class="doc-fragment">"Incendiary approach — theoretically sound, practically irreversible. His conclusions re: emotional cauterization are consistent with my own re: baseline dampening. Different vectors. Same destination."</div>
-        <p>The address is in the hills outside Genoa, Italy. That region is a post-war wasteland, largely uninhabited. Supplies to the lab were flown in during its operational period. Whatever is there now — or whoever survived — may still be findable.</p>
+        <p>The address is in the hills outside Genoa, Italy. That region is largely uninhabited post-war. Whatever is there now — or whoever survived — may still be findable.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="location-card floor5 mbr">
+    <div class="location-header">
+      <div class="location-name">INCINERATOR</div>
+      <div class="location-tag">FLOOR 5 SOUTH // INCINERATOR MAP — 5190·8263</div>
+    </div>
+    <div class="location-body">
+      <p>Industrial waste disposal. Sealed. The incinerator itself is a large, institutional-grade unit — the kind used for medical and biological waste. It has been used and cleaned, repeatedly. The inside surfaces are scored. Whatever passed through here left no trace.</p>
+      <p>There are no documents, no labeling, no finds. The room communicates entirely through what is absent. <strong>Something that could not be kept was disposed of here.</strong> The party can speculate. They will not know what.</p>
+      <div class="design-note" style="margin-bottom:0;">
+        <div class="design-note-label">■ GM NOTE</div>
+        <p>Do not answer questions about what was incinerated. Let the room do its work. The scale of the unit is the information — it is far larger than any standard lab waste disposal. The scoring on the interior surfaces suggests repeated, heavy use. That is all the party gets.</p>
       </div>
     </div>
   </div>
 
   <div class="design-note mbr">
     <div class="design-note-label">■ GM NOTE — ENCLOSURES TIMING</div>
-    <p>Save the Enclosures map (3847·6015) until the party physically reaches the PS wing corridor — seeing the numbered doors on the map before they see them in person will heighten the dread. PS-08 should be the last door they check.</p>
+    <p>Save the Enclosures map (3847·6015) until the party physically reaches the PS wing corridor — seeing the numbered doors on the map before they see them in person will heighten the dread. PS-08 should be the last door they check. Issue the END map only after PS-08 has fully landed.</p>
   </div>
 
   <div class="location-card floor5 mbr">
     <div class="location-header">
       <div class="location-name">ENCLOSURES — THE PS WING</div>
-      <div class="location-tag">PRIMARY FIND // ENCLOSURES MAP</div>
+      <div class="location-tag">PRIMARY FIND // ENCLOSURES MAP — 3847·6015</div>
     </div>
     <div class="location-body">
       <p>A long corridor of twenty chambers, numbered <strong>PS-01 through PS-20</strong> on the enclosures map. Each chamber is approximately four meters square, sealed with heavy glass doors. Observation windows. Interior monitoring equipment, still drawing minimal power. Each chamber has a subject nameplate mounted beside the door. The chambers contain simple cots — no desks, no furnishings beyond the bare minimum. PS-01 through PS-07 and PS-09 through PS-20 are empty — cleaned, sealed, unremarkable except for the scale of their containment infrastructure, which is far beyond what any aerosol therapy trial would require.</p>
@@ -1056,18 +1079,22 @@ footer {
         <div class="find-label">■ PS-08</div>
         <p>The nameplate reads: <strong>MITCHELL, C. — PS-08 — PRIMARY CANDIDATE.</strong></p>
         <p>The glass door is broken from the inside — shattered outward into the corridor. The chamber beyond contains a simple cot, standard monitoring equipment, and nothing else.</p>
-        <p>In the far corner of the chamber, near the floor: <strong>there is a mostly decomposed body.</strong> It is unidentifiable. The state of decomposition is consistent with five years' time in a sealed, climate-controlled environment. Multiple bullet holes in the wall above the cot. The glass was broken outward. The body is inside.</p>
+        <p>In the far corner of the chamber, near the floor: <strong>there is a mostly decomposed body.</strong> It is unidentifiable. The state of decomposition is consistent with five years' time in a sealed, climate-controlled environment. Multiple impact marks in the wall above the cot. The glass was broken outward. The body is inside.</p>
         <p><strong>The identity of the body is intentionally unresolvable.</strong> Do not offer clarification. The nameplate says Mitchell. The body cannot be identified. Both facts are true. Let them sit together.</p>
       </div>
       <div class="find-block">
         <div class="find-label">■ FIND — FLOOR ETCHING</div>
-        <p>In the corner of the chamber, opposite the body, scratched directly into the concrete floor with something small and sharp. It appears to have been done hastily.</p>
+        <p>In the corner of the chamber, opposite the body, scratched directly into the concrete floor with something small and sharp. Done carefully, in measured letters, not in panic.</p>
         <div class="doc-fragment">even at the end of the world, humanity cannot resist a flair for the dramatic</div>
-        <p>The only other etchings in the floor are fourty-two tick marks, seemingly signifying days. No signature anywhere.</p>
+        <p>The only other markings in the floor are forty-two tick marks arranged in rows, as though counting days. No signature anywhere.</p>
+        <div class="design-note" style="margin-top:8px;margin-bottom:0;">
+          <div class="design-note-label">■ GM NOTE — GM EYES ONLY</div>
+          <p>This is Mitchell's line — he says it in Hardware. Its presence here confirms he was in this chamber. Whether the body is his is a question the players cannot answer from this room, and should not be able to. <strong>Do not hint either way.</strong> Hold both facts — the name, the unidentifiable body — and let the ambiguity work. It will resolve in Hardware, not here.</p>
+        </div>
       </div>
       <div class="spike-trigger">
         <div class="spike-trigger-label">■ SPIKE TRIGGER — PS-08 ENTRY TN 11</div>
-        <p>Entering the chamber: optional save for any operative. The trigger is the combination: the nameplate, the body, the bullet holes, the broken glass from the inside, the etching in the corner. Each detail is individually manageable. Together, they accumulate into something the mind cannot comfortably file.</p>
+        <p>Entering the chamber: optional save for any operative. The trigger is the combination — the nameplate, the body, the broken glass from the inside, the etching in the corner. Each detail is individually manageable. Together, they accumulate into something the mind cannot comfortably file.</p>
       </div>
     </div>
   </div>
@@ -1078,7 +1105,7 @@ footer {
       <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE — FINAL MAP</div>
       <div class="acc-doc">Map — Floor 5: END</div>
       <div class="acc-code">9016·4837</div>
-      <div class="acc-note">Issue only when the party physically reaches the END area — after Enclosures, after PS-08. The END map shows the drone filling stations where the nanite tanks drained into the high-altitude relay drones, the dispersal manifold, and the backdoor exit Reeves used to leave the facility. It is the last map. It should feel like the last thing.</div>
+      <div class="acc-note">Issue only after PS-08 has fully landed. The END map shows the drone filling stations, the dispersal manifold, and the exit Reeves used to leave the facility. It is the last map. It should feel like the last thing.</div>
     </div>
   </div>
 
@@ -1116,7 +1143,7 @@ footer {
     <div class="panel-title red">THE DEBRIEF — COPENHAGEN</div>
     <p>Director Walker receives the report professionally. He thanks the party. He schedules a documentation review. He does not ask follow-up questions about the lower floors until prompted, and when prompted: <em>"We'll need to flag that for a structural assessment team."</em> He means it. He has no idea what he's flagging.</p>
     <p>The journals, the dispersal log, the Calafiori file — all submitted. Walker reviews none of it in front of the party. It will go to Science Division. Garcia may receive it. That is a later session's thread.</p>
-    <p><strong>Following the debrief, depending on the party's SPIKE levels, Walker may recommend — or quietly require — that operatives with elevated readings complete a round of recalibration sessions with the Division IV wellness team before their next commission.</strong> This is framed as standard post-field protocol, not punishment. The wellness team is pleasant, efficient, and entirely unremarkable. Whether operatives comply or find a way around it is a choice to discuss at the table.</p>
+    <p><strong>Following the debrief, depending on the party's SPIKE levels, Walker may recommend — or quietly require — that operatives with elevated readings complete a round of sessions with the Division IV wellness team before their next commission.</strong> This is framed as standard post-field protocol, not punishment. The wellness team is pleasant, efficient, and entirely unremarkable. Whether operatives comply or find a way around it is a choice to discuss at the table.</p>
   </div>
 
 </section>
@@ -1187,7 +1214,7 @@ footer {
           <td class="td-name">HENSLEY, CAROL</td>
           <td>Fort Wayne resident</td>
           <td class="td-spike-3">3 — SHAKEN</td>
-          <td>Demonstrates the Reset's emotional gap. Lost her son Danny. Optional SPIKE trigger TN 9.</td>
+          <td>Demonstrates the Reset's emotional gap. Lost her son Danny. Returns to memorial daily — elevated readings from sustained unresolved distress. Optional SPIKE trigger TN 9.</td>
         </tr>
         <tr>
           <td class="td-name">GARZA, TOMMY</td>
@@ -1215,22 +1242,12 @@ footer {
         <tr>
           <td class="gloss-term">PS-SERIES</td>
           <td class="gloss-floor">Floors 1–5</td>
-          <td>Don't explain. PS-08 nameplate: MITCHELL, C. — PRIMARY CANDIDATE. The body in the chamber is unidentifiable. Let both facts exist.</td>
+          <td>Don't explain. PS-08 nameplate: MITCHELL, C. — PRIMARY CANDIDATE. The body in the chamber is unidentifiable. Let both facts exist without resolution.</td>
         </tr>
         <tr>
-          <td class="gloss-term">SEMANTIC CONTINUITY</td>
-          <td class="gloss-floor">Floor 2, research summary</td>
-          <td>Undefined. Technical-sounding. No explanation warranted at this stage.</td>
-        </tr>
-        <tr>
-          <td class="gloss-term">RECALIBRATION</td>
-          <td class="gloss-floor">Floor 5, journals</td>
-          <td>Reeves' name for the Reset. Let players make the connection themselves.</td>
-        </tr>
-        <tr>
-          <td class="gloss-term">ANCHOR</td>
-          <td class="gloss-floor">Floor 5, journals</td>
-          <td>The word from Volume 11. "Must originate from a living source." Do not expand. The word should land. Campaign 2 begins to answer it.</td>
+          <td class="gloss-term">INTEGRATION THRESHOLD</td>
+          <td class="gloss-floor">Floor 2, lab notebooks</td>
+          <td>Undefined. Technical-sounding. No explanation warranted at this stage. Players should note it and move on.</td>
         </tr>
         <tr>
           <td class="gloss-term">HARDWARE</td>
@@ -1240,7 +1257,7 @@ footer {
         <tr>
           <td class="gloss-term">ALAN PRATER</td>
           <td class="gloss-floor">Floor 3</td>
-          <td>Name on the AP Logistics correspondence. Signed a pressured letter to Reeves. The name means nothing to players yet. Do not give it weight — let it sit as a loose thread.</td>
+          <td>Name on the AP Logistics correspondence. Signed a pressured letter to Reeves. The name means nothing to players yet. Do not give it weight.</td>
         </tr>
         <tr>
           <td class="gloss-term">CALAFIORI</td>
@@ -1262,7 +1279,7 @@ footer {
       <ul>
         <li><strong>Carol Hensley:</strong> Honest human engagement. TN 9, GM discretion.</li>
         <li><strong>Brandon Cole:</strong> Proximity at SPIKE 5+. TN 11, Disadvantage. Each turn. Also presents as physical threat at close range.</li>
-        <li><strong>Dispersal Log (END map):</strong> Understanding its meaning. TN 13.</li>
+        <li><strong>Dispersal Log (END area):</strong> Understanding its meaning. TN 13.</li>
         <li><strong>PS-08 Chamber:</strong> Entering and processing what's inside. TN 11, optional.</li>
       </ul>
     </div>
@@ -1271,21 +1288,49 @@ footer {
       <p>Players should leave with at least one. Ideally all three. They do not need to understand what they mean yet.</p>
       <ul>
         <li><strong>Calafiori correspondence</strong> (Floor 3) — Letters establishing the connection. Fire notice from Floor 1 cross-referenced.</li>
-        <li><strong>Reeves' Italy file</strong> (Floor 5, Command map) — Photographs, location, Reeves' assessment of Calafiori's methods. Address in the hills outside Genoa.</li>
+        <li><strong>Reeves' Italy file</strong> (Floor 5, Command) — Photographs, location, Reeves' assessment of Calafiori's methods. Address in the hills outside Genoa.</li>
         <li><strong>Garcia's four-researcher list</strong> (Briefing) — Calafiori (Italy) is one of four. Garcia can surface the address between sessions if needed.</li>
       </ul>
     </div>
   </div>
 
+  <div class="panel quiet mbr">
+    <div class="panel-title">FIELD VAULT CODES — MASTER LIST</div>
+    <table class="gloss-table">
+      <thead>
+        <tr><th>DOCUMENT / MAP</th><th>CODE</th><th>WHEN TO ISSUE</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>RE-01 Research Mandate Summary</td><td class="gloss-term">2203·9461</td><td>Briefing — Copenhagen</td></tr>
+        <tr><td>Reeves Personnel Dossier</td><td class="gloss-term">1104·7382</td><td>Briefing — Copenhagen</td></tr>
+        <tr><td>Map — Fort Wayne Settlement</td><td class="gloss-term">5847·2193</td><td>Arriving in Fort Wayne</td></tr>
+        <tr><td>Map — RE-01 Approach</td><td class="gloss-term">7364·0528</td><td>First sight of fence line</td></tr>
+        <tr><td>Map — Floor 1</td><td class="gloss-term">3091·8574</td><td>Stepping inside RE-01</td></tr>
+        <tr><td>Map — Floor 2</td><td class="gloss-term">6182·4037</td><td>Descending to Floor 2</td></tr>
+        <tr><td>Map — Floor 3</td><td class="gloss-term">4815·6239</td><td>Stepping off elevator onto Floor 3</td></tr>
+        <tr><td>Map — Floor 4</td><td class="gloss-term">9273·5810</td><td>Descending to Floor 4</td></tr>
+        <tr><td>Map — Floor 5: Entry + Security</td><td class="gloss-term">6739·4852 + 4061·9583</td><td>Stepping off elevator onto Floor 5</td></tr>
+        <tr><td>Map — Floor 5: Tanks</td><td class="gloss-term">1927·3046</td><td>Entering Tanks zone</td></tr>
+        <tr><td>Map — Floor 5: Power</td><td class="gloss-term">8350·2714</td><td>Entering Power zone</td></tr>
+        <tr><td>Map — Floor 5: Surgery</td><td class="gloss-term">7302·5948</td><td>Entering Surgery zone</td></tr>
+        <tr><td>Map — Floor 5: Command</td><td class="gloss-term">2584·7031</td><td>Entering Command zone</td></tr>
+        <tr><td>Map — Floor 5: Incinerator</td><td class="gloss-term">5190·8263</td><td>Entering Incinerator zone</td></tr>
+        <tr><td>Map — Floor 5: Enclosures</td><td class="gloss-term">3847·6015</td><td>Reaching the PS wing corridor</td></tr>
+        <tr><td>Map — Floor 5: END</td><td class="gloss-term">9016·4837</td><td>After PS-08 has fully landed</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <div class="panel quiet">
     <div class="panel-title">CONTINUITY NOTES FOR GM</div>
     <ul>
-      <li><strong>PS-08 body is unidentifiable.</strong> The nameplate says Mitchell. The body cannot be identified. Do not disambiguate in play — the ambiguity is the point. Players should not be able to confirm or rule out Mitchell's fate from this room alone.</li>
-      <li><strong>The comms jam</strong> is localized to the facility and the surrounding area. The facility has been low priority — no one had reason to actively scan for signal from this site. The jam presents as silence, not interference. The players should be the first to discover it.</li>
-      <li><strong>Brandon Cole will not leave.</strong> This is final. If players attempt extraction by force, he becomes violent and retreats to the deeper maintenance runs. He has been here three years. He cannot be saved in this campaign.</li>
+      <li><strong>PS-08 body is unidentifiable.</strong> The nameplate says Mitchell. The body cannot be confirmed. Do not disambiguate in play. The ambiguity is the point and will not be resolved until Hardware.</li>
+      <li><strong>The comms jam</strong> targets outbound UGD relay frequencies specifically — internal short-range comms still function. The jam presents as silence on UGD channels, not interference. Players should be the first to discover it.</li>
+      <li><strong>Brandon Cole will not leave.</strong> If players attempt extraction by force, he becomes violent and retreats to the deeper maintenance runs. He has been here three years. He cannot be saved in this campaign.</li>
       <li><strong>Floors 3–5</strong> are not on the UGD briefing documents. Walker doesn't know they exist. This is not a conspiracy on Walker's part — the plans he has are the plans he was given.</li>
-      <li><strong>The Calafiori site</strong> is an isolated research station in the hills of Liguria, Italy — not in the city of Genoa. The surrounding area is post-war wasteland. Supplies were flown in during the facility's active period. Whatever remains there is not easily accessible and not expected to be inhabited.</li>
-      <li><strong>Floor 5 spatial layout.</strong> Entry feeds directly into Security — this is a physical chokepoint, not a narrative one. The party will pass through Security simply by moving south from the elevator. After Security, the floor branches: Tanks and Surgery branch west, Power and Command branch east, Enclosures is south-centre, Incinerator is south below Enclosures. The END area is beyond Command to the far east. The GM overview map (5map.png, embedded in the Floor 5 section above) shows all zones and their relationships. Do not show this map to players — issue individual zone maps via Field Vault codes only.</li>
+      <li><strong>The Calafiori site</strong> is an isolated research station in the hills of Liguria, Italy — not in the city of Genoa. The surrounding area is post-war wasteland. Whatever remains there is not easily accessible and not expected to be inhabited.</li>
+      <li><strong>The wand</strong> is a shared party resource for evaluating others. Operatives' own SPIKE levels are always known via implant without a roll. The wand is for reading NPCs, civilians, and potential hostiles.</li>
+      <li><strong>Floor 5 spatial layout.</strong> Entry + Security form a single chokepoint — the party passes through both immediately on arrival. After Security, the floor branches freely. The GM overview map (5map.png) shows all zones. Do not show this to players — issue individual zone maps via Field Vault codes only.</li>
     </ul>
   </div>
 
