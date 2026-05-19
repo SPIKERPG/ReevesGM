@@ -121,14 +121,18 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .cmd-spike-pip{width:10px;height:10px;border:1px solid var(--border-hi);border-radius:50%;cursor:pointer;flex-shrink:0}
 
 /* ─── REACTION PIPS (actions row inline) ─── */
-.rxn-group{display:flex;flex-direction:column;align-items:center;gap:3px;align-self:flex-start}
+.rxn-group{display:flex;flex-direction:column;align-items:center;gap:3px}
 .rxn-group-lbl{font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:.1em;color:var(--text-dim)}
-.rxn-pips-row{display:flex;gap:4px;align-items:center}
-.rxn-pip{width:18px;height:18px;border:1.5px solid var(--amber);background:rgba(184,120,32,.25);cursor:pointer;flex-shrink:0;transition:all .12s}
+.rxn-pips-row{display:flex;gap:5px;align-items:center}
+.rxn-pip{width:18px;height:18px;border-radius:50%;border:2px solid var(--amber);background:rgba(184,120,32,.25);cursor:pointer;flex-shrink:0;transition:all .12s}
 .rxn-pip.spent{background:var(--surface);border-color:var(--border-hi)}
 .rxn-pip:hover{opacity:.75}
-.cmd-long-rest-btn{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.18em;background:transparent;border:1px solid var(--border-hi);color:var(--text-dim);padding:5px 10px;cursor:pointer;transition:all .1s;align-self:center}
-.cmd-long-rest-btn:hover{border-color:var(--green-dim);color:var(--green);background:rgba(122,154,40,.08)}
+.rest-btn{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.14em;background:transparent;border:1px solid var(--border-hi);color:var(--text-dim);padding:5px 10px;cursor:pointer;transition:all .1s;white-space:nowrap}
+.rest-btn.short:hover{border-color:var(--amber-dim);color:var(--amber);background:rgba(184,120,32,.08)}
+.rest-btn.long:hover{border-color:var(--green-dim);color:var(--green);background:rgba(122,154,40,.08)}
+.rest-btn.medkit{border-color:var(--blue-dim)}
+.rest-btn.medkit:hover{border-color:var(--blue);color:#5ab0e0;background:rgba(40,120,160,.1)}
+.rest-btn.medkit.used{opacity:.4;cursor:default;pointer-events:none}
 
 .cmd-actions{background:var(--surface2);border:1px solid var(--border-hi);padding:10px 12px}
 .cmd-actions-lbl{font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--text-dim);margin-bottom:8px}
@@ -291,7 +295,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
           <div class="f-group"><div><label class="f-label">HP</label><input class="f-input mono sm" id="add-hp" type="number" placeholder="12"></div><div><label class="f-label">MAX HP</label><input class="f-input mono sm" id="add-hpmax" type="number" placeholder="12"></div></div>
           <div class="f-group"><div><label class="f-label">COMPOSURE</label><input class="f-input mono sm" id="add-comp" type="number" placeholder="5"></div><div><label class="f-label">MAX COMP</label><input class="f-input mono sm" id="add-compmax" type="number" placeholder="5"></div></div>
           <div class="f-group"><div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="add-armor" type="number" placeholder="0"></div><div><label class="f-label">DEF VALUE</label><input class="f-input mono sm" id="add-defense" type="number" placeholder="6"></div></div>
-          <div class="f-group"><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="add-resolve" type="number" placeholder="1"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="add-mind" type="number" placeholder="1"></div></div>
+          <div class="f-group"><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="add-resolve" type="number" placeholder="1"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="add-mind" type="number" placeholder="1"></div><div><label class="f-label">BODY</label><input class="f-input mono sm" id="add-body" type="number" placeholder="1"></div></div>
           <button class="btn green full" onclick="addCombatant()">+ ADD</button>
         </div>
       </div>
@@ -331,7 +335,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
 
       <div class="cmd-actions">
         <div class="cmd-actions-lbl">&#9632; ACTIONS THIS TURN &mdash; CLICK TO MARK USED</div>
-        <div class="cmd-action-row">
+        <div class="cmd-action-row" style="align-items:center">
           <div class="action-pip" id="action-pip" onclick="toggleAction()"><div class="action-pip-icon">&#9679;</div><span class="action-pip-lbl">ACTION</span></div>
           <div class="action-pip minor" id="minor-pip" onclick="toggleMinor()"><div class="action-pip-icon">&#9679;</div><span class="action-pip-lbl">MINOR</span></div>
           <div class="rxn-group">
@@ -341,9 +345,13 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
             </div>
             <span class="rxn-group-lbl">REACTIONS</span>
           </div>
+          <div style="width:1px;height:28px;background:var(--border-hi);flex-shrink:0"></div>
           <button class="action-btn" id="aim-btn" onclick="doAim()">&#9675; AIM</button>
           <button class="action-btn" onclick="doExtendMove()">&#8679;&#8679; EXTEND MOVE &minus;1 COMP</button>
-          <button class="cmd-long-rest-btn" onclick="cmdLongRest()" title="Long Rest — restore reactions, SPIKE −2, full HP/COMP">&#8635; LONG REST</button>
+          <div style="width:1px;height:28px;background:var(--border-hi);flex-shrink:0"></div>
+          <button class="rest-btn short" onclick="cmdShortRest()" title="Short Rest — SPIKE −1">&#9675; SHORT REST</button>
+          <button class="rest-btn long" onclick="cmdLongRest()" title="Long Rest — SPIKE −2, HP/COMP full, reactions restored">&#8635; LONG REST</button>
+          <button class="rest-btn medkit" id="medkit-btn" onclick="cmdUseMedkit()" title="Medkit — d10+BODY HP, once per encounter">&#9862; MEDKIT</button>
         </div>
       </div>
       <div class="atk-strip">
@@ -548,7 +556,7 @@ function addCombatant(){
   const name=document.getElementById('add-name').value.trim();if(!name){document.getElementById('add-name').focus();return;}
   const hp=parseInt(document.getElementById('add-hp').value)||12,hpMax=parseInt(document.getElementById('add-hpmax').value)||hp;
   const comp=parseInt(document.getElementById('add-comp').value)||5,compMax=parseInt(document.getElementById('add-compmax').value)||comp;
-  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,spike:0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false});
+  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,body:parseInt(document.getElementById('add-body').value)||0,spike:0,reactions:emptyReactions(),medkitUsed:false,status:'alive',actionUsed:false,minorUsed:false,aimed:false});
   ['add-name','add-hp','add-hpmax','add-comp','add-compmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   saveState();renderQueue();
 }
@@ -578,14 +586,39 @@ function cmdToggleReaction(idx){
   saveState();renderQueue();refreshReactions();
 }
 
+function cmdShortRest(){
+  const c=getCurrent();if(!c)return;
+  c.spike=Math.max(0,(c.spike||0)-1);
+  saveState();renderQueue();refreshSpike();
+  addLog({label:`${c.name}: Short Rest \u2014 SPIKE \u22121`,total:null});
+}
+
+function cmdUseMedkit(){
+  const c=getCurrent();if(!c)return;
+  if(c.medkitUsed){return;}
+  const bodyVal=c.body!==undefined?c.body:((c.attrVals&&c.attrVals[0])||0);
+  const roll=Math.ceil(Math.random()*10);
+  const healed=Math.max(1,roll+bodyVal);
+  c.hp=Math.min(c.hpMax,c.hp+healed);
+  c.medkitUsed=true;
+  saveState();renderQueue();refreshVitals();refreshMedkit();
+  addLog({label:`${c.name}: Medkit \u2014 d10(${roll})+BODY(${bodyVal}) = +${healed} HP`,total:healed});
+}
+
+function refreshMedkit(){
+  const c=getCurrent();if(!c)return;
+  const btn=document.getElementById('medkit-btn');
+  if(btn)btn.classList.toggle('used',!!c.medkitUsed);
+}
 function cmdLongRest(){
   const c=getCurrent();if(!c)return;
   c.reactions=[false,false];
+  c.medkitUsed=false;
   c.spike=Math.max(0,(c.spike||0)-2);
   c.hp=c.hpMax;
   c.comp=c.compMax;
-  saveState();renderQueue();refreshVitals();refreshSpike();refreshReactions();
-  addLog({label:`${c.name}: Long Rest \u2014 reactions restored, SPIKE \u22122, HP/COMP full`,total:null});
+  saveState();renderQueue();refreshVitals();refreshSpike();refreshReactions();refreshMedkit();
+  addLog({label:`${c.name}: Long Rest \u2014 reactions + medkit restored, SPIKE \u22122, HP/COMP full`,total:null});
 }
 
 function refreshReactions(){
@@ -648,7 +681,7 @@ function renderCommandCenter(){
   document.getElementById('cmd-name').textContent=c.name;
   document.getElementById('cmd-badge').textContent=c.type.toUpperCase()+(c.npcRole?' // '+c.npcRole.slice(0,14).toUpperCase():'');
   const st=document.getElementById('cmd-status');st.className='cmd-status-el '+c.status;st.textContent=c.status.toUpperCase();
-  refreshVitals();refreshSpike();refreshActionPips();refreshReactions();
+  refreshVitals();refreshSpike();refreshActionPips();refreshReactions();refreshMedkit();
   const targetSel=document.getElementById('atk-target');
   const targets=combatants.filter(x=>x.id!==c.id&&x.status!=='dead');
   targetSel.innerHTML=targets.map(t=>`<option value="${t.id}">${escHtml(t.name)} [HP:${t.hp} ARM:${t.armor||0} DEF:${t.defense||6}]</option>`).join('');
