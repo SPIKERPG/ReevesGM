@@ -61,7 +61,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .qi-step.minus:hover{border-color:var(--red);color:var(--red-bright)}
 .qi-step.plus:hover{border-color:var(--green-dim);color:var(--green)}
 .qi-v{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-hi);min-width:26px;text-align:center}
-.qi-bottom{display:flex;align-items:center;gap:4px}
+.qi-bottom{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.qi-aimed-tag{font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:.14em;color:var(--amber);border:1px solid var(--amber-dim);background:rgba(184,120,32,.1);padding:1px 5px;flex-shrink:0}
 
 /* ─── REACTION PIPS (queue) ─── */
 .qi-rxn-pips{display:flex;gap:3px;align-items:center}
@@ -348,10 +349,17 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
           <div style="width:1px;height:28px;background:var(--border-hi);flex-shrink:0"></div>
           <button class="action-btn" id="aim-btn" onclick="doAim()">&#9675; AIM</button>
           <button class="action-btn" onclick="doExtendMove()">&#8679;&#8679; EXTEND MOVE &minus;1 COMP</button>
-          <div style="width:1px;height:28px;background:var(--border-hi);flex-shrink:0"></div>
-          <button class="rest-btn short" onclick="cmdShortRest()" title="Short Rest — SPIKE −1">&#9675; SHORT REST</button>
-          <button class="rest-btn long" onclick="cmdLongRest()" title="Long Rest — SPIKE −2, HP/COMP full, reactions restored">&#8635; LONG REST</button>
-          <button class="rest-btn medkit" id="medkit-btn" onclick="cmdUseMedkit()" title="Medkit — d10+BODY HP, once per encounter">&#9862; MEDKIT</button>
+          <div style="width:1px;height:28px;background:var(--border-hi);flex-shrink:0" id="rest-divider"></div>
+          <button class="rest-btn short" id="short-rest-btn" onclick="cmdShortRest()" title="Short Rest — SPIKE −1">&#9675; SHORT REST</button>
+          <button class="rest-btn long" id="long-rest-btn" onclick="cmdLongRest()" title="Long Rest — SPIKE −2, HP/COMP full, reactions restored">&#8635; LONG REST</button>
+          <div style="width:1px;height:28px;background:var(--border-hi);flex-shrink:0" id="medkit-divider"></div>
+          <div id="medkit-group" style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <label style="font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:.12em;color:var(--text-dim)">MEDKIT ROLL</label>
+              <input id="medkit-roll-input" type="number" min="1" max="10" placeholder="d10" style="width:52px;background:var(--surface);border:1px solid var(--blue-dim);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:13px;padding:4px 6px;outline:none">
+            </div>
+            <button class="rest-btn medkit" onclick="cmdUseMedkit()" style="align-self:flex-end">&#9862; APPLY</button>
+          </div>
         </div>
       </div>
       <div class="atk-strip">
@@ -556,7 +564,7 @@ function addCombatant(){
   const name=document.getElementById('add-name').value.trim();if(!name){document.getElementById('add-name').focus();return;}
   const hp=parseInt(document.getElementById('add-hp').value)||12,hpMax=parseInt(document.getElementById('add-hpmax').value)||hp;
   const comp=parseInt(document.getElementById('add-comp').value)||5,compMax=parseInt(document.getElementById('add-compmax').value)||comp;
-  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,body:parseInt(document.getElementById('add-body').value)||0,spike:0,reactions:emptyReactions(),medkitUsed:false,status:'alive',actionUsed:false,minorUsed:false,aimed:false});
+  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,body:parseInt(document.getElementById('add-body').value)||0,spike:0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false});
   ['add-name','add-hp','add-hpmax','add-comp','add-compmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   saveState();renderQueue();
 }
@@ -595,13 +603,14 @@ function cmdShortRest(){
 
 function cmdUseMedkit(){
   const c=getCurrent();if(!c)return;
-  if(c.medkitUsed){return;}
+  const input=document.getElementById('medkit-roll-input');
+  const roll=parseInt(input?.value);
+  if(!roll||roll<1||roll>10){if(input)input.focus();return;}
   const bodyVal=c.body!==undefined?c.body:((c.attrVals&&c.attrVals[0])||0);
-  const roll=Math.ceil(Math.random()*10);
   const healed=Math.max(1,roll+bodyVal);
   c.hp=Math.min(c.hpMax,c.hp+healed);
-  c.medkitUsed=true;
-  saveState();renderQueue();refreshVitals();refreshMedkit();
+  if(input)input.value='';
+  saveState();renderQueue();refreshVitals();
   addLog({label:`${c.name}: Medkit \u2014 d10(${roll})+BODY(${bodyVal}) = +${healed} HP`,total:healed});
 }
 
@@ -613,13 +622,14 @@ function refreshMedkit(){
 function cmdLongRest(){
   const c=getCurrent();if(!c)return;
   c.reactions=[false,false];
-  c.medkitUsed=false;
   c.spike=Math.max(0,(c.spike||0)-2);
   c.hp=c.hpMax;
   c.comp=c.compMax;
-  saveState();renderQueue();refreshVitals();refreshSpike();refreshReactions();refreshMedkit();
-  addLog({label:`${c.name}: Long Rest \u2014 reactions + medkit restored, SPIKE \u22122, HP/COMP full`,total:null});
+  saveState();renderQueue();refreshVitals();refreshSpike();refreshReactions();
+  addLog({label:`${c.name}: Long Rest \u2014 reactions restored, SPIKE \u22122, HP/COMP full`,total:null});
 }
+
+function refreshMedkit(){/* no-op — medkit is now inventory-based, no state to refresh */}
 
 function refreshReactions(){
   const c=getCurrent();if(!c)return;
@@ -643,7 +653,9 @@ function renderQueue(){
   scroll.innerHTML=combatants.map((c,i)=>{
     migrateReactions(c);
     const isCur=encounterActive&&i===currentTurnIdx,sc=spikeColor(c.spike||0);
-    const rxnPips=[0,1].map(ri=>`<div class="qi-rxn${c.reactions[ri]?' used':''}" onclick="toggleReaction('${c.id}',${ri});event.stopPropagation()"></div>`).join('');
+    const isOp=c.type==='operative'||c.type==='tracker';
+    const rxnPips=isOp?[0,1].map(ri=>`<div class="qi-rxn${c.reactions[ri]?' used':''}" onclick="toggleReaction('${c.id}',${ri});event.stopPropagation()"></div>`).join(''):'';
+    const aimedTag=c.aimed?'<span class="qi-aimed-tag">&#9675; AIMED</span>':'';
     let tc=c.type;if(c.trackerRef)tc='tracker';
     return `<div class="qi ${tc}${isCur?' current':''}${c.status==='dead'?' dead':''}" id="qi-${c.id}" draggable="true">
       <div class="qi-top">${isCur?'<span class="qi-arrow">\u25b6</span>':''}<div class="qi-dot ${c.status}" onclick="cycleStatus('${c.id}');event.stopPropagation()"></div><div class="qi-name">${escHtml(c.name)}</div><div class="qi-badge">${c.type.toUpperCase()}</div></div>
@@ -652,7 +664,7 @@ function renderQueue(){
         <div class="qi-vg"><span class="qi-vl">CMP</span><button class="qi-step minus" onclick="adjComp('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v">${c.comp}/${c.compMax}</span><button class="qi-step plus" onclick="adjComp('${c.id}',+1);event.stopPropagation()">+</button></div>
         <div class="qi-vg"><span class="qi-vl" style="color:${sc}">SP</span><button class="qi-step minus" onclick="adjSpike('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v" style="color:${sc}">${c.spike||0}</span><button class="qi-step plus" onclick="adjSpike('${c.id}',+1);event.stopPropagation()">+</button></div>
       </div>
-      <div class="qi-bottom"><div class="qi-rxn-pips">${rxnPips}</div><button class="qi-rm" onclick="removeCombatant('${c.id}');event.stopPropagation()" title="Remove">\u00d7</button></div>
+      <div class="qi-bottom">${rxnPips?`<div class="qi-rxn-pips">${rxnPips}</div>`:''}${aimedTag}<button class="qi-rm" onclick="removeCombatant('${c.id}');event.stopPropagation()" title="Remove">\u00d7</button></div>
     </div>`;
   }).join('');
   combatants.forEach((c,i)=>{const el=document.getElementById('qi-'+c.id);if(el)el.addEventListener('click',()=>{if(encounterActive){currentTurnIdx=i;saveState();renderQueue();renderCommandCenter();}});});
@@ -681,13 +693,24 @@ function renderCommandCenter(){
   document.getElementById('cmd-name').textContent=c.name;
   document.getElementById('cmd-badge').textContent=c.type.toUpperCase()+(c.npcRole?' // '+c.npcRole.slice(0,14).toUpperCase():'');
   const st=document.getElementById('cmd-status');st.className='cmd-status-el '+c.status;st.textContent=c.status.toUpperCase();
-  refreshVitals();refreshSpike();refreshActionPips();refreshReactions();refreshMedkit();
+  refreshVitals();refreshSpike();refreshActionPips();
+  const isOp=c.type==='operative'||c.type==='tracker';
+  // Reactions — operatives only
+  const rxnGroup=document.getElementById('rxn-group-wrap');
+  if(rxnGroup)rxnGroup.style.display=isOp?'':'none';
+  const rxnDiv=document.querySelector('.cmd-action-row .rxn-group');
+  if(rxnDiv)rxnDiv.style.display=isOp?'':'none';
+  if(isOp){refreshReactions();}
+  // Rest + medkit — operatives only
+  ['rest-divider','short-rest-btn','long-rest-btn','medkit-divider','medkit-group'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display=isOp?'':'none';
+  });
+  if(isOp)refreshMedkit();
   const targetSel=document.getElementById('atk-target');
   const targets=combatants.filter(x=>x.id!==c.id&&x.status!=='dead');
   targetSel.innerHTML=targets.map(t=>`<option value="${t.id}">${escHtml(t.name)} [HP:${t.hp} ARM:${t.armor||0} DEF:${t.defense||6}]</option>`).join('');
   if(targets.length){_atkTargetId=targets[0].id;document.getElementById('atk-def').value=targets[0].defense||6;}else{_atkTargetId=null;}
   targetSel.onchange=()=>atkTargetChange();
-  const isOp=c.type==='operative';
   document.getElementById('atk-roll-label').textContent=isOp?'PLAYER\'S ROLL (d10 total)':'ATTACK ROLL (d10)';
   document.getElementById('atk-auto-btn').style.display=isOp?'none':'';
   const savedAtks=c.hostileAtks||c.npcAtks||[];
@@ -736,7 +759,7 @@ function cmdAdjSpike(d){const c=getCurrent();if(c)adjSpike(c.id,d);}
 function cmdCycleStatus(){const c=getCurrent();if(c)cycleStatus(c.id);}
 function toggleAction(){const c=getCurrent();if(!c)return;c.actionUsed=!c.actionUsed;saveState();refreshActionPips();}
 function toggleMinor(){const c=getCurrent();if(!c)return;c.minorUsed=!c.minorUsed;saveState();refreshActionPips();}
-function doAim(){const c=getCurrent();if(!c)return;c.aimed=!c.aimed;if(!c.minorUsed)c.minorUsed=true;saveState();refreshActionPips();addLog({label:c.name+': '+(c.aimed?'Aimed':'Un-aimed'),total:null});}
+function doAim(){const c=getCurrent();if(!c)return;c.aimed=!c.aimed;if(c.aimed&&!c.minorUsed)c.minorUsed=true;saveState();renderQueue();refreshActionPips();addLog({label:c.name+': '+(c.aimed?'Aimed':'Un-aimed'),total:null});}
 function doExtendMove(){const c=getCurrent();if(!c)return;c.minorUsed=true;adjComp(c.id,-1);addLog({label:c.name+': Extended Move (\u22121 COMP)',total:null});}
 
 function atkTargetChange(){const sel=document.getElementById('atk-target');_atkTargetId=sel.value;const t=combatants.find(c=>c.id===sel.value);if(t)document.getElementById('atk-def').value=t.defense||6;}
