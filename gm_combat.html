@@ -548,13 +548,13 @@ function loadPartyTracker(){
 }
 function importOperative(pi,si,cd,slot){
   if(combatants.some(c=>c.trackerRef===`${pi}-${si}`)){alert('Already imported.');return;}
-  const av=cd.attrVals||[1,1,1,1,1];const resolve=av[4]||0,mind=av[1]||0;
+  const av=cd.attrVals||[1,1,1,1,1];const resolve=av[4]||0,mind=av[1]||0,body=av[0]||0;
   const hpCur=slot.sessionHp!==undefined?slot.sessionHp:(cd.hpCurrent??10);
   const hpMax=cd.hpMax??(10+(av[0]||0));
   const compCur=slot.sessionComp!==undefined?slot.sessionComp:(cd.compCurrent??5);
   const compMax=cd.compMax??(5+resolve);
   const spike=slot.sessionSpike!==undefined?slot.sessionSpike:(parseInt(cd.currentSpike)||0);
-  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor:0,defense:6,resolve,mind,spike,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
+  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor:0,defense:6,resolve,mind,body,spike,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
   saveState();renderQueue();loadPartyTracker();
 }
 
@@ -606,7 +606,7 @@ function cmdUseMedkit(){
   const input=document.getElementById('medkit-roll-input');
   const roll=parseInt(input?.value);
   if(!roll||roll<1||roll>10){if(input)input.focus();return;}
-  const bodyVal=c.body!==undefined?c.body:((c.attrVals&&c.attrVals[0])||0);
+  const bodyVal=c.body||0;
   const healed=Math.max(1,roll+bodyVal);
   c.hp=Math.min(c.hpMax,c.hp+healed);
   if(input)input.value='';
@@ -731,12 +731,12 @@ function renderCommandCenter(){
 function refreshVitals(){
   const c=getCurrent();if(!c)return;
   const hpPct=c.hpMax?Math.min(100,(c.hp/c.hpMax)*100):0,compPct=c.compMax?Math.min(100,(c.comp/c.compMax)*100):0;
-  const hpCol=hpPct>50?'var(--green-dim)':hpPct>25?'var(--amber)':'var(--red-bright)';
-  const compCol=compPct>50?'var(--amber-dim)':compPct>25?'var(--amber)':'var(--red-bright)';
+  const hpCol=hpPct>50?'var(--green-dim)':hpPct>25?'var(--amber)':'#c03030';
+  const compCol=compPct>50?'var(--amber-dim)':compPct>25?'var(--amber)':'#c03030';
   document.getElementById('cmd-hp-val').textContent=c.hp;document.getElementById('cmd-hp-val').style.color=hpCol;
   document.getElementById('cmd-hp-max').textContent='/'+c.hpMax;
   document.getElementById('cmd-hp-bar').style.width=hpPct+'%';document.getElementById('cmd-hp-bar').style.background=hpCol;
-  document.getElementById('cmd-comp-val').textContent=c.comp;document.getElementById('cmd-comp-val').style.color=c.comp===0?'var(--red-bright)':compCol;
+  document.getElementById('cmd-comp-val').textContent=c.comp;document.getElementById('cmd-comp-val').style.color=c.comp===0?'#c03030':compCol;
   document.getElementById('cmd-comp-max').textContent='/'+c.compMax;
   document.getElementById('cmd-comp-bar').style.width=compPct+'%';document.getElementById('cmd-comp-bar').style.background=compCol;
 }
