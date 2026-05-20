@@ -531,7 +531,7 @@ function saveState(){try{localStorage.setItem(STORAGE_COMBAT,JSON.stringify({com
 function loadState(){
   try{const h=localStorage.getItem(STORAGE_HOSTILE);if(h)hostileRoster=JSON.parse(h)||[];}catch(e){}
   try{const n=localStorage.getItem(STORAGE_NPC);if(n)npcRoster=JSON.parse(n)||[];}catch(e){}
-  try{const c=localStorage.getItem(STORAGE_COMBAT);if(c){const d=JSON.parse(c);combatants=(d.combatants||[]).map(cx=>{const m={resolve:1,mind:1,defense:6,...cx,actionUsed:false,minorUsed:false,aimed:false};migrateReactions(m);return m;});currentTurnIdx=d.currentTurnIdx??-1;encounterActive=d.encounterActive??false;}}catch(e){}
+  try{const c=localStorage.getItem(STORAGE_COMBAT);if(c){const d=JSON.parse(c);combatants=(d.combatants||[]).map(cx=>{const m={resolve:1,mind:1,body:0,defense:6,...cx,actionUsed:false,minorUsed:false,aimed:false};migrateReactions(m);return m;});currentTurnIdx=d.currentTurnIdx??-1;encounterActive=d.encounterActive??false;}}catch(e){}
 }
 
 function switchPage(n){['encounter','hostiles','npcs'].forEach(p=>{document.getElementById('page-'+p).classList.toggle('active',p===n);document.getElementById('ntab-'+p).classList.toggle('active',p===n);});}
@@ -548,6 +548,7 @@ function loadPartyTracker(){
 }
 function importOperative(pi,si,cd,slot){
   if(combatants.some(c=>c.trackerRef===`${pi}-${si}`)){alert('Already imported.');return;}
+  console.log('[SPIKE import] cd keys:', Object.keys(cd), '| attrVals:', cd.attrVals, '| hpMax:', cd.hpMax, '| slot keys:', Object.keys(slot));
   const av=cd.attrVals||[1,1,1,1,1];const resolve=av[4]||0,mind=av[1]||0,body=av[0]||0;
   const hpCur=slot.sessionHp!==undefined?slot.sessionHp:(cd.hpCurrent??10);
   const hpMax=cd.hpMax??(10+(av[0]||0));
