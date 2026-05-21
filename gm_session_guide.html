@@ -475,6 +475,8 @@ footer {
   <div class="panel red mbr">
     <div class="panel-title red">■ WHAT THE PARTY IS TOLD</div>
     <p><em>"Research Establishment 01 was a Division IV-funded behavioral sciences facility in the former state of Indiana, United States. It was documented as pursuing aerosol therapy trials for SPIKE management and neurological treatment research. We have floor records for the upper two levels. The facility went dark at Year 0 and has not been reoccupied. Exterior scans indicate residual automated systems are still drawing on emergency power. Your objective is recovery and assessment: surviving documentation, structural status, outstanding risk factors. Return with whatever the facility contains."</em></p>
+    <p><em>"This commission is off the books for a reason. The Storm has already created enough institutional anxiety — we don't need speculation about what Reeves' facility contains circulating through the settlement network before we understand it ourselves. You are operatives conducting a structural recovery assessment. That is what you tell anyone who asks. Details of what you find, what you encounter, and what you bring back are classified at Division IV level until we have completed our own review. Any deviation from that is a clearance violation. Understood?"</em></p>
+    <p>Walker does not wait for confirmation. He moves on.</p>
   </div>
 
   <div class="access-code-callout">
@@ -623,9 +625,10 @@ footer {
     </div>
     <div class="npc-body">
       <p>50s. Large. The kind of person who has stayed in one place while the world changed around him.</p>
-      <div class="npc-says">"Diamond Hill. Yeah. People went in, first couple years. Shelter-seekers, mostly — the facility was intact, had power, walls that held. Some came back elevated, bad elevated. We stopped tracking them after a while."</div>
-      <p><strong>On recent activity:</strong> <em>"There was a group, three years ago. Five of them. One of them never came back. Brandon. Good man, before. Nobody who's gone in there has made it out since — not that I know of. I've stood at the fence a few times. Tried calling for him. Nothing comes back."</em> He lets the silence hold, then moves on.</p>
-      <p>He offers the party an extra round before they leave. He doesn't explain why.</p>
+      <div class="npc-says">"Diamond Hill, yeah. Diamond Lake's out that way too — used to be a spot people went, first couple years. Nice enough place to sit. Nothing to do, but Reset people don't need much excuse for that."</div>
+      <p><strong>On the disappearances:</strong> <em>"Started noticing a few years back. People go out toward the lake, some of them just don't come back. No bodies. No trace. We figured maybe they kept walking — plenty of people did that in Year 1, just kept moving until they stopped. But some of them were settled. Had reasons to stay. Brandon was one of them."</em></p>
+      <p><strong>On Brandon specifically:</strong> <em>"Three years ago. Went out with four others to the lake. Others came back saying they got separated. Said there was something out in the trees — structure of some kind, maybe. Brandon went toward it. That was the last."</em> A pause. <em>"Makes sense there'd be something out there. That whole area was UGD territory before the Reset. Could be anything."</em></p>
+      <p>He doesn't press for details about what the party is doing there. He has the particular Reset quality of leaving space where curiosity should be. But he offers them an extra round before they leave, and doesn't explain why.</p>
     </div>
   </div>
 </section>
@@ -811,7 +814,7 @@ footer {
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
     <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 2</div>
-    <p style="margin-bottom:0;">Refer to the <strong>Floor 2</strong> player-facing map. The freight elevator and server room are marked. Animal wing is accessible off the main corridor.</p>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 2</strong> player-facing map. The server room and animal wing are accessible off the main corridor. The stairwell access point and the sealed lower door are both marked — there is no freight elevator on this map or any other.</p>
   </div>
 
   <div class="location-card floor2 mbr">
@@ -848,11 +851,20 @@ footer {
 
   <div class="location-card floor2">
     <div class="location-header">
-      <div class="location-name">SERVER ROOM & FREIGHT ELEVATOR</div>
+      <div class="location-name">SERVER ROOM & THE LOWER ACCESS</div>
     </div>
     <div class="location-body">
       <p>The server room is locked — TECH TN 13 to access, or accessible via a keycard found on Floor 3. Data terminals within show a directory with folder structures labeled by date and PS designation. The files themselves require deeper access.</p>
-      <p>The freight elevator marked MAINTENANCE ACCESS on the briefing maps operates. Its panel shows five buttons: 1, 2, and three unmarked positions below. The elevator descends.</p>
+      <p>At the far end of the Floor 2 corridor, there is a heavy steel stairwell door marked <strong>SUBSTRUCTURE — RESTRICTED.</strong> It does not appear on the briefing floor plans. The door is sealed — not locked electronically, but physically barred from below using a steel crossbar mechanism. The bar cannot be lifted from this side.</p>
+      <div class="roll-block">
+        <div class="roll-tag">INVESTIGATION TN 9</div>
+        <p>The door frame shows impact damage consistent with repeated blows from below, and acoustic dampening foam has been applied to both sides of the frame — recent enough to still be tacky in patches. Someone sealed this door from below and then tried, many times, to get back through it.</p>
+      </div>
+      <div class="find-block">
+        <div class="find-label">■ BREACHING THE DOOR</div>
+        <p>The door can be opened one of two ways. <strong>Option 1 — Breaching charge:</strong> A standard field explosive applied to the hinge side will blow the door inward. Loud. The sound travels through the floor. Anything below that responds to noise will be aware of their presence. <strong>Option 2 — The elevator shaft:</strong> There is a service elevator shaft in the northwest corner of Floor 2, labeled MAINTENANCE ONLY. The elevator itself is locked at Floor 1. The shaft doors can be pried open (BODY TN 9). Descending the shaft requires climbing equipment or improvisation — the party can lower themselves one floor at a time, bypassing the barred door entirely. Quiet, slower, and more dangerous if the shaft is not inspected first.</p>
+        <p>Either method gets them to Floor 3. The breach charge approach means they cannot count on surprise below. Emphasize this choice; it has downstream consequences.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -873,7 +885,7 @@ footer {
       <div class="acc-label">■ ISSUE TO PLAYERS NOW // FIELD VAULT CODE</div>
       <div class="acc-doc">Map — RE-01 Floor 3</div>
       <div class="acc-code">4815·6239</div>
-      <div class="acc-note">Issue when the party steps off the freight elevator onto Floor 3. This floor does not appear in the briefing documents. The map will make that visible immediately.</div>
+      <div class="acc-note">Issue when the party reaches Floor 3 — whether via the elevator shaft or through the barred stairwell door. This floor does not appear in the briefing documents. The map will make that visible immediately.</div>
     </div>
   </div>
 
@@ -883,7 +895,25 @@ footer {
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
     <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 3</div>
-    <p style="margin-bottom:0;">Refer to the <strong>Floor 3</strong> player-facing map. The research archive, storage bays, and restricted corridor are marked.</p>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 3</strong> player-facing map. The research archive, storage bays, and restricted corridor are marked. Turret positions are visible on the map — they are in plain sight, not concealed.</p>
+  </div>
+
+  <div class="location-card floor3 mbr">
+    <div class="location-header">
+      <div class="location-name">SECURITY — FLOOR 3 TURRETS</div>
+      <div class="location-tag">ENCOUNTER // NON-LETHAL</div>
+    </div>
+    <div class="location-body">
+      <p>Two wall-mounted turrets guard the primary corridor junction on Floor 3 — visible, not hidden. They fire rubber/concussive rounds: non-lethal, but a direct hit knocks an operative prone and suppresses them for one turn (–2 to all rolls until end of next turn). They track motion above waist-height across the corridor's center line.</p>
+      <div class="roll-block">
+        <div class="roll-tag">TECH TN 11</div>
+        <p>The turrets are wired to a local power junction on the north wall — bypassing it cuts both simultaneously. Alternatively, staying below waist height (crawling) avoids their tracking arc entirely — slow and undignified, but reliable. A third turret covers the archive room entrance; it can be triggered separately if players enter that space without disabling the main junction first.</p>
+      </div>
+      <div class="design-note" style="margin-bottom:0;">
+        <div class="design-note-label">■ GM NOTE</div>
+        <p>The Floor 3 turrets should feel like obstacles, not fights. They are a signal that this floor was designed to deter, not destroy. Non-lethal rubber rounds are a puzzle first. If the party breached with a charge rather than the elevator shaft, they may already have drawn attention — build tension accordingly.</p>
+      </div>
+    </div>
   </div>
 
   <div class="location-card floor3 mbr">
@@ -899,12 +929,13 @@ footer {
       <div class="find-block">
         <div class="find-label">■ FIND — AP LOGISTICS CORRESPONDENCE</div>
         <p>Found in a separate locked cabinet (TECH TN 11 or keycard from this floor's office). Multiple letters and manifests referencing <strong>AP Logistics</strong> — a private supply company that arranged shipments to RE-01 for over a year. The tone is businesslike but the content is strange: the manifests describe HVAC components, but the weights and dimensions match no HVAC equipment in the building.</p>
-        <p>Deeper in the cabinet: <strong>a letter signed "A. Prater, AP Logistics."</strong> The tone is pressured. The final letter reads:</p>
-        <div class="doc-fragment">"The timeline cannot slip further. The WHO sessions are not going to produce anything we can use. If you want this to happen, it happens on our schedule."</div>
-        <p>Reeves' draft response is handwritten in the margin: <em>"Agreed. Initiating."</em></p>
+        <p>Deeper in the cabinet: <strong>a letter signed "A. Prater, AP Logistics."</strong> The tone is frustrated, bordering on desperate. The final letter reads:</p>
+        <div class="doc-fragment">"I've held this arrangement together for fourteen months on the understanding that you had a timeline. My people are asking questions. The materials are staged. The window we discussed is closing. I need a date from you — not a range, not a condition, a date. You have the research. Give me something I can work with."</div>
+        <p>Reeves' draft response is handwritten beneath it, in the same orderly hand as everything else in his desk:</p>
+        <div class="doc-fragment">"The timeline is when the research is complete. Not before. Your operational constraints are not my research constraints. When I have a date, you will have a date. Until then: deliver what was agreed and wait."</div>
         <div class="design-note" style="margin-top:8px;margin-bottom:0;">
           <div class="design-note-label">■ GM NOTE — HIGH VALUE FIND</div>
-          <p>This is one of the most significant discoveries on Floor 3. Do not rush past it. Prater's name means nothing to players yet — <strong>do not give it weight in delivery</strong>, let it sit as a loose thread. What matters is the pressure in the letter and the two-word response: "Agreed. Initiating." Players will not know what was initiated. That is correct. The crates in the building do not contain HVAC components.</p>
+          <p>This is one of the most significant discoveries on Floor 3. Do not rush past it. What reads clearly here: Prater needed Reeves, not the other way around. Reeves controlled the timeline and was prepared to say so bluntly. Prater was a supplier waiting on a scientist. That dynamic matters later. Prater's name means nothing to players yet — <strong>do not give it weight in delivery</strong>. Let it sit as a name on a logistics letter. The crates in the building do not contain HVAC components.</p>
         </div>
       </div>
     </div>
@@ -928,7 +959,29 @@ footer {
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
     <div class="panel-title" style="color:var(--blue)">MAP // FLOOR 4</div>
-    <p style="margin-bottom:0;">Refer to the <strong>Floor 4</strong> player-facing map. The maintenance corridors are shown. Brandon Cole can be encountered in any of the dark maintenance runs — he moves between them and has done so for years.</p>
+    <p style="margin-bottom:0;">Refer to the <strong>Floor 4</strong> player-facing map. The maintenance corridors are shown. Turret positions are marked — visible but operating in low light. Brandon Cole can be encountered in any of the dark maintenance runs — he moves between them and has done so for years.</p>
+  </div>
+
+  <div class="location-card floor4 mbr">
+    <div class="location-header">
+      <div class="location-name">SECURITY — FLOOR 4 TURRETS</div>
+      <div class="location-tag">ENCOUNTER // LETHAL</div>
+    </div>
+    <div class="location-body">
+      <p>Unlike Floor 3, the turrets on Floor 4 fire live rounds — standard caliber, lethal. There are four of them distributed across the maintenance corridor junctions, visible on the map but difficult to spot in the low-light environment until they're tracking you. They respond to motion at any height and in any direction.</p>
+      <div class="roll-block">
+        <div class="roll-tag">AWARENESS TN 11</div>
+        <p>Spotting a turret before entering its arc. Failure means it has already acquired a target before the operative sees it. Each turret fires as an independent hostile on initiative — attack roll +3, Standard weapon, Defense Value 8 (they are small and wall-mounted). Destroying one requires 8 HP of damage or a TECH TN 13 hack attempt (requires physical contact with the housing).</p>
+      </div>
+      <div class="roll-block">
+        <div class="roll-tag">TECH TN 13 // STEALTH TN 11</div>
+        <p>A Stealth check allows an operative to move through a turret's arc without triggering it — the turrets rely on motion sensitivity, and very slow, controlled movement in dark sections can fool them. A TECH hack at a turret's housing shuts it down. Neither approach works well if Brandon is nearby and screaming.</p>
+      </div>
+      <div class="design-note" style="margin-bottom:0;">
+        <div class="design-note-label">■ GM NOTE — THREAT LAYERING</div>
+        <p>The combination of live turrets and Brandon Cole is the primary danger of Floor 4. Brandon's noise and unpredictable movement can trigger turrets that the party has so far avoided. This is intentional. The two threats are not coordinated — they simply coexist in a space that was designed to deter and now contains a person in complete psychological collapse. Do not over-engineer this. Let the tension compound naturally.</p>
+      </div>
+    </div>
   </div>
 
   <div class="npc-card consumed mbr">
@@ -982,7 +1035,35 @@ footer {
 
   <div class="panel full-red mbr">
     <p>Floor 5 should feel like stepping into the inside of something's mind. The scale is wrong for a sub-basement. The ceiling is higher than it should be. The space opens in ways that contradict the building's footprint above. The emergency lighting here is red — a design decision, not a fault.</p>
-    <p style="margin-bottom:0;">Play it slowly. Let the party move through the space before putting language to anything. The discoveries should arrive in silence first. Refer to the Floor 5 sub-maps — each zone corresponds to a discrete area. The END map is the last stop. That is where it ended.</p>
+    <p style="margin-bottom:0;">Play it slowly. Let the party move through the space before putting language to anything. The discoveries should arrive in silence first. Refer to the Floor 5 sub-maps — each zone corresponds to a discrete area. The END map is the last stop.</p>
+  </div>
+
+  <div class="location-card floor5 mbr">
+    <div class="location-header">
+      <div class="location-name">SECURITY — FLOOR 5 TURRETS & DRONES</div>
+      <div class="location-tag">ENCOUNTER // LETHAL // HIDDEN</div>
+    </div>
+    <div class="location-body">
+      <p>Floor 5 turrets are hidden — recessed into wall panels, ceiling fixtures, and equipment housings. They do not look like turrets until they open. They fire live rounds and cannot be spotted on any player-facing map. The security room, located near the Entry zone, is the only way to disable them systematically.</p>
+      <div class="roll-block">
+        <div class="roll-tag">AWARENESS TN 13</div>
+        <p>Noticing a turret housing before it activates. Even on success, the operative cannot be certain what they're looking at — the housing is designed to be ambiguous. The turrets activate on proximity: any operative moving through a zone without prior clearance will trigger the nearest unit within 15 meters.</p>
+      </div>
+      <div class="find-block">
+        <div class="find-label">■ SECURITY ROOM — TURRET OVERRIDE</div>
+        <p>The security room near Entry contains a monitoring terminal still drawing emergency power. It is not visually obvious as a security control — it looks like any other data terminal. An operative who examines it and <strong>actively investigates its function</strong> (not just glances at it) may attempt a TECH TN 13 hack. Success disables all turrets on Floor 5 simultaneously. Failure triggers a lockdown alert — turrets in adjacent zones activate and scan to the nearest heat source. A second attempt may be made at TN 15 before the system fully locks out.</p>
+        <p>The security room override is available but not advertised. Players who don't look for it won't find it. Reward methodical exploration.</p>
+      </div>
+      <div class="find-block">
+        <div class="find-label">■ DRONES — PROXIMITY ACTIVATION</div>
+        <p>Dormant security drones are stored in charging bays distributed across Floor 5 — visible as inert, folded shapes mounted to walls or resting in floor alcoves if examined closely, but easy to dismiss as equipment in the red light. They activate on proximity (within 5 meters) or when a turret is destroyed. Each drone is roughly the size of a large dog, moves on four articulated legs, and attacks exclusively through melee — ramming charges and impact strikes. They do not fire weapons. They are fast, relentless, and take 12 HP to disable.</p>
+        <p>Treat as hostile enemies: attack roll +4, Close Combat, Defense Value 7. A disabled drone stays down. They do not reset or recharge mid-encounter.</p>
+      </div>
+      <div class="design-note" style="margin-bottom:0;">
+        <div class="design-note-label">■ GM NOTE — THREAT PACING ON FLOOR 5</div>
+        <p>Not every room needs a drone encounter. Spread them deliberately — one or two activations as the party first enters deep zones, the main drone squad fight in END (see below). The hidden turrets should create paranoia and careful movement even in rooms where nothing activates. The feeling that something could open at any moment is worth more than constant contact.</p>
+      </div>
+    </div>
   </div>
 
   <div class="panel quiet mbr" style="border-left-color:var(--blue)">
@@ -1000,11 +1081,11 @@ footer {
 
   <div class="design-note mbr">
     <div class="design-note-label">■ GM REFERENCE // FLOOR 5 OVERVIEW — GM EYES ONLY</div>
-    <p>The image below is the full Floor 5 layout for GM reference. <strong>Do not share this map with players</strong> — it is the complete overview used to orient yourself while the party explores. Issue individual zone maps via Field Vault codes as players reach each area.</p>
+    <p>The image below is the full Floor 5 layout for GM reference — treat it as a <strong>sample, not gospel.</strong> The zone names (Tanks, Command, END, etc.) are descriptive labels, not official designations. The spatial relationships shown are a reasonable starting point, but you are free to rearrange rooms, add connective corridors, shift zones relative to each other, or compress/expand areas to suit your table's pacing. The essential elements are: the Security chokepoint near the elevator arrival, the Tanks and their dispersal manifolds, the Command room with Reeves' desk and the broken observation screen, the Enclosures wing and PS-08, and the END room with its drone bays and the tunnel exit. How you arrange them between each other is yours to determine.</p>
     <div style="margin-top:10px;border:1px solid var(--border-hi);overflow:hidden;">
-      <img src="documents/RE-01/5map.png" alt="Floor 5 Overview — GM Only" style="width:100%;display:block;filter:brightness(0.9);">
+      <img src="documents/RE-01/5map.png" alt="Floor 5 Overview — GM Reference" style="width:100%;display:block;filter:brightness(0.9);">
     </div>
-    <p style="margin-top:8px;margin-bottom:0;">Zones: Entry (north, elevator arrival) → Security (chokepoint) → branches to Tanks (west), Surgery (far west), Power (east), Command (far east), END (far east beyond Command), Enclosures (south centre), Incinerator (south, below Enclosures). All zones are on the same underground level connected by the primary corridor.</p>
+    <p style="margin-top:8px;margin-bottom:0;">Key zones as shown: Entry (north, elevator arrival) → Security (chokepoint) → branches to Tanks (west), Surgery (far west), Power (east), Command (far east), END (far east beyond Command), Enclosures (south centre), Incinerator (south, below Enclosures). All zones are on the same underground level connected by the primary corridor.</p>
   </div>
 
   <div class="location-card floor5 mbr">
@@ -1013,28 +1094,39 @@ footer {
       <div class="location-tag">PRIMARY FIND // TANKS MAP — 1927·3046</div>
     </div>
     <div class="location-body">
-      <p>Enormous tank arrays — twelve in total, each the size of a shipping container. All empty. Drain manifolds still connected to industrial dispersal systems that route upward through the building and outward to the roof. The tanks have been cleaned thoroughly. No residue. No labeling on the tanks themselves beyond a stenciled identification series and the initials <strong>E.R. IV</strong>.</p>
-      <div class="find-block">
-        <div class="find-label">■ FIND — DISPERSAL LOG // IN END AREA</div>
-        <p>A single laminated sheet bolted to the wall above the primary valve manifold in the END area. A dispersal record. Twelve tanks. One event. Date: Year 0, Day 1. Duration: 6 hours, 14 minutes. Distribution method: HIGH-ALTITUDE DRONE RELAY. Coverage zone: GLOBAL. Outcome field is blank.</p>
+      <p>The tank room is enormous — ceiling higher than the floors above it have any right to allow. Twelve production tanks stand in two rows, each roughly the size of a shipping container, made of dark industrial steel with glass observation panels running their length. They are empty now, drained and sealed, but the infrastructure surrounding them is intact: pipe manifolds running floor to ceiling, monitoring consoles along the east wall still drawing minimal power, drainage channels cut into the floor connecting each tank to a central collection point. The scale of the room makes no sense for a research facility. It makes sense for a factory.</p>
+      <p>To the right of the tank rows: a cluster of heavy industrial pump housings connected by thick conduit that routes upward through the ceiling. These are the dispersal feeds — the mechanism by which whatever was produced in these tanks was moved into the building's ventilation and external dispersal systems. The pipes are clean. Whatever passed through them left no residue.</p>
+      <div class="roll-block">
+        <div class="roll-tag">TECH TN 9</div>
+        <p>Reading the monitoring consoles. They log production cycles — twelve tanks, each cycled multiple times over approximately eight months. The terminology is opaque but the scale is not. The final cycle log shows all twelve tanks running simultaneously before the entry cuts off mid-record. No shutdown procedure was logged. They simply stopped.</p>
+      </div>
+      <div class="roll-block">
+        <div class="roll-tag">INVESTIGATION TN 11</div>
+        <p>Tracing the dispersal pipes from the tank room upward. They do not connect to the building's standard ventilation. They route to a separate system — larger diameter, purpose-built — that terminates somewhere above Floor 1. Outside the building. High.</p>
       </div>
       <div class="spike-trigger">
-        <div class="spike-trigger-label">■ SPIKE TRIGGER — COMPREHENSION TN 13</div>
-        <p>Any operative who reads the dispersal log in full and makes a successful Investigation check to understand what it describes must make a SPIKE Save at TN 13. Not because the document is disturbing in its language — it isn't. Because of what the language means, once assembled. The Reset was <strong>delivered from this room.</strong></p>
+        <div class="spike-trigger-label">■ SPIKE TRIGGER — SCALE COMPREHENSION TN 11</div>
+        <p>Any operative who stands in this room long enough to understand what it was built to produce — not what, but <em>how much</em> — must make a SPIKE Save at TN 11. The tanks are not research equipment. They are industrial production infrastructure. Whatever was made here was made in quantity sufficient to matter at a scale the party is only beginning to understand.</p>
       </div>
     </div>
   </div>
 
   <div class="location-card floor5 mbr">
     <div class="location-header">
-      <div class="location-name">COMMAND — REEVES' LABORATORY</div>
+      <div class="location-name">COMMAND — REEVES' OBSERVATION DECK</div>
       <div class="location-tag">PRIMARY FIND // COMMAND MAP — 2584·7031</div>
     </div>
     <div class="location-body">
-      <p>A private workspace set apart from the production floor by a glass partition — floor to ceiling, clean, intact. Reeves' desk is ordered. His work is filed. The man was methodical to the end.</p>
+      <p>A large open room that reads immediately as a monitoring space rather than a laboratory. Eight workstations arranged in two rows face a raised command desk at the north wall — Reeves' desk, set apart from the others by its position, its size, and the fact that it has been meticulously cleared. Whatever was on it when the facility went dark, it was filed away before he left. Above the command desk: a bank of six screens mounted to the wall. The central screen is shattered — a starburst fracture pattern surrounded by impact marks. The flanking screens are intact, dark, still drawing minimal emergency power.</p>
+      <p>The room feels like something happened here. Not violence, exactly — it is too ordered for violence. But something deliberate occurred at that desk, and something less deliberate occurred at that screen.</p>
+      <div class="roll-block">
+        <div class="roll-tag">INVESTIGATION TN 9 // THE BROKEN SCREEN</div>
+        <p>The damage to the central screen is a mix of two distinct types. The outer fractures — radiating from a central point — are consistent with a hard blunt impact, possibly a fist or a thrown object. The surrounding marks are bullet holes: three of them, tight grouping, fired from the direction of the desk at close range. The bullet holes came first — the pattern suggests they were fired deliberately into the screen's center. The blunt impact came after. Someone shot the screen, and then hit it.</p>
+        <p>There is no way to know who. There is no way to know why. What is clear is that whoever was at that desk at some point was not entirely composed when they left it.</p>
+      </div>
       <div class="find-block">
         <div class="find-label">■ FIND — RESEARCH JOURNALS</div>
-        <p>A shelf of research volumes, neatly numbered. The party can examine them but they are dense and technical — written for an audience with years of shared context. What comes through is not a legible arc but a voice: <strong>certain, measured, entirely without doubt or remorse.</strong> Terminology is unexplained. Outcomes are noted without sentiment. The journals convey the shape of the man more clearly than any specific fact they contain.</p>
+        <p>A shelf of numbered research volumes behind the command desk, neatly filed. Dense, technical, written for an audience with years of shared context. What comes through reading them is not a legible arc but a voice: certain, measured, entirely without doubt or remorse. Terminology is unexplained. Outcomes are noted without sentiment. The journals convey the shape of the man more clearly than any specific fact they contain.</p>
         <p>Any operative spending time with the journals may make an Investigation TN 11 check. Success yields a single legible fragment — not an explanation, but a phrase, a measurement, a term that will mean something later. The GM should pick one that fits what has already been found without adding clarity. The journals are not a confession. They are a window into a mind.</p>
       </div>
       <div class="find-block">
@@ -1042,6 +1134,10 @@ footer {
         <p>A single manila folder labeled <strong>CALAFIORI — LIGURIA.</strong> Inside: two photographs of an isolated research station in the hills — bare concrete, narrow windows, surrounded by scrubland. An address outside Genoa. A handwritten note from Reeves:</p>
         <div class="doc-fragment">"Incendiary approach — theoretically sound, practically irreversible. His conclusions re: emotional cauterization are consistent with my own re: baseline dampening. Different vectors. Same destination."</div>
         <p>The address is in the hills outside Genoa, Italy. That region is largely uninhabited post-war. Whatever is there now — or whoever survived — may still be findable.</p>
+      </div>
+      <div class="find-block">
+        <div class="find-label">■ FIND — ACTIVE WORKSTATIONS</div>
+        <p>Two of the eight workstations still have power. Their screens show monitoring feeds — static from dead cameras, mostly, but one feed resolves intermittently: a corridor on Floor 4, in night-vision green. The feed cuts in and out. When it resolves, the corridor is empty. When it cuts back in a second later, something has moved in the dark.</p>
       </div>
     </div>
   </div>
@@ -1106,6 +1202,47 @@ footer {
       <div class="acc-doc">Map — Floor 5: END</div>
       <div class="acc-code">9016·4837</div>
       <div class="acc-note">Issue only after PS-08 has fully landed. The END map shows the drone filling stations, the dispersal manifold, and the exit Reeves used to leave the facility. It is the last map. It should feel like the last thing.</div>
+    </div>
+  </div>
+
+  <div class="location-card floor5 mbr">
+    <div class="location-header">
+      <div class="location-name">END — DRONE BAYS & THE TUNNEL EXIT</div>
+      <div class="location-tag">FINAL ZONE // MINIBOSS ENCOUNTER // END MAP — 9016·4837</div>
+    </div>
+    <div class="location-body">
+      <p>The END room is the terminal point of Floor 5. Where the Tanks produced, this room dispatched. A row of drone cradles lines the west wall — fifteen in total, each sized for a high-altitude dispersal unit. Most are empty. Three cradles still contain drones, folded and dormant, their chassis marked with the same stenciled identification series as the tanks. The dispersal hardware is still connected: payload feed lines running from the cradle array to a central manifold, which connects upward through the ceiling via a sealed conduit. The exit is in the northeast corner — a heavy tunnel door, unsealed, leading into a concrete passage that slopes upward toward the surface. This is how Reeves left.</p>
+
+      <div class="find-block">
+        <div class="find-label">■ FIND — DISPERSAL LOG</div>
+        <p>A single laminated sheet bolted to the wall above the primary valve manifold. A dispersal record. Twelve tanks. One event. Date: Year 0, Day 1. Duration: 6 hours, 14 minutes. Distribution method: HIGH-ALTITUDE DRONE RELAY. Coverage zone: GLOBAL. Outcome field is blank.</p>
+      </div>
+
+      <div class="spike-trigger">
+        <div class="spike-trigger-label">■ SPIKE TRIGGER — COMPREHENSION TN 13</div>
+        <p>Any operative who reads the dispersal log in full and connects it to the tank room — who understands what was loaded into these drones and where it went — must make a SPIKE Save at TN 13. Not because the document is disturbing in its language. It isn't. Because of what the language means, once assembled. The Reset was delivered from this room.</p>
+      </div>
+
+      <div class="location-card floor5" style="margin-top:12px;border-left-color:#e04040;">
+        <div class="location-header">
+          <div class="location-name">ENCOUNTER — DRONE SQUAD</div>
+          <div class="location-tag">MINIBOSS // MELEE ONLY</div>
+        </div>
+        <div class="location-body">
+          <p>When the party enters the END room and approaches the dispersal manifold or the tunnel door, the three dormant drones in their cradles activate simultaneously. They are larger than the proximity drones encountered elsewhere on Floor 5 — built for payload carrying, not patrol, which makes them slower but considerably more durable. They attack exclusively through melee: ramming charges, pinning strikes, and concussive impacts with their chassis arms.</p>
+          <p><strong>Drone (×3):</strong> HP 18, Defense Value 8, attack roll +4, Heavy melee (margin +4), Armor 2. Cannot be hacked mid-combat — their activation severs the control signal. Trait: <em>Relentless</em> — when reduced to 0 HP, the drone makes one final ramming attack before shutting down.</p>
+          <p>The tunnel door is accessible during the fight — the party can choose to disengage and run. The drones do not pursue beyond the END room. This is a meaningful option and should be available without penalty.</p>
+          <div class="design-note" style="margin-bottom:0;">
+            <div class="design-note-label">■ GM NOTE — TONE OF THE FIGHT</div>
+            <p>This should feel earned, not arbitrary. The party has descended through five floors of mounting dread, found the most significant evidence in the campaign, and is now standing in the room where the world was changed. The drones are a physical expression of Reeves' thoroughness — everything on Floor 5 has a failsafe. Run this fight with weight. Let it hurt. Let the tunnel door be a real temptation. Whatever the party does here, they leave the room different.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="find-block" style="margin-top:12px;">
+        <div class="find-label">■ THE TUNNEL EXIT</div>
+        <p>The concrete passage slopes upward for approximately 80 meters, emerging through a camouflaged hatch in the hillside roughly 200 meters northeast of the facility's main structure — outside the fence line, in treeline. The hatch is unlocked from both sides. This is how Reeves left RE-01. The passage shows signs of one-time use: boot prints in the dust, partially preserved. One set, leading out. None leading back.</p>
+      </div>
     </div>
   </div>
 
@@ -1220,7 +1357,7 @@ footer {
           <td class="td-name">GARZA, TOMMY</td>
           <td>Fort Wayne bartender</td>
           <td class="td-spike-1">1 — STABLE</td>
-          <td>Intel on Diamond Hill and Brandon Cole. Emotional anchor on return. Nobody who's gone in since Brandon has made it out.</td>
+          <td>Intel on Diamond Hill and Diamond Lake area disappearances. Knows Brandon by name. No knowledge of the facility itself — only that people went toward the lake and some didn't come back. Brandon's group mentioned a structure in the trees.</td>
         </tr>
         <tr>
           <td class="td-name">COLE, BRANDON</td>
@@ -1251,8 +1388,8 @@ footer {
         </tr>
         <tr>
           <td class="gloss-term">HARDWARE</td>
-          <td class="gloss-floor">PS-08 floor etching</td>
-          <td>Scratched into concrete. No context. No explanation. Campaign 4 answers it.</td>
+          <td class="gloss-floor">PS-08 floor etching, Command room journals</td>
+          <td>Scratched into concrete in PS-08. No context. No explanation. Campaign 4 answers it.</td>
         </tr>
         <tr>
           <td class="gloss-term">ALAN PRATER</td>
@@ -1309,7 +1446,7 @@ footer {
         <tr><td>Map — Floor 2</td><td class="gloss-term">6182·4037</td><td>Descending to Floor 2</td></tr>
         <tr><td>Map — Floor 3</td><td class="gloss-term">4815·6239</td><td>Stepping off elevator onto Floor 3</td></tr>
         <tr><td>Map — Floor 4</td><td class="gloss-term">9273·5810</td><td>Descending to Floor 4</td></tr>
-        <tr><td>Map — Floor 5: Entry + Security</td><td class="gloss-term">6739·4852 + 4061·9583</td><td>Stepping off elevator onto Floor 5</td></tr>
+        <tr><td>Map — Floor 5: Entry + Security</td><td class="gloss-term">6739·4852 + 4061·9583</td><td>Stepping off the elevator shaft or through the barred stairwell onto Floor 5</td></tr>
         <tr><td>Map — Floor 5: Tanks</td><td class="gloss-term">1927·3046</td><td>Entering Tanks zone</td></tr>
         <tr><td>Map — Floor 5: Power</td><td class="gloss-term">8350·2714</td><td>Entering Power zone</td></tr>
         <tr><td>Map — Floor 5: Surgery</td><td class="gloss-term">7302·5948</td><td>Entering Surgery zone</td></tr>
@@ -1328,9 +1465,14 @@ footer {
       <li><strong>The comms jam</strong> targets outbound UGD relay frequencies specifically — internal short-range comms still function. The jam presents as silence on UGD channels, not interference. Players should be the first to discover it.</li>
       <li><strong>Brandon Cole will not leave.</strong> If players attempt extraction by force, he becomes violent and retreats to the deeper maintenance runs. He has been here three years. He cannot be saved in this campaign.</li>
       <li><strong>Floors 3–5</strong> are not on the UGD briefing documents. Walker doesn't know they exist. This is not a conspiracy on Walker's part — the plans he has are the plans he was given.</li>
+      <li><strong>There is no freight elevator.</strong> The only access to floors 3–5 is via the barred stairwell door on Floor 2 (breach charge required to open from this side) or via the service elevator shaft (pry open the doors, climb down). The choice between these has downstream consequences — a breach charge is loud and carries through the floor.</li>
+      <li><strong>Turret escalation:</strong> Floor 3 — rubber/concussive, visible, non-lethal. Floor 4 — live rounds, visible, lethal. Floor 5 — live rounds, hidden, lethal. The security room on Floor 5 near Entry contains a terminal that can disable all Floor 5 turrets (TECH TN 13), but only if actively investigated. Players who skip it deal with turrets room by room.</li>
+      <li><strong>Drones on Floor 5</strong> activate on proximity throughout the floor. They are melee-only — ramming and impact attacks, no weapons. The three larger dispersal drones in END activate together as a miniboss encounter when the party approaches the manifold or tunnel door. They do not pursue beyond the END room.</li>
+      <li><strong>Command room</strong> is Reeves' observation and monitoring space, not his laboratory. His desk is there, his journals are there. The broken central screen shows both bullet holes (deliberate, fired from the desk) and blunt impact damage (less deliberate, came after). Neither is explained. Do not explain it.</li>
       <li><strong>The Calafiori site</strong> is an isolated research station in the hills of Liguria, Italy — not in the city of Genoa. The surrounding area is post-war wasteland. Whatever remains there is not easily accessible and not expected to be inhabited.</li>
+      <li><strong>The tunnel exit in END</strong> leads to the hillside northeast of the facility, outside the fence line. One set of boot prints, leading out, none returning. This is how Reeves left. It is also the party's fastest exit if the drone fight goes badly.</li>
       <li><strong>The wand</strong> is a shared party resource for evaluating others. Operatives' own SPIKE levels are always known via implant without a roll. The wand is for reading NPCs, civilians, and potential hostiles.</li>
-      <li><strong>Floor 5 spatial layout.</strong> Entry + Security form a single chokepoint — the party passes through both immediately on arrival. After Security, the floor branches freely. The GM overview map (5map.png) shows all zones. Do not show this to players — issue individual zone maps via Field Vault codes only.</li>
+      <li><strong>Floor 5 spatial layout</strong> is a reference, not a blueprint. The GM overview map shows one possible arrangement. Rearrange zones as needed for pacing. The essential elements — Security chokepoint, Tanks, Command, Enclosures/PS-08, END — must all be present. How they connect is the GM's call.</li>
     </ul>
   </div>
 
