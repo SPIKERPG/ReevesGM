@@ -365,11 +365,12 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
       <div class="atk-strip">
         <div class="atk-head">&#9632; ATTACK</div>
         <div class="atk-weapons-row" id="atk-weapons-row" style="display:none"><span class="atk-weapons-lbl">WEAPON:</span><div id="atk-weapon-pills"></div></div>
-        <div class="atk-fields">
+        <div class="atk-fields" style="grid-template-columns:2fr 1fr 0.8fr 0.8fr 0.6fr;">
           <div class="atk-field"><label>TARGET</label><select id="atk-target" onchange="atkTargetChange()"></select></div>
           <div class="atk-field"><label>WEAPON CLASS</label><select id="atk-wpn"><option value="0">Light (+0)</option><option value="2" selected>Standard (+2)</option><option value="4">Heavy (+4)</option></select></div>
           <div class="atk-field"><label>ATK BONUS</label><input id="atk-bonus" type="number" value="0"></div>
           <div class="atk-field"><label>DEF VALUE</label><input id="atk-def" type="number" value="6"></div>
+          <div class="atk-field"><label>BODY</label><input id="atk-body" type="number" value="0" min="0" max="3" title="Attacker BODY — added to final damage"></div>
         </div>
         <div class="atk-roll-row">
           <div class="atk-roll-field"><label id="atk-roll-label">PLAYER'S ROLL (d10 total)</label><div style="display:flex;gap:5px"><input id="atk-roll" type="number" placeholder="e.g. 11"><button id="atk-auto-btn" class="btn amber sm" onclick="atkAutoRoll()" style="display:none">&#9711; AUTO</button></div></div>
@@ -714,6 +715,7 @@ function renderCommandCenter(){
   targetSel.onchange=()=>atkTargetChange();
   document.getElementById('atk-roll-label').textContent=isOp?'PLAYER\'S ROLL (d10 total)':'ATTACK ROLL (d10)';
   document.getElementById('atk-auto-btn').style.display=isOp?'none':'';
+  document.getElementById('atk-body').value=c.body||0;
   const savedAtks=c.hostileAtks||c.npcAtks||[];
   const pillsRow=document.getElementById('atk-weapons-row');
   if(savedAtks.length){
@@ -764,19 +766,21 @@ function doAim(){const c=getCurrent();if(!c)return;c.aimed=!c.aimed;if(c.aimed&&
 function doExtendMove(){const c=getCurrent();if(!c)return;c.minorUsed=true;adjComp(c.id,-1);addLog({label:c.name+': Extended Move (\u22121 COMP)',total:null});}
 
 function atkTargetChange(){const sel=document.getElementById('atk-target');_atkTargetId=sel.value;const t=combatants.find(c=>c.id===sel.value);if(t)document.getElementById('atk-def').value=t.defense||6;}
-function atkWeaponPillClick(mod,bonus,btn){document.getElementById('atk-wpn').value=String(mod);document.getElementById('atk-bonus').value=String(bonus);document.querySelectorAll('.atk-wpn-pill').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
+function atkWeaponPillClick(mod,bonus,btn){document.getElementById('atk-wpn').value=String(mod);document.getElementById('atk-bonus').value=String(bonus);const c=getCurrent();if(c)document.getElementById('atk-body').value=c.body||0;document.querySelectorAll('.atk-wpn-pill').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
 function atkAutoRoll(){const bonus=parseInt(document.getElementById('atk-bonus').value)||0;document.getElementById('atk-roll').value=Math.ceil(Math.random()*10)+bonus;}
 function resolveAttack(){
   const total=parseInt(document.getElementById('atk-roll').value),defVal=parseInt(document.getElementById('atk-def').value)||6;
   const bonus=parseInt(document.getElementById('atk-bonus').value)||0,wpnMod=parseInt(document.getElementById('atk-wpn').value)||0;
+  const bodyMod=parseInt(document.getElementById('atk-body').value)||0;
   const dieRoll=total-bonus;
   if(isNaN(total)){setAtkR('<span class="r-miss">Enter a roll first.</span>');return;}
   const isFault=dieRoll===1,isCrit=dieRoll===10,hit=total>=defVal&&!isFault;
   const c=getCurrent();
   if(!hit||isFault){_atkLastHit=false;setAtkR(`<span class="r-miss">${isFault?'\u2715 CRIT FAULT \u2014 complication':'\u2715 MISS'}</span> \u2014 Roll ${total} vs DEF ${defVal}`);document.getElementById('atk-apply-btn').style.display='none';addLog({label:`${c?.name||'?'} Attack (DEF ${defVal})`,total,tn:defVal,fail:true});return;}
-  let base=total-defVal;if(isCrit)base*=2;_atkLastDamage=base+wpnMod;_atkLastHit=true;
+  let base=total-defVal;if(isCrit)base*=2;_atkLastDamage=base+wpnMod+bodyMod;_atkLastHit=true;
   const wl=wpnMod===0?'Light':wpnMod===4?'Heavy':'Standard';
-  setAtkR(`<span class="r-hit">${isCrit?'\u2605 CRIT HIT':'\u2713 HIT'}</span> \u2014 ${total} vs DEF ${defVal} \u2192 margin ${total-defVal}${isCrit?' \u00d72':''} + ${wl}(+${wpnMod}) = <span class="r-dmg">${_atkLastDamage} raw dmg</span>`);
+  const bodyStr=bodyMod?` + BODY(+${bodyMod})`:'';
+  setAtkR(`<span class="r-hit">${isCrit?'\u2605 CRIT HIT':'\u2713 HIT'}</span> \u2014 ${total} vs DEF ${defVal} \u2192 margin ${total-defVal}${isCrit?' \u00d72':''} + ${wl}(+${wpnMod})${bodyStr} = <span class="r-dmg">${_atkLastDamage} raw dmg</span>`);
   document.getElementById('atk-apply-btn').style.display='';
   addLog({label:`${c?.name||'?'} Attack (DEF ${defVal})`,total,tn:defVal});
 }
