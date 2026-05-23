@@ -550,13 +550,14 @@ function loadPartyTracker(){
 function importOperative(pi,si,cd,slot){
   if(combatants.some(c=>c.trackerRef===`${pi}-${si}`)){alert('Already imported.');return;}
   console.log('[SPIKE import] cd keys:', Object.keys(cd), '| attrVals:', cd.attrVals, '| hpMax:', cd.hpMax, '| slot keys:', Object.keys(slot));
-  const av=cd.attrVals||[1,1,1,1,1];const resolve=av[4]||0,mind=av[1]||0,body=av[0]||0;
+  const av=(slot.sessionAttrVals)||cd.attrVals||[1,1,1,1,1];const resolve=av[4]||0,mind=av[1]||0,body=av[0]||0;
   const hpCur=slot.sessionHp!==undefined?slot.sessionHp:(cd.hpCurrent??10);
   const hpMax=cd.hpMax??(10+(av[0]||0));
   const compCur=slot.sessionComp!==undefined?slot.sessionComp:(cd.compCurrent??5);
   const compMax=cd.compMax??(5+resolve);
   const spike=slot.sessionSpike!==undefined?slot.sessionSpike:(parseInt(cd.currentSpike)||0);
-  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor:0,defense:6,resolve,mind,body,spike,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
+  const armor=slot.sessionArmor!==undefined?slot.sessionArmor:(cd.armor??0);
+  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor,defense:6,resolve,mind,body,spike,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
   saveState();renderQueue();loadPartyTracker();
 }
 
@@ -855,7 +856,7 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 // LIVE SYNC
 const syncChannel=typeof BroadcastChannel!=='undefined'?new BroadcastChannel('spike_live_sync'):null;
 function broadcastSync(c){if(!syncChannel||!c||!c.trackerRef)return;const[pi,si]=c.trackerRef.split('-').map(Number);syncChannel.postMessage({type:'update',src:'combat',pi,si,spike:c.spike??0,hp:c.hp,comp:c.comp});}
-if(syncChannel){syncChannel.onmessage=e=>{const msg=e.data;if(!msg||!msg.type)return;if(msg.type==='ping'&&msg.src==='tracker'){syncChannel.postMessage({type:'pong',src:'combat'});return;}if(msg.type!=='update'||msg.src!=='tracker')return;const ref=`${msg.pi}-${msg.si}`;const c=combatants.find(x=>x.trackerRef===ref);if(!c)return;let changed=false;if(msg.spike!==undefined&&c.spike!==msg.spike){c.spike=msg.spike;changed=true;}if(msg.hp!==undefined&&c.hp!==msg.hp){c.hp=msg.hp;changed=true;}if(msg.comp!==undefined&&c.comp!==msg.comp){c.comp=msg.comp;changed=true;}if(!changed)return;saveState();renderQueue();const cur=getCurrent();if(cur&&cur.id===c.id){refreshVitals();refreshSpike();}};}
+if(syncChannel){syncChannel.onmessage=e=>{const msg=e.data;if(!msg||!msg.type)return;if(msg.type==='ping'&&msg.src==='tracker'){syncChannel.postMessage({type:'pong',src:'combat'});return;}if(msg.type!=='update'||msg.src!=='tracker')return;const ref=`${msg.pi}-${msg.si}`;const c=combatants.find(x=>x.trackerRef===ref);if(!c)return;let changed=false;if(msg.spike!==undefined&&c.spike!==msg.spike){c.spike=msg.spike;changed=true;}if(msg.hp!==undefined&&c.hp!==msg.hp){c.hp=msg.hp;changed=true;}if(msg.comp!==undefined&&c.comp!==msg.comp){c.comp=msg.comp;changed=true;}if(msg.armor!==undefined&&c.armor!==msg.armor){c.armor=msg.armor;changed=true;}if(!changed)return;saveState();renderQueue();const cur=getCurrent();if(cur&&cur.id===c.id){refreshVitals();refreshSpike();}};}
 
 function escHtml(s){if(typeof s!=='string')return String(s||'');return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
