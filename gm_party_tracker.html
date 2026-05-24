@@ -1750,24 +1750,24 @@ select.lm-input { appearance: none; cursor: pointer; }
     <input type="hidden" id="lm-si">
     <div id="lm-op-name" style="font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.16em;color:#5ab0e0;margin-bottom:12px"></div>
     <div id="lm-items" style="margin-bottom:12px"></div>
-    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:14px 16px 16px;margin-bottom:12px">
-      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">■ ADD ITEM</div>
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:14px 16px 14px;margin-bottom:12px">
+      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border)">■ ADD ITEM</div>
 
       <!-- Row 1: Name (full width) -->
-      <div style="margin-bottom:10px">
+      <div style="margin-bottom:8px">
         <label class="lm-label">NAME</label>
         <input class="lm-input" id="lm-new-name" placeholder="e.g. Assault Rifle, Flashbang, Hacking Kit">
       </div>
 
-      <!-- Row 2: Weapon Class · Bonus · Range · Slot Type -->
-      <div style="display:grid;grid-template-columns:1.6fr 0.7fr 0.8fr 1.1fr;gap:8px;margin-bottom:10px">
+      <!-- Row 2: four compact fields equal width -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">
         <div>
           <label class="lm-label">WEAPON CLASS</label>
           <select class="lm-input mono" id="lm-new-dice">
-            <option value="light">Light (+0)</option>
             <option value="standard" selected>Standard (+2)</option>
+            <option value="light">Light (+0)</option>
             <option value="heavy">Heavy (+4)</option>
-            <option value="">— Ability / Passive</option>
+            <option value="">Ability / Passive</option>
           </select>
         </div>
         <div>
@@ -1794,14 +1794,14 @@ select.lm-input { appearance: none; cursor: pointer; }
         </div>
       </div>
 
-      <!-- Row 3: Notes + Add button -->
-      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:flex-end">
-        <div>
-          <label class="lm-label">NOTES (OPTIONAL)</label>
-          <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use, requires kit...">
-        </div>
-        <button class="lm-btn add" onclick="addTrackerEquipItem()" style="white-space:nowrap;height:36px">+ ADD TO LOADOUT</button>
+      <!-- Row 3: Notes full width -->
+      <div style="margin-bottom:10px">
+        <label class="lm-label">NOTES (OPTIONAL)</label>
+        <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use, requires kit...">
       </div>
+
+      <!-- Row 4: Add button full width -->
+      <button class="lm-btn add" onclick="addTrackerEquipItem()" style="width:100%;text-align:center;padding:9px">+ ADD TO LOADOUT</button>
     </div>
     <button class="lm-btn" onclick="closeLoadoutModal()" style="width:100%">DONE</button>
   </div>
@@ -2790,7 +2790,7 @@ function openLoadoutModal(pIdx, sIdx) {
   document.getElementById('lm-op-name').textContent =
     (slot.charData.inputs && slot.charData.inputs[0]) || 'OPERATIVE';
   document.getElementById('lm-new-name').value = '';
-  document.getElementById('lm-new-dice').value = '';
+  document.getElementById('lm-new-dice').value = 'standard';
   document.getElementById('lm-new-bonus').value = '0';
   document.getElementById('lm-new-range').value = 'far';
   document.getElementById('lm-new-type').value = 'action';
@@ -2874,7 +2874,7 @@ function addTrackerEquipItem() {
     slot.sessionEquipment.push(itemData);
   }
   document.getElementById('lm-new-name').value = '';
-  document.getElementById('lm-new-dice').value = '';
+  document.getElementById('lm-new-dice').value = 'standard';
   document.getElementById('lm-new-bonus').value = '0';
   document.getElementById('lm-new-notes').value = '';
   saveToStorage();
