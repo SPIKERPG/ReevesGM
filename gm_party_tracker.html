@@ -1556,8 +1556,8 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   border: 1px solid var(--border-hi);
   border-top: 2px solid #2878a0;
   padding: 20px 22px;
-  width: 520px;
-  max-width: 95vw;
+  width: 700px;
+  max-width: 96vw;
   max-height: 85vh;
   overflow-y: auto;
 }
@@ -1794,14 +1794,14 @@ select.lm-input { appearance: none; cursor: pointer; }
         </div>
       </div>
 
-      <!-- Notes + button inline: notes takes space, button is compact -->
-      <div style="display:grid;grid-template-columns:1fr auto;gap:6px;align-items:flex-end">
-        <div>
-          <label class="lm-label">NOTES (OPTIONAL)</label>
-          <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use...">
-        </div>
-        <button class="lm-btn add" onclick="addTrackerEquipItem()" style="white-space:nowrap;align-self:flex-end;height:33px;font-size:8px">+ ADD</button>
+      <!-- Notes -->
+      <div style="margin-bottom:8px">
+        <label class="lm-label">NOTES (OPTIONAL)</label>
+        <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use...">
       </div>
+
+      <!-- ADD button full width -->
+      <button class="lm-btn add" onclick="addTrackerEquipItem()" style="width:100%;text-align:center;padding:8px;font-size:8.5px">+ ADD TO LOADOUT</button>
     </div>
     <button class="lm-btn" onclick="closeLoadoutModal()" style="width:100%">DONE</button>
   </div>
