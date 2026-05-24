@@ -2083,13 +2083,13 @@ function buildSlotEl(pIdx, sIdx) {
 }
 
 function buildCharCardHTML(d, pIdx, sIdx) {
+  const slot       = state[pIdx] && state[pIdx][sIdx];
   const inputs     = d.inputs || [];
   const textareas  = d.textareas || [];
   const attrVals   = (slot && slot.sessionAttrVals) ? slot.sessionAttrVals : (d.attrVals || [0,0,0,0,0]);
   const skillState = d.skillState || [];
 
   // Use session overrides if present, else charData values
-  const slot       = state[pIdx] && state[pIdx][sIdx];
   const spike      = slot && slot.sessionSpike      !== undefined ? slot.sessionSpike      : (parseInt(d.currentSpike) || 0);
   const hpCur      = slot && slot.sessionHp         !== undefined ? slot.sessionHp         : (d.hpCurrent ?? 0);
   const hpMax      = d.hpMax   ?? 0;
@@ -2456,6 +2456,7 @@ function loadFile(ev, pIdx, sIdx) {
       updatePartyTab(pIdx);
       updatePartyMeta(pIdx);
     } catch(err) {
+      console.error('SPIKE Tracker loadFile error:', err);
       alert('Could not parse file. Make sure this is a valid SPIKE Operative Dossier export (.json).');
     }
   };
