@@ -1585,6 +1585,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 .lm-close:hover { color: var(--red-bright); border-color: var(--red); }
 .lm-input {
   width: 100%;
+  box-sizing: border-box;
   background: var(--surface);
   border: 1px solid var(--border-hi);
   color: var(--text-hi);
@@ -1760,8 +1761,8 @@ select.lm-input { appearance: none; cursor: pointer; }
       </div>
 
       <!-- Four fields: Weapon Class wide, Bonus fixed narrow, Range and Slot share remainder -->
-      <div style="display:grid;grid-template-columns:2fr 52px 1fr 1fr;gap:6px;margin-bottom:7px">
-        <div>
+      <div style="display:grid;grid-template-columns:2fr 80px 1fr 1fr;gap:8px;margin-bottom:7px;min-width:0">
+        <div style="min-width:0">
           <label class="lm-label">WEAPON CLASS</label>
           <select class="lm-input mono" id="lm-new-dice">
             <option value="standard" selected>Standard (+2)</option>
@@ -1770,13 +1771,13 @@ select.lm-input { appearance: none; cursor: pointer; }
             <option value="">Ability / Passive</option>
           </select>
         </div>
-        <div>
+        <div style="min-width:0">
           <label class="lm-label">BONUS</label>
-          <input class="lm-input mono" id="lm-new-bonus" type="number" value="0">
+          <input class="lm-input mono" id="lm-new-bonus" type="number" value="0" style="min-width:0;padding-left:6px;padding-right:4px">
         </div>
-        <div>
+        <div style="min-width:0">
           <label class="lm-label">RANGE</label>
-          <select class="lm-input mono" id="lm-new-range">
+          <select class="lm-input mono" id="lm-new-range" style="min-width:0">
             <option value="close">CLOSE</option>
             <option value="near">NEAR</option>
             <option value="far" selected>FAR</option>
@@ -1784,9 +1785,9 @@ select.lm-input { appearance: none; cursor: pointer; }
             <option value="any">ANY</option>
           </select>
         </div>
-        <div>
+        <div style="min-width:0">
           <label class="lm-label">SLOT TYPE</label>
-          <select class="lm-input mono" id="lm-new-type">
+          <select class="lm-input mono" id="lm-new-type" style="min-width:0">
             <option value="action">ACTION</option>
             <option value="minor">MINOR</option>
             <option value="passive">PASSIVE</option>
