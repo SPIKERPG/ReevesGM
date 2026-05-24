@@ -596,11 +596,11 @@ main {
 
 .skill-tag {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 6.5px;
+  font-size: 9px;
   letter-spacing: .08em;
   color: var(--green);
   border: 1px solid var(--green-dim);
-  padding: 2px 5px;
+  padding: 3px 7px;
   background: rgba(122,154,40,.06);
 }
 
@@ -1046,6 +1046,48 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 }
 
 
+/* ─── GM NOTES SECTION ─── */
+.gm-note-area {
+  width: 100%;
+  height: 160px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  padding: 10px 12px;
+  outline: none;
+  resize: none;
+  caret-color: var(--amber);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.gm-note-area::placeholder { color: var(--text-dim); font-style: italic; font-size: 12.5px; }
+.gm-note-area:focus { background: rgba(255,255,255,.012); }
+
+.gm-row-resizer {
+  height: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-top: none;
+  cursor: ns-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  user-select: none;
+  transition: background .12s;
+}
+.gm-row-resizer:hover { background: var(--border-hi); }
+.gm-row-resizer::after {
+  content: '⠿';
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
 /* ─── CARD NOTES ─── */
 .card-notes-area {
   background: transparent;
@@ -1296,9 +1338,9 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 }
 .loadout-item {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 7px;
+  font-size: 9.5px;
   letter-spacing: .08em;
-  padding: 2px 7px;
+  padding: 4px 9px;
   background: rgba(40,100,160,.08);
   border: 1px solid #1a3050;
   color: #5ab0e0;
@@ -1738,6 +1780,74 @@ select.lm-input { appearance: none; cursor: pointer; }
   </div>
 
 </main>
+
+<!-- ══════════════════════════════════════
+     GM NOTES SECTION
+══════════════════════════════════════ -->
+<section id="gm-notes-section" style="max-width:1400px;margin:0 auto;padding:0 24px 80px;">
+
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-top:28px;border-top:1px solid var(--border-hi)">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.35em;color:var(--text-hi)">GM FIELD NOTES</div>
+    <div style="flex:1;height:1px;background:var(--border-hi)"></div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.16em;color:var(--text-dim)">AUTO-SAVED // LOCAL</div>
+  </div>
+
+  <div id="gm-row-0" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+
+    <!-- Session Notes -->
+    <div style="background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid var(--red)">
+      <div style="background:var(--surface);border-bottom:1px solid var(--border-hi);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--red-bright)">■ SESSION LOG</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:var(--text-dim)">what happened this session</span>
+      </div>
+      <textarea id="gmnote-session" class="gm-note-area" placeholder="Key events, decisions, turning points, player actions worth remembering..." oninput="saveGmNote('session')"></textarea>
+    </div>
+
+    <!-- NPCs & Contacts -->
+    <div style="background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid var(--amber)">
+      <div style="background:var(--surface);border-bottom:1px solid var(--border-hi);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--amber)">■ NPCS &amp; CONTACTS</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:var(--text-dim)">names, disposition, status</span>
+      </div>
+      <textarea id="gmnote-npcs" class="gm-note-area" placeholder="Known NPCs, their current disposition, secrets, last known location..." oninput="saveGmNote('npcs')"></textarea>
+    </div>
+
+    <!-- Open Threads -->
+    <div style="background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid var(--green-dim)">
+      <div style="background:var(--surface);border-bottom:1px solid var(--border-hi);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--green)">■ OPEN THREADS</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:var(--text-dim)">loose ends, player hooks</span>
+      </div>
+      <textarea id="gmnote-threads" class="gm-note-area" placeholder="Unanswered questions, player suspicions, unresolved plot threads, things to follow up..." oninput="saveGmNote('threads')"></textarea>
+    </div>
+
+  </div>
+  <div class="gm-row-resizer" id="gm-resizer-0" title="Drag to resize row"></div>
+
+  <div id="gm-row-1" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+    <!-- Locations -->
+    <div style="background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid #2878a0">
+      <div style="background:var(--surface);border-bottom:1px solid var(--border-hi);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:#5ab0e0">■ LOCATIONS &amp; INTEL</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:var(--text-dim)">areas, hazards, evidence</span>
+      </div>
+      <textarea id="gmnote-locations" class="gm-note-area" placeholder="Visited locations, notable features, hazards, discovered evidence, recovered documents..." oninput="saveGmNote('locations')"></textarea>
+    </div>
+
+    <!-- SPIKE Events -->
+    <div style="background:var(--surface2);border:1px solid var(--border-hi);border-top:2px solid var(--spike-8)">
+      <div style="background:var(--surface);border-bottom:1px solid var(--border-hi);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--spike-8)">■ SPIKE EVENTS</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:var(--text-dim)">escalations, triggers, outcomes</span>
+      </div>
+      <textarea id="gmnote-spike" class="gm-note-area" placeholder="Notable SPIKE escalations, what triggered them, behaviors observed, flaws acquired or activated..." oninput="saveGmNote('spike')"></textarea>
+    </div>
+
+  </div>
+  <div class="gm-row-resizer" id="gm-resizer-1" title="Drag to resize row"></div>
+
+</section>
 
 
 <!-- ── LOADOUT MODAL ── -->
@@ -2331,15 +2441,6 @@ function buildCharCardHTML(d, pIdx, sIdx) {
       <div class="loadout-items" id="loadout-items-${sid}">
         ${loadoutChipsHtml || '<span style="font-size:10px;color:var(--text-dim);font-style:italic">No loadout — click MANAGE to add attacks</span>'}
       </div>
-    </div>
-
-    <div style="flex-shrink:0">
-      <div class="mini-lbl">NOTES</div>
-      <textarea class="card-notes-area"
-        id="cardnotes-${sid}"
-        placeholder="Quick field notes..."
-        oninput="saveCardNotes(${pIdx},${sIdx})"
-      >${escHtml(cardNotes)}</textarea>
     </div>
 
     <div style="flex-shrink:0">
@@ -3486,6 +3587,94 @@ function saveCardNotes(pIdx, sIdx) {
 }
 
 // ═══════════════════════════════════════════════════════
+//  GM NOTES
+// ═══════════════════════════════════════════════════════
+
+const GM_NOTE_KEYS = ['session','npcs','threads','locations','spike'];
+const GM_NOTES_STORAGE = 'spike_gm_notes_v1';
+
+function saveGmNote(key) {
+  const ta = document.getElementById('gmnote-' + key);
+  if (!ta) return;
+  try {
+    const all = JSON.parse(localStorage.getItem(GM_NOTES_STORAGE) || '{}');
+    all[key] = ta.value;
+    localStorage.setItem(GM_NOTES_STORAGE, JSON.stringify(all));
+  } catch(e) {}
+}
+
+function loadGmNotes() {
+  try {
+    const all = JSON.parse(localStorage.getItem(GM_NOTES_STORAGE) || '{}');
+    GM_NOTE_KEYS.forEach(k => {
+      const ta = document.getElementById('gmnote-' + k);
+      if (ta && all[k]) ta.value = all[k];
+    });
+    // Restore saved row heights
+    const heights = JSON.parse(localStorage.getItem(GM_NOTES_STORAGE + '_heights') || '{}');
+    [0, 1].forEach(rowIdx => {
+      if (heights[rowIdx]) setRowHeight(rowIdx, heights[rowIdx]);
+    });
+  } catch(e) {}
+}
+
+// Row keys: which textareas belong to each row
+const GM_ROW_AREAS = {
+  0: ['gmnote-session', 'gmnote-npcs', 'gmnote-threads'],
+  1: ['gmnote-locations', 'gmnote-spike'],
+};
+
+function setRowHeight(rowIdx, height) {
+  const ids = GM_ROW_AREAS[rowIdx];
+  if (!ids) return;
+  ids.forEach(id => {
+    const ta = document.getElementById(id);
+    if (ta) ta.style.height = height + 'px';
+  });
+}
+
+function initRowResizers() {
+  [0, 1].forEach(rowIdx => {
+    const handle = document.getElementById('gm-resizer-' + rowIdx);
+    if (!handle) return;
+    let startY = 0, startHeight = 0;
+
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const ids = GM_ROW_AREAS[rowIdx];
+      const firstTa = document.getElementById(ids[0]);
+      startY = e.clientY;
+      startHeight = firstTa ? firstTa.offsetHeight : 160;
+      handle.style.background = 'var(--amber-dim)';
+
+      function onMove(e) {
+        const newH = Math.max(80, startHeight + (e.clientY - startY));
+        setRowHeight(rowIdx, newH);
+      }
+
+      function onUp() {
+        handle.style.background = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        // Save height
+        const ids = GM_ROW_AREAS[rowIdx];
+        const ta = document.getElementById(ids[0]);
+        if (ta) {
+          try {
+            const heights = JSON.parse(localStorage.getItem(GM_NOTES_STORAGE + '_heights') || '{}');
+            heights[rowIdx] = ta.offsetHeight;
+            localStorage.setItem(GM_NOTES_STORAGE + '_heights', JSON.stringify(heights));
+          } catch(e) {}
+        }
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════
 //  UTILITY
 // ═══════════════════════════════════════════════════════
 
@@ -3505,6 +3694,8 @@ function escHtml(str) {
 window.addEventListener('DOMContentLoaded', () => {
   loadFromStorage();
   renderAll();
+  loadGmNotes();
+  initRowResizers();
   startPresenceHeartbeat();
 });
 </script>
