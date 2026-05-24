@@ -1759,8 +1759,8 @@ select.lm-input { appearance: none; cursor: pointer; }
         <input class="lm-input" id="lm-new-name" placeholder="e.g. Assault Rifle, Flashbang, Hacking Kit">
       </div>
 
-      <!-- Four fields: proportional, not equal — Weapon Class gets more room -->
-      <div style="display:grid;grid-template-columns:2fr 0.6fr 0.7fr 1fr;gap:6px;margin-bottom:7px">
+      <!-- Four fields: Weapon Class wide, Bonus fixed narrow, Range and Slot share remainder -->
+      <div style="display:grid;grid-template-columns:2fr 52px 1fr 1fr;gap:6px;margin-bottom:7px">
         <div>
           <label class="lm-label">WEAPON CLASS</label>
           <select class="lm-input mono" id="lm-new-dice">
