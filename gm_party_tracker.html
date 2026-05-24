@@ -1960,10 +1960,12 @@ function loadFromStorage() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     const saved = JSON.parse(raw);
-    if (saved.partyNames) partyNames = saved.partyNames;
-    if (saved.state) state = saved.state;
+    if (saved.partyNames && Array.isArray(saved.partyNames)) partyNames = saved.partyNames;
+    if (saved.state && Array.isArray(saved.state)) state = saved.state;
   } catch(e) {
-    console.warn('SPIKE Tracker: could not restore state', e);
+    console.warn('SPIKE Tracker: could not restore state — clearing corrupt data', e);
+    try { localStorage.removeItem(STORAGE_KEY); } catch(_) {}
+    state = [];
   }
 }
 
@@ -1980,10 +1982,16 @@ function saveToStorage() {
 // ═══════════════════════════════════════════════════════
 
 function renderAll() {
-  // Ensure state arrays are sized
+  // Ensure state arrays are correctly typed and sized —
+  // old localStorage versions may have stored objects, nulls, or wrong-length arrays
   for (let p = 0; p < NUM_PARTIES; p++) {
-    if (!state[p]) state[p] = new Array(NUM_SLOTS).fill(null);
+    if (!state[p] || !Array.isArray(state[p])) state[p] = new Array(NUM_SLOTS).fill(null);
     while (state[p].length < NUM_SLOTS) state[p].push(null);
+    // Sanitise each slot — must be null or a plain object with charData
+    state[p] = state[p].map(slot => {
+      if (!slot || typeof slot !== 'object' || !slot.charData) return null;
+      return slot;
+    });
   }
 
   for (let p = 0; p < NUM_PARTIES; p++) {
