@@ -1750,17 +1750,17 @@ select.lm-input { appearance: none; cursor: pointer; }
     <input type="hidden" id="lm-si">
     <div id="lm-op-name" style="font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.16em;color:#5ab0e0;margin-bottom:12px"></div>
     <div id="lm-items" style="margin-bottom:12px"></div>
-    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:14px 16px 14px;margin-bottom:12px">
-      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border)">■ ADD ITEM</div>
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:12px 14px;margin-bottom:12px">
+      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border)">■ ADD ITEM</div>
 
-      <!-- Row 1: Name (full width) -->
-      <div style="margin-bottom:8px">
+      <!-- Name -->
+      <div style="margin-bottom:7px">
         <label class="lm-label">NAME</label>
         <input class="lm-input" id="lm-new-name" placeholder="e.g. Assault Rifle, Flashbang, Hacking Kit">
       </div>
 
-      <!-- Row 2: four compact fields equal width -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">
+      <!-- Four fields: proportional, not equal — Weapon Class gets more room -->
+      <div style="display:grid;grid-template-columns:2fr 0.6fr 0.7fr 1fr;gap:6px;margin-bottom:7px">
         <div>
           <label class="lm-label">WEAPON CLASS</label>
           <select class="lm-input mono" id="lm-new-dice">
@@ -1771,7 +1771,7 @@ select.lm-input { appearance: none; cursor: pointer; }
           </select>
         </div>
         <div>
-          <label class="lm-label">ATK BONUS</label>
+          <label class="lm-label">BONUS</label>
           <input class="lm-input mono" id="lm-new-bonus" type="number" value="0">
         </div>
         <div>
@@ -1788,20 +1788,20 @@ select.lm-input { appearance: none; cursor: pointer; }
           <label class="lm-label">SLOT TYPE</label>
           <select class="lm-input mono" id="lm-new-type">
             <option value="action">ACTION</option>
-            <option value="minor">MINOR ACTION</option>
-            <option value="passive">PASSIVE / ABILITY</option>
+            <option value="minor">MINOR</option>
+            <option value="passive">PASSIVE</option>
           </select>
         </div>
       </div>
 
-      <!-- Row 3: Notes full width -->
-      <div style="margin-bottom:10px">
-        <label class="lm-label">NOTES (OPTIONAL)</label>
-        <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use, requires kit...">
+      <!-- Notes + button inline: notes takes space, button is compact -->
+      <div style="display:grid;grid-template-columns:1fr auto;gap:6px;align-items:flex-end">
+        <div>
+          <label class="lm-label">NOTES (OPTIONAL)</label>
+          <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use...">
+        </div>
+        <button class="lm-btn add" onclick="addTrackerEquipItem()" style="white-space:nowrap;align-self:flex-end;height:33px;font-size:8px">+ ADD</button>
       </div>
-
-      <!-- Row 4: Add button full width -->
-      <button class="lm-btn add" onclick="addTrackerEquipItem()" style="width:100%;text-align:center;padding:9px">+ ADD TO LOADOUT</button>
     </div>
     <button class="lm-btn" onclick="closeLoadoutModal()" style="width:100%">DONE</button>
   </div>
