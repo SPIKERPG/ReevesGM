@@ -3609,10 +3609,11 @@ function updateRpAll() {
   const skillStates = slot.sessionSkillState || slot.charData.skillState || [];
 
   if (!isNaN(dieRaw)) {
+    const effectiveDie = isCrit ? dieRaw * 2 : dieRaw;
     // Update attr-only row totals
     ATTRS.forEach((a, i) => {
       const val = attrVals[i] || 0;
-      const tot = isFault ? '✕' : dieRaw + val;
+      const tot = isFault ? '✕' : effectiveDie + val;
       const el  = document.getElementById(`rptot-attr-${i}`);
       if (el) { el.textContent = tot; el.classList.toggle('lit', !isFault); }
     });
@@ -3622,9 +3623,7 @@ function updateRpAll() {
       const attrVal = attrVals[attrIdx] || 0;
       const state   = skillStates[i] || 0;
       const bonus   = state === 2 ? 3 : state === 1 ? 2 : 0;
-      const rawTotal= dieRaw + attrVal + bonus;
-      const margin  = isCrit ? (rawTotal - attrVal - bonus) + attrVal + bonus + (dieRaw - 1) : rawTotal; // crit doubles die margin
-      const display = isFault ? '✕' : rawTotal;
+      const display = isFault ? '✕' : effectiveDie + attrVal + bonus;
       const el      = document.getElementById(`rptot-sk-${i}`);
       if (el) { el.textContent = display; el.classList.toggle('lit', !isFault); }
     });
