@@ -1750,27 +1750,58 @@ select.lm-input { appearance: none; cursor: pointer; }
     <input type="hidden" id="lm-si">
     <div id="lm-op-name" style="font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.16em;color:#5ab0e0;margin-bottom:12px"></div>
     <div id="lm-items" style="margin-bottom:12px"></div>
-    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:10px;margin-bottom:12px">
-      <div style="font-family:Share Tech Mono,monospace;font-size:7px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:8px">■ ADD ITEM</div>
-      <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;margin-bottom:6px;align-items:flex-end">
-        <div><label class="lm-label">NAME</label><input class="lm-input" id="lm-new-name" placeholder="e.g. Assault Rifle"></div>
-        <div><label class="lm-label">CLASS</label>
-          <select class="lm-input mono" id="lm-new-dice" style="min-width:120px">
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:14px 16px 16px;margin-bottom:12px">
+      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">■ ADD ITEM</div>
+
+      <!-- Row 1: Name (full width) -->
+      <div style="margin-bottom:10px">
+        <label class="lm-label">NAME</label>
+        <input class="lm-input" id="lm-new-name" placeholder="e.g. Assault Rifle, Flashbang, Hacking Kit">
+      </div>
+
+      <!-- Row 2: Weapon Class · Bonus · Range · Slot Type -->
+      <div style="display:grid;grid-template-columns:1.6fr 0.7fr 0.8fr 1.1fr;gap:8px;margin-bottom:10px">
+        <div>
+          <label class="lm-label">WEAPON CLASS</label>
+          <select class="lm-input mono" id="lm-new-dice">
             <option value="light">Light (+0)</option>
             <option value="standard" selected>Standard (+2)</option>
             <option value="heavy">Heavy (+4)</option>
-            <option value="">Ability / Passive</option>
+            <option value="">— Ability / Passive</option>
           </select>
         </div>
-        <div><label class="lm-label">ATK BONUS</label><input class="lm-input mono" id="lm-new-bonus" type="number" value="0" style="width:64px"></div>
+        <div>
+          <label class="lm-label">ATK BONUS</label>
+          <input class="lm-input mono" id="lm-new-bonus" type="number" value="0">
+        </div>
+        <div>
+          <label class="lm-label">RANGE</label>
+          <select class="lm-input mono" id="lm-new-range">
+            <option value="close">CLOSE</option>
+            <option value="near">NEAR</option>
+            <option value="far" selected>FAR</option>
+            <option value="out">OUT</option>
+            <option value="any">ANY</option>
+          </select>
+        </div>
+        <div>
+          <label class="lm-label">SLOT TYPE</label>
+          <select class="lm-input mono" id="lm-new-type">
+            <option value="action">ACTION</option>
+            <option value="minor">MINOR ACTION</option>
+            <option value="passive">PASSIVE / ABILITY</option>
+          </select>
+        </div>
       </div>
-      <div style="display:flex;gap:6px;align-items:flex-end">
-        <div style="flex:1"><label class="lm-label">NOTES (OPTIONAL)</label><input class="lm-input" id="lm-new-notes" placeholder="e.g. CLOSE/NEAR only, +1 when aimed"></div>
-        <button class="lm-btn add" onclick="addTrackerEquipItem()" style="white-space:nowrap;align-self:flex-end">+ ADD</button>
+
+      <!-- Row 3: Notes + Add button -->
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:flex-end">
+        <div>
+          <label class="lm-label">NOTES (OPTIONAL)</label>
+          <input class="lm-input" id="lm-new-notes" placeholder="e.g. +1 at CLOSE, single use, requires kit...">
+        </div>
+        <button class="lm-btn add" onclick="addTrackerEquipItem()" style="white-space:nowrap;height:36px">+ ADD TO LOADOUT</button>
       </div>
-      <!-- Hidden fields kept for data compatibility -->
-      <input type="hidden" id="lm-new-range" value="any">
-      <input type="hidden" id="lm-new-type" value="action">
     </div>
     <button class="lm-btn" onclick="closeLoadoutModal()" style="width:100%">DONE</button>
   </div>
@@ -1878,17 +1909,18 @@ const ATTR_ABBR = ['BOD','MND','TEC','AWR','RES'];
 
 const SKILLS = [
   // COMBAT
-  { name: 'Firearms',      attr: 'BODY'      },
+  { name: 'Firearms',      attr: 'AWARENESS' },
   { name: 'Close Combat',  attr: 'BODY'      },
   // PHYSICAL
   { name: 'Mobility',      attr: 'BODY'      },
-  { name: 'Stealth',       attr: 'BODY'      },
-  { name: 'Survival',      attr: 'AWARENESS' },
+  { name: 'Stealth',       attr: 'AWARENESS' },
+  { name: 'Survival',      attr: 'BODY'      },
   // TECHNICAL
   { name: 'Computing',     attr: 'TECH'      },
   { name: 'Engineering',   attr: 'TECH'      },
-  { name: 'Medicine',      attr: 'MIND'      },
+  { name: 'Medicine',      attr: 'TECH'      },
   // MENTAL
+  { name: 'History',       attr: 'MIND'      },
   { name: 'Investigation', attr: 'MIND'      },
   { name: 'Perception',    attr: 'AWARENESS' },
   // SOCIAL
