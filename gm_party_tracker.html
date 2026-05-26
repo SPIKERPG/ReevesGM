@@ -1246,7 +1246,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 
 .rp-skill-row {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto 24px auto;
   gap: 8px;
   align-items: center;
   padding: 6px 10px;
@@ -2114,7 +2114,7 @@ const EQUIPMENT_CATALOGUE = [
   { group:'EQUIPMENT', name:'Bandages',        dice:'',         bonus:0, range:'close', type:'minor',   notes:'Stabilise downed operative (1 HP). No roll. Single use.' },
   { group:'EQUIPMENT', name:'Hacking Kit',     dice:'',         bonus:0, range:'close', type:'passive', notes:'Required for all Computing checks on secured systems.' },
   { group:'EQUIPMENT', name:'Flashbang',       dice:'light',    bonus:0, range:'close', type:'action',  notes:'All CLOSE targets: d10+AWR vs TN 11 or Disadvantage. Single use.' },
-  { group:'EQUIPMENT', name:'Breach Charge',   dice:'',         bonus:0, range:'close', type:'action',  notes:'Destroys door/lock/wall. Minor to detonate. Pack of 3.' },
+  { group:'EQUIPMENT', name:'Breach Charges (×3)', dice:'',         bonus:0, range:'close', type:'action',  notes:'Destroys door/lock/wall. Minor to detonate. Pack of 3.' },
   { group:'EQUIPMENT', name:'Handcuffs',       dice:'',         bonus:0, range:'close', type:'action',  notes:'Restrain incapacitated target. Close Combat vs TN 9. Reusable.' },
   { group:'EQUIPMENT', name:'SPIKE Wand',      dice:'',         bonus:0, range:'near',  type:'minor',   notes:'Read SPIKE level of target at CLOSE/NEAR range.' },
 ];
@@ -3956,7 +3956,7 @@ function renderRpSkills(slot) {
 function rpBuildRow(key, name, attrAbbr, attrVal, bonus, cls, dataIdx, dataType, armorPen) {
   const bonusDisplay = bonus === 3 ? '+3 ★' : bonus === 2 ? '+2' : '—';
   const bonusCls     = bonus === 3 ? 'spec' : bonus === 2 ? 'trained' : '';
-  const penHtml = armorPen ? `<span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--red-bright);min-width:24px;text-align:right">${armorPen}</span>` : '';
+  const penHtml = `<span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--red-bright);min-width:24px;text-align:right">${armorPen ? armorPen : ''}</span>`;
   return `
   <div class="rp-skill-row ${cls}" id="rprow-${key}"
        onclick="rpSelectRow('${key}','${name}',${attrVal},${bonus},${armorPen||0})">
