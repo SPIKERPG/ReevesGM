@@ -1133,9 +1133,39 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 }
 .attr-step-btn:hover { border-color: var(--amber-dim); color: var(--amber); }
 
-/* ─── ARMOR VITAL (no progress bar) ─── */
-.vital-box.armor-box { justify-content: center; text-align: center; }
-.vital-box.armor-box .vital-val { font-size: 22px; }
+/* ─── ARMOR VITAL (selector) ─── */
+.vital-box.armor-box { justify-content: flex-start; }
+.armor-select {
+  background: var(--surface3);
+  border: 1px solid var(--border-hi);
+  color: var(--text-hi);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  padding: 3px 5px;
+  outline: none;
+  width: 100%;
+  margin-top: 3px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.armor-select:focus { border-color: var(--amber-dim); }
+.armor-debuffs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 4px;
+}
+.armor-debuff-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6px;
+  letter-spacing: .08em;
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+  padding: 1px 4px;
+  background: rgba(184,120,32,.08);
+}
 
 /* ─── ROLL CALCULATOR PANEL ─── */
 .roll-panel-btn {
@@ -1349,7 +1379,32 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   transition: all .1s;
 }
 .loadout-item:hover { background: rgba(40,100,160,.18); border-color: #2878a0; }
-.loadout-add-btn {
+.cat-group-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 6.5px;
+  letter-spacing: .18em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.cat-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .06em;
+  padding: 3px 9px;
+  border: 1px solid var(--border-hi);
+  background: var(--surface2);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .1s;
+  white-space: nowrap;
+  display: inline-block;
+  margin: 2px 2px;
+}
+.cat-pill:hover { border-color: var(--green-dim); color: var(--green); background: rgba(122,154,40,.08); }
+.cat-pill.weapon { border-color: #1a3050; color: #5ab0e0; background: rgba(40,100,160,.07); }
+.cat-pill.weapon:hover { background: rgba(40,100,160,.18); border-color: #2878a0; }
+.cat-pill.equip { border-color: var(--amber-dim); color: var(--amber); background: rgba(184,120,32,.06); }
+.cat-pill.equip:hover { background: rgba(184,120,32,.16); }
   font-family: 'Share Tech Mono', monospace;
   font-size: 9px;
   color: var(--text-dim);
@@ -1861,6 +1916,10 @@ select.lm-input { appearance: none; cursor: pointer; }
     <input type="hidden" id="lm-si">
     <div id="lm-op-name" style="font-family:Share Tech Mono,monospace;font-size:8px;letter-spacing:.16em;color:#5ab0e0;margin-bottom:12px"></div>
     <div id="lm-items" style="margin-bottom:12px"></div>
+    <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid var(--green-dim);padding:10px 14px;margin-bottom:10px">
+      <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:var(--green);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">■ REQUISITION CATALOGUE — CLICK TO AUTO-FILL</div>
+      <div id="lm-catalogue"></div>
+    </div>
     <div style="background:var(--surface);border:1px solid var(--border-hi);border-left:2px solid #2878a0;padding:12px 14px;margin-bottom:12px">
       <div style="font-family:Share Tech Mono,monospace;font-size:7.5px;letter-spacing:.18em;color:#5ab0e0;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border)">■ ADD ITEM</div>
 
@@ -2037,6 +2096,24 @@ const SKILLS = [
   // SOCIAL
   { name: 'Persuasion',    attr: 'MIND'      },
   { name: 'Intimidation',  attr: 'RESOLVE'   },
+];
+
+const EQUIPMENT_CATALOGUE = [
+  // WEAPONS
+  { group:'WEAPONS', name:'Pistol',        dice:'light',    bonus:0, range:'near',  type:'action',  notes:'Concealable. CLOSE/NEAR range.' },
+  { group:'WEAPONS', name:'Knife',         dice:'light',    bonus:0, range:'close', type:'action',  notes:'Melee. CLOSE range only.' },
+  { group:'WEAPONS', name:'Rifle',         dice:'standard', bonus:0, range:'far',   type:'action',  notes:'NEAR/FAR range.' },
+  { group:'WEAPONS', name:'Sniper Rifle',  dice:'heavy',    bonus:0, range:'out',   type:'action',  notes:'FAR/OUT range. Cannot move and attack same turn.' },
+  { group:'WEAPONS', name:'Shotgun',       dice:'heavy',    bonus:0, range:'near',  type:'action',  notes:'CLOSE/NEAR range only. Cannot move and attack same turn.' },
+  { group:'WEAPONS', name:'Baton',         dice:'light',    bonus:0, range:'close', type:'action',  notes:'Melee. CLOSE range.' },
+  // FIELD EQUIPMENT
+  { group:'EQUIPMENT', name:'Medkit',         dice:'',         bonus:0, range:'close', type:'action',  notes:'Roll d10 + BODY — result = HP restored. Single use.' },
+  { group:'EQUIPMENT', name:'Bandages',        dice:'',         bonus:0, range:'close', type:'minor',   notes:'Stabilise downed operative (1 HP). No roll. Single use.' },
+  { group:'EQUIPMENT', name:'Hacking Kit',     dice:'',         bonus:0, range:'close', type:'passive', notes:'Required for all Computing checks on secured systems.' },
+  { group:'EQUIPMENT', name:'Flashbang',       dice:'light',    bonus:0, range:'close', type:'action',  notes:'All CLOSE targets: d10+AWR vs TN 11 or Disadvantage. Single use.' },
+  { group:'EQUIPMENT', name:'Breach Charge',   dice:'',         bonus:0, range:'close', type:'action',  notes:'Destroys door/lock/wall. Minor to detonate. Pack of 3.' },
+  { group:'EQUIPMENT', name:'Handcuffs',       dice:'',         bonus:0, range:'close', type:'action',  notes:'Restrain incapacitated target. Close Combat vs TN 9. Reusable.' },
+  { group:'EQUIPMENT', name:'SPIKE Wand',      dice:'',         bonus:0, range:'near',  type:'minor',   notes:'Read SPIKE level of target at CLOSE/NEAR range.' },
 ];
 
 // inputs[] field indices (from character sheet order)
@@ -2225,7 +2302,8 @@ function buildCharCardHTML(d, pIdx, sIdx) {
   const hpMax      = d.hpMax   ?? 0;
   const compCur    = slot && slot.sessionComp       !== undefined ? slot.sessionComp       : (d.compCurrent ?? 0);
   const compMax    = d.compMax ?? 0;
-  const armor      = slot && slot.sessionArmor      !== undefined ? slot.sessionArmor      : (d.armor ?? 0);
+  const armorClass = (slot && slot.sessionArmorClass) ? slot.sessionArmorClass : (d.armorClass || 'none');
+  const armor      = armorClassToReduction(armorClass);
   const cardNotes  = slot && slot.sessionCardNotes  !== undefined ? slot.sessionCardNotes  : '';
   const reactions  = (slot && slot.sessionReactions) ? slot.sessionReactions
                    : (d.reactionPips || [false, false]);
@@ -2408,10 +2486,14 @@ function buildCharCardHTML(d, pIdx, sIdx) {
       </div>
       <div class="vital-box armor-box">
         <div class="vital-lbl">ARMOR</div>
-        <div class="vital-val" id="armval-${sid}" style="color:var(--text-hi)">${armor}</div>
-        <div class="vital-stepper" style="justify-content:center">
-          <button class="stepper-btn minus" onclick="adjArmor(${pIdx},${sIdx},-1)" title="Decrease Armor">−</button>
-          <button class="stepper-btn plus"  onclick="adjArmor(${pIdx},${sIdx},+1)" title="Increase Armor">+</button>
+        <select class="armor-select" id="armsel-${sid}" onchange="setArmorClass(${pIdx},${sIdx},this.value)" title="Armor class">
+          <option value="none"   ${armorClass==='none'   ?'selected':''}>None (−0)</option>
+          <option value="light"  ${armorClass==='light'  ?'selected':''}>Light (−2)</option>
+          <option value="medium" ${armorClass==='medium' ?'selected':''}>Medium (−4)</option>
+          <option value="heavy"  ${armorClass==='heavy'  ?'selected':''}>Heavy (−6)</option>
+        </select>
+        <div class="armor-debuffs" id="armdebuffs-${sid}">
+          ${buildArmorDebuffTags(slot.sessionArmorClass||'none')}
         </div>
       </div>
     </div>
@@ -2551,6 +2633,7 @@ function loadFile(ev, pIdx, sIdx) {
         sessionEquipment:  existing ? (existing.sessionEquipment || []) : [],
         sessionAimed:      false,
         sessionArmor:      existing ? (existing.sessionArmor     ?? 0)  : 0,
+        sessionArmorClass: existing ? (existing.sessionArmorClass || 'none') : 'none',
         sessionAttrVals:   existing ? (existing.sessionAttrVals  || null) : null,
         sessionCardNotes:  existing ? (existing.sessionCardNotes  || '') : '',
       };
@@ -2806,7 +2889,7 @@ function broadcastSync(pIdx, sIdx) {
   const spike = slot.sessionSpike !== undefined ? slot.sessionSpike : (parseInt(slot.charData.currentSpike) || 0);
   const hp    = slot.sessionHp    !== undefined ? slot.sessionHp    : (slot.charData.hpCurrent ?? 0);
   const comp  = slot.sessionComp  !== undefined ? slot.sessionComp  : (slot.charData.compCurrent ?? 0);
-  const armor = slot.sessionArmor !== undefined ? slot.sessionArmor : (slot.charData.armor ?? 0);
+  const armor = armorClassToReduction(slot.sessionArmorClass || 'none');
   syncChannel.postMessage({ type: 'update', src: 'tracker', pi: pIdx, si: sIdx, spike, hp, comp, armor });
 }
 
@@ -2898,7 +2981,42 @@ function openLoadoutModal(pIdx, sIdx) {
   document.getElementById('lm-new-type').value = 'action';
   document.getElementById('lm-new-notes').value = '';
   renderLmItems(slot);
+  renderLmCatalogue();
   document.getElementById('loadout-backdrop').classList.add('open');
+}
+
+function renderLmCatalogue() {
+  const el = document.getElementById('lm-catalogue');
+  if (!el) return;
+  const groups = {};
+  EQUIPMENT_CATALOGUE.forEach(item => {
+    if (!groups[item.group]) groups[item.group] = [];
+    groups[item.group].push(item);
+  });
+  let html = '';
+  Object.keys(groups).forEach(grp => {
+    const iswpn = grp === 'WEAPONS';
+    html += `<div class="cat-group-label">${grp}</div><div style="margin-bottom:8px;line-height:0">`;
+    groups[grp].forEach((item, idx) => {
+      const cls = iswpn ? 'weapon' : 'equip';
+      html += `<span class="cat-pill ${cls}" onclick="catalogueFill(${EQUIPMENT_CATALOGUE.indexOf(item)})" title="${escHtml(item.notes)}">${escHtml(item.name)}</span>`;
+    });
+    html += `</div>`;
+  });
+  el.innerHTML = html;
+}
+
+function catalogueFill(idx) {
+  const item = EQUIPMENT_CATALOGUE[idx];
+  if (!item) return;
+  document.getElementById('lm-new-name').value  = item.name;
+  document.getElementById('lm-new-dice').value  = item.dice  || '';
+  document.getElementById('lm-new-bonus').value = item.bonus || 0;
+  document.getElementById('lm-new-range').value = item.range || 'far';
+  document.getElementById('lm-new-type').value  = item.type  || 'action';
+  document.getElementById('lm-new-notes').value = item.notes || '';
+  // Scroll to form
+  document.getElementById('lm-new-name').focus();
 }
 
 function closeLoadoutModal() {
@@ -3541,18 +3659,53 @@ function execApplyDamage() {
 }
 
 // ═══════════════════════════════════════════════════════
-//  ARMOR ADJUSTMENT
+//  ARMOR CLASS
 // ═══════════════════════════════════════════════════════
 
-function adjArmor(pIdx, sIdx, delta) {
+const ARMOR_DATA = {
+  none:   { label:'None',   reduction:0,  debuffs:[] },
+  light:  { label:'Light',  reduction:2,  debuffs:[] },
+  medium: { label:'Medium', reduction:4,  debuffs:[{attr:'BODY', skill:'Mobility', penalty:-1, tag:'-1 MOBILITY'}] },
+  heavy:  { label:'Heavy',  reduction:6,  debuffs:[
+    {attr:'BODY',      skill:'Mobility', penalty:-1, tag:'-1 MOBILITY'},
+    {attr:'AWARENESS', skill:null,        penalty:-1, tag:'-1 AWARENESS (all)'},
+  ]},
+};
+
+function armorClassToReduction(cls) {
+  return (ARMOR_DATA[cls] || ARMOR_DATA.none).reduction;
+}
+
+function buildArmorDebuffTags(cls) {
+  const d = ARMOR_DATA[cls] || ARMOR_DATA.none;
+  if (!d.debuffs.length) return '';
+  return d.debuffs.map(db => `<span class="armor-debuff-tag">${db.tag}</span>`).join('');
+}
+
+function setArmorClass(pIdx, sIdx, cls) {
   const slot = getSlot(pIdx, sIdx);
   if (!slot) return;
-  const cur = slot.sessionArmor !== undefined ? slot.sessionArmor : 0;
-  const nv  = Math.max(0, cur + delta);
-  slot.sessionArmor = nv;
+  slot.sessionArmorClass = cls;
+  slot.sessionArmor = armorClassToReduction(cls);
   saveToStorage();
-  const el = document.getElementById(`armval-${pIdx}-${sIdx}`);
-  if (el) el.textContent = nv;
+  // Update debuff tags
+  const sid = `${pIdx}-${sIdx}`;
+  const debuffsEl = document.getElementById('armdebuffs-' + sid);
+  if (debuffsEl) debuffsEl.innerHTML = buildArmorDebuffTags(cls);
+  broadcastSync(pIdx, sIdx);
+}
+
+// Get armor penalty for a given skill/attr from current slot
+function getArmorPenalty(slot, skillName, attrName) {
+  if (!slot) return 0;
+  const cls = slot.sessionArmorClass || 'none';
+  const d = ARMOR_DATA[cls] || ARMOR_DATA.none;
+  let penalty = 0;
+  d.debuffs.forEach(db => {
+    if (db.skill && db.skill === skillName) penalty += db.penalty;
+    if (!db.skill && db.attr === attrName) penalty += db.penalty;
+  });
+  return penalty;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -3772,7 +3925,8 @@ function renderRpSkills(slot) {
   ATTRS.forEach((a, i) => {
     const val = attrVals[i] || 0;
     const key = `attr-${i}`;
-    html += rpBuildRow(key, a, ATTR_ABBR[i], val, 0, 'rp-dim', i, 'attr');
+    const armorPen = getArmorPenalty(slot, null, a);
+    html += rpBuildRow(key, a, ATTR_ABBR[i], val, 0, 'rp-dim', i, 'attr', armorPen);
   });
 
   // ── Skills grouped by attribute ──
@@ -3788,28 +3942,31 @@ function renderRpSkills(slot) {
     groupSkills.forEach(sk => {
       const bonus = sk.state === 2 ? 3 : sk.state === 1 ? 2 : 0;
       const cls   = sk.state === 2 ? 'rp-spec' : sk.state === 1 ? 'rp-trained' : 'rp-dim';
-      html += rpBuildRow(`sk-${sk.i}`, sk.name, ATTR_ABBR[attrIdx], attrVal, bonus, cls, sk.i, 'skill');
+      const armorPen = getArmorPenalty(slot, sk.name, sk.attr);
+      html += rpBuildRow(`sk-${sk.i}`, sk.name, ATTR_ABBR[attrIdx], attrVal, bonus, cls, sk.i, 'skill', armorPen);
     });
   });
 
   el.innerHTML = html;
 }
 
-function rpBuildRow(key, name, attrAbbr, attrVal, bonus, cls, dataIdx, dataType) {
+function rpBuildRow(key, name, attrAbbr, attrVal, bonus, cls, dataIdx, dataType, armorPen) {
   const bonusDisplay = bonus === 3 ? '+3 ★' : bonus === 2 ? '+2' : '—';
   const bonusCls     = bonus === 3 ? 'spec' : bonus === 2 ? 'trained' : '';
+  const penHtml = armorPen ? `<span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--red-bright);min-width:24px;text-align:right">${armorPen}</span>` : '';
   return `
   <div class="rp-skill-row ${cls}" id="rprow-${key}"
-       onclick="rpSelectRow('${key}','${name}',${attrVal},${bonus})">
+       onclick="rpSelectRow('${key}','${name}',${attrVal},${bonus},${armorPen||0})">
     <span class="rp-sname">${escHtml(name)}</span>
     <span class="rp-sattr">${attrAbbr} <strong>${attrVal}</strong></span>
     <span class="rp-sbonus ${bonusCls}">${bonusDisplay}</span>
+    ${penHtml}
     <span class="rp-stot" id="rptot-${key}">—</span>
   </div>`;
 }
 
-function rpSelectRow(key, name, attrVal, bonus) {
-  _rpSelected = { key, name, attrVal, bonus };
+function rpSelectRow(key, name, attrVal, bonus, armorPen) {
+  _rpSelected = { key, name, attrVal, bonus, armorPen: armorPen || 0 };
   document.querySelectorAll('.rp-skill-row').forEach(r => r.classList.remove('rp-selected'));
   const row = document.getElementById('rprow-' + key);
   if (row) row.classList.add('rp-selected');
@@ -3833,7 +3990,8 @@ function updateRpAll() {
     // Update attr-only row totals
     ATTRS.forEach((a, i) => {
       const val = attrVals[i] || 0;
-      const tot = isFault ? '✕' : effectiveDie + val;
+      const armorPen = getArmorPenalty(slot, null, a);
+      const tot = isFault ? '✕' : effectiveDie + val + armorPen;
       const el  = document.getElementById(`rptot-attr-${i}`);
       if (el) { el.textContent = tot; el.classList.toggle('lit', !isFault); }
     });
@@ -3843,7 +4001,8 @@ function updateRpAll() {
       const attrVal = attrVals[attrIdx] || 0;
       const state   = skillStates[i] || 0;
       const bonus   = state === 2 ? 3 : state === 1 ? 2 : 0;
-      const display = isFault ? '✕' : effectiveDie + attrVal + bonus;
+      const armorPen = getArmorPenalty(slot, sk.name, sk.attr);
+      const display = isFault ? '✕' : effectiveDie + attrVal + bonus + armorPen;
       const el      = document.getElementById(`rptot-sk-${i}`);
       if (el) { el.textContent = display; el.classList.toggle('lit', !isFault); }
     });
@@ -3869,15 +4028,16 @@ function updateRpResult() {
 
   const isCrit  = dieRaw === 10;
   const isFault = dieRaw === 1;
-  const { name, attrVal, bonus } = _rpSelected;
+  const { name, attrVal, bonus, armorPen } = _rpSelected;
 
   // On crit: die contribution is doubled (margin ×2 means effective die doubles)
   const effectiveDie = isCrit ? dieRaw * 2 : dieRaw;
-  const total = isFault ? 0 : effectiveDie + attrVal + bonus;
+  const total = isFault ? 0 : effectiveDie + attrVal + bonus + (armorPen || 0);
 
   const bonusParts = [];
   bonusParts.push(`${attrVal > 0 ? '+' : ''}attr(${attrVal})`);
   if (bonus > 0) bonusParts.push(`+skill(${bonus})`);
+  if (armorPen) bonusParts.push(`<span style="color:var(--red-bright)">armor(${armorPen})</span>`);
 
   const critNote   = isCrit  ? ' <span style="color:var(--amber)">★ CRIT — die ×2</span>' : '';
   const faultNote  = isFault ? ' <span style="color:var(--red-bright)">✕ FAULT</span>' : '';
