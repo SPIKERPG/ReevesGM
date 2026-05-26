@@ -1390,7 +1390,7 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
   font-family: 'Share Tech Mono', monospace;
   font-size: 8.5px;
   letter-spacing: .06em;
-  padding: 3px 9px;
+  padding: 5px 10px;
   border: 1px solid var(--border-hi);
   background: var(--surface2);
   color: var(--text-dim);
@@ -1405,15 +1405,18 @@ p, li, td, .step-text, .trait-fx, .flaw-body,
 .cat-pill.weapon:hover { background: rgba(40,100,160,.18); border-color: #2878a0; }
 .cat-pill.equip { border-color: var(--amber-dim); color: var(--amber); background: rgba(184,120,32,.06); }
 .cat-pill.equip:hover { background: rgba(184,120,32,.16); }
+
+.loadout-add-btn {
   font-family: 'Share Tech Mono', monospace;
   font-size: 9px;
   color: var(--text-dim);
   cursor: pointer;
-  padding: 1px 6px;
-  border: 1px dashed var(--border);
+  padding: 3px 8px;
+  border: 1px solid var(--border-hi);
   line-height: 1.4;
   transition: all .1s;
   background: transparent;
+  letter-spacing: .1em;
 }
 .loadout-add-btn:hover { color: #5ab0e0; border-color: #1a3050; }
 
@@ -2518,7 +2521,7 @@ function buildCharCardHTML(d, pIdx, sIdx) {
     <div class="loadout-section" id="loadout-${sid}">
       <div class="mini-lbl" style="display:flex;justify-content:space-between;align-items:center">
         LOADOUT
-        <button class="loadout-add-btn" onclick="openLoadoutModal(${pIdx},${sIdx})">+ MANAGE</button>
+        <button class="skills-manage-btn" onclick="openLoadoutModal(${pIdx},${sIdx})">+ MANAGE</button>
       </div>
       <div class="loadout-items" id="loadout-items-${sid}">
         ${loadoutChipsHtml || '<span style="font-size:10px;color:var(--text-dim);font-style:italic">No loadout — click MANAGE to add attacks</span>'}
