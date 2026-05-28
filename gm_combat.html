@@ -184,6 +184,31 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .rle-val{font-weight:700;font-size:12px;min-width:24px;text-align:right}
 .rle-val.success{color:var(--green)}.rle-val.fail{color:var(--red-bright)}.rle-val.neutral{color:var(--text-hi)}
 .rle-note{color:var(--text-dim);font-size:7.5px}
+/* STATUS EFFECTS */
+.status-bar{display:flex;gap:4px;flex-wrap:wrap;padding:8px 12px;background:var(--surface);border:1px solid var(--border-hi);border-top:none}
+.status-bar-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.16em;color:var(--text-dim);align-self:center;white-space:nowrap;margin-right:2px}
+.status-tag{font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.1em;padding:4px 10px;border:1px solid;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:5px}
+.status-tag.suppressed{color:#c8a040;border-color:#7a6020;background:rgba(200,160,64,.1)}
+.status-tag.suppressed.active{background:rgba(200,160,64,.25);border-color:#c8a040}
+.status-tag.concussed{color:#c06060;border-color:#7a2020;background:rgba(192,96,96,.1)}
+.status-tag.concussed.active{background:rgba(192,96,96,.25);border-color:#c06060}
+.status-tag.exposed{color:#a060c0;border-color:#602080;background:rgba(160,96,192,.1)}
+.status-tag.exposed.active{background:rgba(160,96,192,.25);border-color:#a060c0}
+.status-tag.shaken{color:#5ab0e0;border-color:#2878a0;background:rgba(90,176,224,.1)}
+.status-tag.shaken.active{background:rgba(90,176,224,.25);border-color:#5ab0e0}
+.status-tag-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.qi-status-tags{display:flex;gap:2px;flex-wrap:wrap;margin-top:3px}
+.qi-status-tag{font-family:'Share Tech Mono',monospace;font-size:6px;letter-spacing:.08em;padding:1px 4px;border:1px solid currentColor}
+.qi-status-tag.suppressed{color:#c8a040}
+.qi-status-tag.concussed{color:#c06060}
+.qi-status-tag.exposed{color:#a060c0}
+.qi-status-tag.shaken{color:#5ab0e0}
+/* ARMOR DISPLAY IN CMD */
+.cmd-armor-badge{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.12em;padding:3px 8px;border:1px solid var(--amber-dim);color:var(--amber);background:rgba(184,120,32,.08);white-space:nowrap}
+/* WEAPON ROLL PREVIEW */
+.roll-preview{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--text-dim);padding:5px 12px;background:var(--surface);border-bottom:1px solid var(--border)}
+.roll-preview strong{color:var(--text-hi)}
+
 
 /* SHARED */
 .btn{background:var(--surface3);border:1px solid var(--border-hi);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:all .1s}
@@ -295,7 +320,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
           <div class="f-row"><label class="f-label">NAME</label><input class="f-input sm" id="add-name" placeholder="Designation" autocomplete="off"></div>
           <div class="f-group"><div><label class="f-label">HP</label><input class="f-input mono sm" id="add-hp" type="number" placeholder="12"></div><div><label class="f-label">MAX HP</label><input class="f-input mono sm" id="add-hpmax" type="number" placeholder="12"></div></div>
           <div class="f-group"><div><label class="f-label">COMPOSURE</label><input class="f-input mono sm" id="add-comp" type="number" placeholder="5"></div><div><label class="f-label">MAX COMP</label><input class="f-input mono sm" id="add-compmax" type="number" placeholder="5"></div></div>
-          <div class="f-group"><div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="add-armor" type="number" placeholder="0"></div><div><label class="f-label">DEF VALUE</label><input class="f-input mono sm" id="add-defense" type="number" placeholder="6"></div></div>
+          <div class="f-group"><div><label class="f-label">ARMOR CLASS</label><select class="f-input mono sm" id="add-armor-class"><option value="none">None (0)</option><option value="light">Light (−2)</option><option value="medium">Medium (−4)</option><option value="heavy">Heavy (−6)</option></select></div><div><label class="f-label">BASE DEF VALUE</label><input class="f-input mono sm" id="add-defense" type="number" placeholder="6"></div></div>
           <div class="f-group"><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="add-resolve" type="number" placeholder="1"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="add-mind" type="number" placeholder="1"></div><div><label class="f-label">BODY</label><input class="f-input mono sm" id="add-body" type="number" placeholder="1"></div></div>
           <button class="btn green full" onclick="addCombatant()">+ ADD</button>
         </div>
@@ -309,6 +334,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
       <div class="cmd-header op-turn" id="cmd-header">
         <span class="cmd-badge-el" id="cmd-badge">OPERATIVE</span>
         <div class="cmd-name" id="cmd-name">&#8212;</div>
+        <span class="cmd-armor-badge" id="cmd-armor-badge" style="display:none">ARM: NONE</span>
         <div class="cmd-status-el alive" id="cmd-status" onclick="cmdCycleStatus()">ALIVE</div>
         <button class="cmd-next-btn" onclick="nextTurn()">&#9658;&#9658; NEXT TURN</button>
       </div>
@@ -367,18 +393,28 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
         <div class="atk-weapons-row" id="atk-weapons-row" style="display:none"><span class="atk-weapons-lbl">WEAPON:</span><div id="atk-weapon-pills"></div></div>
         <div class="atk-fields" style="grid-template-columns:2fr 1fr 0.8fr 0.8fr 0.6fr;">
           <div class="atk-field"><label>TARGET</label><select id="atk-target" onchange="atkTargetChange()"></select></div>
-          <div class="atk-field"><label>WEAPON CLASS</label><select id="atk-wpn"><option value="0">Light (+0)</option><option value="2" selected>Standard (+2)</option><option value="4">Heavy (+4)</option></select></div>
-          <div class="atk-field"><label>ATK BONUS</label><input id="atk-bonus" type="number" value="0"></div>
-          <div class="atk-field"><label>DEF VALUE</label><input id="atk-def" type="number" value="6"></div>
+          <div class="atk-field"><label>WEAPON CLASS</label><select id="atk-wpn" onchange="updateRollPreview()"><option value="0">Light (+0)</option><option value="2" selected>Standard (+2)</option><option value="4">Heavy (+4)</option></select></div>
+          <div class="atk-field"><label>ATK BONUS</label><input id="atk-bonus" type="number" value="0" onchange="updateRollPreview()"></div>
+          <div class="atk-field"><label>EFF. DEF VALUE <span id="atk-def-note" style="color:var(--amber);font-size:6px"></span></label><input id="atk-def" type="number" value="6" onchange="updateRollPreview()"></div>
           <div class="atk-field"><label>BODY</label><input id="atk-body" type="number" value="0" min="0" max="3" title="Attacker BODY — added to final damage"></div>
         </div>
         <div class="atk-roll-row">
-          <div class="atk-roll-field"><label id="atk-roll-label">PLAYER'S ROLL (d10 total)</label><div style="display:flex;gap:5px"><input id="atk-roll" type="number" placeholder="e.g. 11"><button id="atk-auto-btn" class="btn amber sm" onclick="atkAutoRoll()" style="display:none">&#9711; AUTO</button></div></div>
+          <div class="atk-roll-field"><label id="atk-roll-label">PLAYER'S ROLL (d10 total)</label><div style="display:flex;gap:5px"><input id="atk-roll" type="number" placeholder="e.g. 11" oninput="updateRollPreview()"><button id="atk-auto-btn" class="btn amber sm" onclick="atkAutoRoll()" style="display:none">&#9711; AUTO</button></div></div>
+          <div class="atk-roll-field"><label>ADV / DISADV</label><select id="atk-mode" style="background:var(--surface);border:1px solid var(--border-hi);color:var(--text-hi);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 6px;outline:none;min-height:28px"><option value="normal">Normal</option><option value="advantage">Advantage</option><option value="disadvantage">Disadv.</option></select></div>
           <label style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);display:flex;align-items:center;gap:4px;cursor:pointer;align-self:flex-end;padding-bottom:3px"><input type="checkbox" id="atk-use-armor" checked> Apply armor</label>
           <button class="btn amber" onclick="resolveAttack()" style="align-self:flex-end">RESOLVE</button>
           <button class="btn red sm" id="atk-apply-btn" style="display:none;align-self:flex-end" onclick="applyDamage()">&#128165; APPLY</button>
         </div>
         <div class="atk-result" id="atk-result">Select target and enter roll.</div>
+        <div class="roll-preview" id="roll-preview" style="display:none"></div>
+      </div>
+      <div class="status-bar" id="status-bar" style="display:none">
+        <span class="status-bar-lbl">CONDITIONS:</span>
+        <div class="status-tag suppressed" id="sc-suppressed" onclick="toggleStatus('suppressed')" title="Suppressed — −1 to all attacks"><div class="status-tag-dot"></div>SUPPRESSED<span style="font-size:6px;opacity:.7;margin-left:2px">−1 ATK</span></div>
+        <div class="status-tag concussed" id="sc-concussed" onclick="toggleStatus('concussed')" title="Concussed — Disadvantage on MIND/AWARENESS rolls"><div class="status-tag-dot"></div>CONCUSSED<span style="font-size:6px;opacity:.7;margin-left:2px">DISADV MIND</span></div>
+        <div class="status-tag exposed" id="sc-exposed" onclick="toggleStatus('exposed')" title="Exposed — Attackers gain +1 to DEF threshold vs this target"><div class="status-tag-dot"></div>EXPOSED<span style="font-size:6px;opacity:.7;margin-left:2px">DEF −1</span></div>
+        <div class="status-tag shaken" id="sc-shaken" onclick="toggleStatus('shaken')" title="Shaken — −1 SPIKE resistance, SPIKE Saves at Disadvantage this turn"><div class="status-tag-dot"></div>SHAKEN<span style="font-size:6px;opacity:.7;margin-left:2px">SPIKE DISADV</span></div>
+        <button class="btn sm" onclick="clearAllStatuses()" style="margin-left:auto;font-size:7px">CLEAR ALL</button>
       </div>
       <div class="dice-panel" id="dice-panel" style="display:none">
         <div class="dice-panel-lbl">&#9632; DICE ROLLS</div>
@@ -394,6 +430,31 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
         <div class="roll-log-head">&#9632; ROLL LOG <span onclick="clearLog()">&#10005; CLEAR</span></div>
         <div id="roll-log-entries"></div>
       </div>
+      <div style="background:var(--surface2);border:1px solid var(--border-hi);padding:10px 12px">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.2em;color:var(--text-dim);margin-bottom:8px">&#9632; STATUS EFFECT REFERENCE</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+          <div style="padding:6px 8px;border:1px solid #7a6020;background:rgba(200,160,64,.07)">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:#c8a040;margin-bottom:3px">SUPPRESSED</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">−1 to all attack rolls this turn. Clears at end of turn.</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:6.5px;color:#7a6020;margin-top:3px">TRIGGER: STD wpn hit ≥4 dmg</div>
+          </div>
+          <div style="padding:6px 8px;border:1px solid #7a2020;background:rgba(192,96,96,.07)">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:#c06060;margin-bottom:3px">CONCUSSED</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">Disadvantage on MIND &amp; AWARENESS checks. Persists until cleared.</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:6.5px;color:#7a2020;margin-top:3px">TRIGGER: HEAVY wpn hit ≥4 dmg</div>
+          </div>
+          <div style="padding:6px 8px;border:1px solid #602080;background:rgba(160,96,192,.07)">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:#a060c0;margin-bottom:3px">EXPOSED</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">Effective DEF reduced by 1. Attackers gain edge. Persists until cleared.</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:6.5px;color:#602080;margin-top:3px">TRIGGER: LIGHT wpn hit ≥4 dmg</div>
+          </div>
+          <div style="padding:6px 8px;border:1px solid #2878a0;background:rgba(90,176,224,.07)">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.12em;color:#5ab0e0;margin-bottom:3px">SHAKEN</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">Disadvantage on SPIKE Saves this turn. Clears at end of turn.</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:6.5px;color:#2878a0;margin-top:3px">TRIGGER: Manual only</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -406,7 +467,8 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
         <div class="sec-head"><span class="sec-num">// BUILD</span><span class="sec-title">HOSTILE BUILDER</span><span class="sec-line"></span></div>
         <div class="bpanel"><div class="bpanel-lbl">&#9632; IDENTITY</div><div class="f-row"><label class="f-label">NAME</label><input class="f-input" id="h-name" placeholder="e.g. Facility Guard"></div></div>
         <div class="bpanel"><div class="bpanel-lbl">&#9632; VITALS</div>
-          <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="h-hp" type="number" value="10"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="h-comp" type="number" value="5"></div><div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="h-armor" type="number" value="0"></div></div>
+          <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="h-hp" type="number" value="10"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="h-comp" type="number" value="5"></div><div><label class="f-label">ARMOR CLASS</label><select class="f-input mono sm" id="h-armor-class" onchange="document.getElementById('h-armor').value=armorFromClass(this.value)"><option value="none">None (0)</option><option value="light">Light (−2)</option><option value="medium">Medium (−4)</option><option value="heavy">Heavy (−6)</option></select></div></div>
+          <input type="hidden" id="h-armor" value="0">
           <div class="f-group3"><div><label class="f-label">DEF VALUE</label><input class="f-input mono sm" id="h-defense" type="number" value="6"></div><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="h-resolve" type="number" value="1"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="h-mind" type="number" value="1"></div></div>
         </div>
         <div class="bpanel"><div class="bpanel-lbl">&#9632; ATTACKS</div>
@@ -442,7 +504,8 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
           <div class="f-row"><label class="f-label">ROLE / AFFILIATION</label><input class="f-input" id="n-role" placeholder="e.g. UGD RESEARCHER"></div>
         </div>
         <div class="bpanel blue"><div class="bpanel-lbl blue">&#9632; VITALS</div>
-          <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="n-hp" type="number" value="8"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="n-comp" type="number" value="5"></div><div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="n-armor" type="number" value="0"></div></div>
+          <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="n-hp" type="number" value="8"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="n-comp" type="number" value="5"></div><div><label class="f-label">ARMOR CLASS</label><select class="f-input mono sm" id="n-armor-class" onchange="document.getElementById('n-armor').value=armorFromClass(this.value)"><option value="none">None (0)</option><option value="light">Light (−2)</option><option value="medium">Medium (−4)</option><option value="heavy">Heavy (−6)</option></select></div></div>
+          <input type="hidden" id="n-armor" value="0">
           <div class="f-group3"><div><label class="f-label">DEF VALUE</label><input class="f-input mono sm" id="n-defense" type="number" value="6"></div><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="n-resolve" type="number" value="1"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="n-mind" type="number" value="1"></div></div>
         </div>
         <div class="bpanel blue"><div class="bpanel-lbl blue">&#9632; DISPOSITION</div>
@@ -479,7 +542,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
     <div class="modal-title">EDIT HOSTILE <span class="modal-close" onclick="closeModal('modal-edit-hostile')">&#10005;</span></div>
     <input type="hidden" id="eh-id">
     <div class="f-row"><label class="f-label">NAME</label><input class="f-input" id="eh-name"></div>
-    <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="eh-hp" type="number"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="eh-comp" type="number"></div><div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="eh-armor" type="number"></div></div>
+    <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="eh-hp" type="number"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="eh-comp" type="number"></div><div><label class="f-label">ARMOR CLASS</label><select class="f-input mono sm" id="eh-armor-class"><option value="none">None (0)</option><option value="light">Light (−2)</option><option value="medium">Medium (−4)</option><option value="heavy">Heavy (−6)</option></select><input type="hidden" id="eh-armor" value="0"></div></div>
     <div class="f-group3"><div><label class="f-label">DEF VALUE</label><input class="f-input mono sm" id="eh-defense" type="number"></div><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="eh-resolve" type="number"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="eh-mind" type="number"></div></div>
     <div id="eh-atk-builder" style="margin-bottom:8px"></div>
     <button class="btn sm" onclick="addEhAtkRow()" style="margin-bottom:10px">+ ATTACK</button>
@@ -495,7 +558,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:8px 
     <input type="hidden" id="en-id">
     <div class="f-row"><label class="f-label">NAME</label><input class="f-input" id="en-name"></div>
     <div class="f-row"><label class="f-label">ROLE</label><input class="f-input" id="en-role"></div>
-    <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="en-hp" type="number"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="en-comp" type="number"></div><div><label class="f-label">ARMOR</label><input class="f-input mono sm" id="en-armor" type="number"></div></div>
+    <div class="f-group3"><div><label class="f-label">HP</label><input class="f-input mono sm" id="en-hp" type="number"></div><div><label class="f-label">COMP</label><input class="f-input mono sm" id="en-comp" type="number"></div><div><label class="f-label">ARMOR CLASS</label><select class="f-input mono sm" id="en-armor-class"><option value="none">None (0)</option><option value="light">Light (−2)</option><option value="medium">Medium (−4)</option><option value="heavy">Heavy (−6)</option></select><input type="hidden" id="en-armor" value="0"></div></div>
     <div class="f-group3"><div><label class="f-label">DEF</label><input class="f-input mono sm" id="en-defense" type="number"></div><div><label class="f-label">RESOLVE</label><input class="f-input mono sm" id="en-resolve" type="number"></div><div><label class="f-label">MIND</label><input class="f-input mono sm" id="en-mind" type="number"></div></div>
     <div class="f-row"><label class="f-label">DISPOSITION</label><select class="f-input" id="en-disposition"><option value="neutral">NEUTRAL</option><option value="friendly">FRIENDLY</option><option value="hostile">HOSTILE</option><option value="fearful">FEARFUL</option><option value="compliant">COMPLIANT</option><option value="unknown">UNKNOWN</option></select></div>
     <div class="f-row"><label class="f-label">SPIKE</label><input class="f-input mono sm" id="en-spike" type="number" min="0" max="11"></div>
@@ -532,7 +595,7 @@ function saveState(){try{localStorage.setItem(STORAGE_COMBAT,JSON.stringify({com
 function loadState(){
   try{const h=localStorage.getItem(STORAGE_HOSTILE);if(h)hostileRoster=JSON.parse(h)||[];}catch(e){}
   try{const n=localStorage.getItem(STORAGE_NPC);if(n)npcRoster=JSON.parse(n)||[];}catch(e){}
-  try{const c=localStorage.getItem(STORAGE_COMBAT);if(c){const d=JSON.parse(c);combatants=(d.combatants||[]).map(cx=>{const m={resolve:1,mind:1,body:0,defense:6,...cx,actionUsed:false,minorUsed:false,aimed:false};migrateReactions(m);return m;});currentTurnIdx=d.currentTurnIdx??-1;encounterActive=d.encounterActive??false;}}catch(e){}
+  try{const c=localStorage.getItem(STORAGE_COMBAT);if(c){const d=JSON.parse(c);combatants=(d.combatants||[]).map(cx=>{const m={resolve:1,mind:1,body:0,defense:6,...cx,actionUsed:false,minorUsed:false,aimed:false};migrateReactions(m);if(!m.statuses)m.statuses=[];return m;});currentTurnIdx=d.currentTurnIdx??-1;encounterActive=d.encounterActive??false;}}catch(e){}
 }
 
 function switchPage(n){['encounter','hostiles','npcs'].forEach(p=>{document.getElementById('page-'+p).classList.toggle('active',p===n);document.getElementById('ntab-'+p).classList.toggle('active',p===n);});}
@@ -549,25 +612,49 @@ function loadPartyTracker(){
 }
 function importOperative(pi,si,cd,slot){
   if(combatants.some(c=>c.trackerRef===`${pi}-${si}`)){alert('Already imported.');return;}
-  console.log('[SPIKE import] cd keys:', Object.keys(cd), '| attrVals:', cd.attrVals, '| hpMax:', cd.hpMax, '| slot keys:', Object.keys(slot));
   const av=(slot.sessionAttrVals)||cd.attrVals||[1,1,1,1,1];const resolve=av[4]||0,mind=av[1]||0,body=av[0]||0;
   const hpCur=slot.sessionHp!==undefined?slot.sessionHp:(cd.hpCurrent??10);
   const hpMax=cd.hpMax??(10+(av[0]||0));
   const compCur=slot.sessionComp!==undefined?slot.sessionComp:(cd.compCurrent??5);
   const compMax=cd.compMax??(5+resolve);
   const spike=slot.sessionSpike!==undefined?slot.sessionSpike:(parseInt(cd.currentSpike)||0);
-  const armor=slot.sessionArmor!==undefined?slot.sessionArmor:(cd.armor??0);
-  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armor,defense:6,resolve,mind,body,spike,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`});
+  const armorClass=slot.sessionArmorClass||'none';
+  const armor=slot.sessionArmor!==undefined?slot.sessionArmor:armorFromClass(armorClass);
+  // Import weapons from tracker loadout — derive skill/attr
+  const equipment=slot.sessionEquipment||[];
+  const hostileAtks=equipment.filter(e=>e.type==='action'&&e.dice).map(e=>{
+    const diceType=e.dice||'standard';
+    // determine best attr: Firearms→AWARENESS(3), Close Combat→BODY(0), else BODY
+    let attrIdx=3,skillIdx=0,skillBonus=0;
+    const nm=(e.name||'').toLowerCase();
+    if(nm.includes('pistol')||nm.includes('rifle')||nm.includes('sniper')||nm.includes('shotgun')||nm.includes('firearm')){attrIdx=3;}
+    else{attrIdx=0;}
+    // Check skill training from character sheet
+    const skillState=slot.sessionSkillState||cd.skillState||[];
+    const SKILL_LIST=['Firearms','Close Combat','Mobility','Stealth','Survival','Computing','Engineering','Medicine','History','Investigation','Perception','Persuasion','Intimidation'];
+    const SKILL_ATTR=[3,0,0,3,0,2,2,2,1,1,3,1,4];
+    // firearms or close combat?
+    if(nm.includes('pistol')||nm.includes('rifle')||nm.includes('sniper')||nm.includes('shotgun')){
+      const fi=0;skillBonus=skillState[fi]===2?3:skillState[fi]===1?2:0;attrIdx=SKILL_ATTR[fi];
+    }else{
+      const ci=1;skillBonus=skillState[ci]===2?3:skillState[ci]===1?2:0;attrIdx=SKILL_ATTR[ci];
+    }
+    return {name:e.name,dice:diceType,bonus:String(parseInt(e.bonus||0)+skillBonus),attrIdx,attrVal:av[attrIdx]||0,range:e.range||'near',notes:e.notes||''};
+  });
+  combatants.push({id:uid(),name:(cd.inputs&&cd.inputs[0])||'OPERATIVE',type:'operative',hp:hpCur,hpMax,comp:compCur,compMax,armorClass,armor,defense:6,resolve,mind,body,spike,attrVals:[...av],skillState:slot.sessionSkillState||cd.skillState||[],reactions:emptyReactions(),statuses:[],status:'alive',actionUsed:false,minorUsed:false,aimed:false,trackerRef:`${pi}-${si}`,hostileAtks});
   saveState();renderQueue();loadPartyTracker();
 }
 
 function toggleAddForm(){const b=document.getElementById('add-form-body'),i=document.getElementById('add-form-icon');const o=b.classList.toggle('open');i.textContent=o?'\u25b2':'\u25bc';}
 function setAddType(t){addType=t;['operative','hostile','npc'].forEach(x=>{document.getElementById('tbtn-'+x).className='type-btn'+(x===t?' active-'+x:'');});}
+const ARMOR_CLASS_MAP={none:0,light:2,medium:4,heavy:6};
+function armorFromClass(cls){return ARMOR_CLASS_MAP[cls]||0;}
 function addCombatant(){
   const name=document.getElementById('add-name').value.trim();if(!name){document.getElementById('add-name').focus();return;}
   const hp=parseInt(document.getElementById('add-hp').value)||12,hpMax=parseInt(document.getElementById('add-hpmax').value)||hp;
   const comp=parseInt(document.getElementById('add-comp').value)||5,compMax=parseInt(document.getElementById('add-compmax').value)||comp;
-  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armor:parseInt(document.getElementById('add-armor').value)||0,defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,body:parseInt(document.getElementById('add-body').value)||0,spike:0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false});
+  const armorClass=document.getElementById('add-armor-class').value||'none';
+  combatants.push({id:uid(),name,type:addType,hp:Math.min(hp,hpMax),hpMax:Math.max(hpMax,1),comp:Math.min(comp,compMax),compMax:Math.max(compMax,1),armorClass,armor:armorFromClass(armorClass),defense:parseInt(document.getElementById('add-defense').value)||6,resolve:parseInt(document.getElementById('add-resolve').value)||1,mind:parseInt(document.getElementById('add-mind').value)||1,body:parseInt(document.getElementById('add-body').value)||0,spike:0,reactions:emptyReactions(),status:'alive',statuses:[],actionUsed:false,minorUsed:false,aimed:false});
   ['add-name','add-hp','add-hpmax','add-comp','add-compmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   saveState();renderQueue();
 }
@@ -645,7 +732,17 @@ function refreshReactions(){
 /* ─── END REACTION FUNCTIONS ─── */
 
 function startEncounter(){if(!combatants.length){alert('Add combatants first.');return;}encounterActive=true;currentTurnIdx=0;resetTurnState(0);saveState();renderQueue();renderCommandCenter();updateNavInfo();document.getElementById('btn-start').style.display='none';document.getElementById('btn-next').style.display='';document.getElementById('cmd-wrap').style.display='flex';document.getElementById('cmd-empty').style.display='none';}
-function nextTurn(){if(!encounterActive||!combatants.length)return;let next=(currentTurnIdx+1)%combatants.length,safety=0;while(combatants[next].status==='dead'&&safety<combatants.length){next=(next+1)%combatants.length;safety++;}currentTurnIdx=next;resetTurnState(next);saveState();renderQueue();renderCommandCenter();updateNavInfo();}
+function nextTurn(){
+  if(!encounterActive||!combatants.length)return;
+  // Clear per-turn statuses on current before advancing
+  const prev=getCurrent();
+  if(prev&&prev.statuses){
+    prev.statuses=prev.statuses.filter(s=>!['suppressed','shaken'].includes(s));
+  }
+  let next=(currentTurnIdx+1)%combatants.length,safety=0;
+  while(combatants[next].status==='dead'&&safety<combatants.length){next=(next+1)%combatants.length;safety++;}
+  currentTurnIdx=next;resetTurnState(next);saveState();renderQueue();renderCommandCenter();updateNavInfo();
+}
 function resetTurnState(idx){const c=combatants[idx];if(!c)return;c.actionUsed=false;c.minorUsed=false;c.aimed=false;}
 function clearEncounter(){if(combatants.length&&!confirm('Clear all combatants?'))return;combatants=[];currentTurnIdx=-1;encounterActive=false;rollLog=[];saveState();renderQueue();updateNavInfo();renderLog();document.getElementById('btn-start').style.display='';document.getElementById('btn-next').style.display='none';document.getElementById('cmd-wrap').style.display='none';document.getElementById('cmd-empty').style.display='';loadPartyTracker();}
 function updateNavInfo(){const t=encounterActive&&combatants[currentTurnIdx]?combatants[currentTurnIdx].name.slice(0,12).toUpperCase():'\u2014';const r=encounterActive?'\u25b6 ACTIVE':'\u2014';document.getElementById('nav-enc-info').innerHTML=`ENCOUNTER <strong>${r}</strong> &nbsp;|&nbsp; <strong>${t}</strong>`;}
@@ -666,8 +763,10 @@ function renderQueue(){
         <div class="qi-vg"><span class="qi-vl">HP</span><button class="qi-step minus" onclick="adjHp('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v">${c.hp}/${c.hpMax}</span><button class="qi-step plus" onclick="adjHp('${c.id}',+1);event.stopPropagation()">+</button></div>
         <div class="qi-vg"><span class="qi-vl">CMP</span><button class="qi-step minus" onclick="adjComp('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v">${c.comp}/${c.compMax}</span><button class="qi-step plus" onclick="adjComp('${c.id}',+1);event.stopPropagation()">+</button></div>
         <div class="qi-vg"><span class="qi-vl" style="color:${sc}">SP</span><button class="qi-step minus" onclick="adjSpike('${c.id}',-1);event.stopPropagation()">\u2212</button><span class="qi-v" style="color:${sc}">${c.spike||0}</span><button class="qi-step plus" onclick="adjSpike('${c.id}',+1);event.stopPropagation()">+</button></div>
+        ${(c.armorClass&&c.armorClass!=='none')?`<div class="qi-vg"><span class="qi-vl" style="color:var(--amber)">${c.armorClass.slice(0,3).toUpperCase()}</span><span class="qi-v" style="font-size:9px;color:var(--amber)">-${c.armor||0}</span></div>`:''}
       </div>
       <div class="qi-bottom">${rxnPips?`<div class="qi-rxn-pips">${rxnPips}</div>`:''}${aimedTag}<button class="qi-rm" onclick="removeCombatant('${c.id}');event.stopPropagation()" title="Remove">\u00d7</button></div>
+      ${(c.statuses&&c.statuses.length)?`<div class="qi-status-tags">${c.statuses.map(s=>`<span class="qi-status-tag ${s}">${s.toUpperCase()}</span>`).join('')}</div>`:''}
     </div>`;
   }).join('');
   combatants.forEach((c,i)=>{const el=document.getElementById('qi-'+c.id);if(el)el.addEventListener('click',()=>{if(encounterActive){currentTurnIdx=i;saveState();renderQueue();renderCommandCenter();}});});
@@ -721,13 +820,52 @@ function renderCommandCenter(){
   const pillsRow=document.getElementById('atk-weapons-row');
   if(savedAtks.length){
     pillsRow.style.display='';
-    document.getElementById('atk-weapon-pills').innerHTML=savedAtks.map((a,i)=>{const mod=a.dice==='light'?0:a.dice==='heavy'?4:2;const bonus=parseInt(a.bonus)||0;return `<button class="atk-wpn-pill${i===0?' selected':''}" onclick="atkWeaponPillClick(${mod},${bonus},this)">${escHtml(a.name)}</button>`;}).join('');
-    const f=savedAtks[0];document.getElementById('atk-wpn').value=String(f.dice==='light'?0:f.dice==='heavy'?4:2);document.getElementById('atk-bonus').value=String(parseInt(f.bonus)||0);
-  }else{pillsRow.style.display='none';document.getElementById('atk-bonus').value='0';}
+    document.getElementById('atk-weapon-pills').innerHTML=savedAtks.map((a,i)=>{
+      const mod=a.dice==='light'?0:a.dice==='heavy'?4:2;const bonus=parseInt(a.bonus)||0;
+      const attrAbbr=a.attrIdx!==undefined?['BOD','MND','TEC','AWR','RES'][a.attrIdx]||'':'' ;
+      const attrVal=a.attrVal!==undefined?a.attrVal:'';
+      const tipStr=attrAbbr?`${attrAbbr}(${attrVal})+skill+d10`:'d10+bonus';
+      return `<button class="atk-wpn-pill${i===0?' selected':''}" onclick="atkWeaponPillClick(${mod},${bonus},this,${JSON.stringify(a)})" title="${tipStr}">${escHtml(a.name)}</button>`;
+    }).join('');
+    const f=savedAtks[0];
+    document.getElementById('atk-wpn').value=String(f.dice==='light'?0:f.dice==='heavy'?4:2);
+    document.getElementById('atk-bonus').value=String(parseInt(f.bonus)||0);
+    document.getElementById('atk-body').value=c.body||0;
+    _currentWeapon=f;
+  }else{pillsRow.style.display='none';document.getElementById('atk-bonus').value='0';_currentWeapon=null;}
   document.getElementById('atk-result').textContent='Select target and enter roll.';
   document.getElementById('atk-apply-btn').style.display='none';
   document.getElementById('atk-roll').value='';
   _atkLastHit=false;_atkLastDamage=0;
+  // Status bar
+  const statusBar=document.getElementById('status-bar');
+  if(statusBar){statusBar.style.display='';refreshStatusBar(c);}
+  // Show concussed warning on dice panel
+  const isConcussed=(c.statuses||[]).includes('concussed');
+  const stableBtn=document.getElementById('dice-stabilize-btn');
+  const groundBtn=document.getElementById('dice-ground-btn');
+  if(stableBtn)stableBtn.style.display=c.type==='npc'?'':'none';
+  if(groundBtn)groundBtn.style.display=c.type==='npc'?'':'none';
+  const dicePanel=document.getElementById('dice-panel');
+  if(dicePanel&&isRoller){
+    // Remove any existing concussed note
+    const old=dicePanel.querySelector('.concussed-note');if(old)old.remove();
+    if(isConcussed){
+      const note=document.createElement('div');
+      note.className='concussed-note';
+      note.style.cssText='font-family:"Share Tech Mono",monospace;font-size:7.5px;letter-spacing:.12em;color:#c06060;padding:4px 12px;background:rgba(192,96,96,.08);border-top:1px solid rgba(192,96,96,.2)';
+      note.textContent='⚠ CONCUSSED — MIND & AWARENESS rolls at Disadvantage';
+      dicePanel.appendChild(note);
+    }
+  }
+  // Armor badge in header
+  const armorBadge=document.getElementById('cmd-armor-badge');
+  if(armorBadge){
+    const ac=c.armorClass||'none';const ar=c.armor||0;
+    armorBadge.textContent=`ARM: ${ac.toUpperCase()} (−${ar})`;
+    armorBadge.style.display=ac==='none'?'none':'';
+  }
+  updateRollPreview();
   const isRoller=c.type==='hostile'||c.type==='npc';
   document.getElementById('dice-panel').style.display=isRoller?'':'none';
   if(isRoller){document.getElementById('dice-stabilize-btn').style.display=c.type==='npc'?'':'none';document.getElementById('dice-ground-btn').style.display=c.type==='npc'?'':'none';document.getElementById('dice-result').textContent='';}
@@ -766,42 +904,158 @@ function toggleMinor(){const c=getCurrent();if(!c)return;c.minorUsed=!c.minorUse
 function doAim(){const c=getCurrent();if(!c)return;c.aimed=!c.aimed;if(c.aimed&&!c.minorUsed)c.minorUsed=true;saveState();renderQueue();refreshActionPips();addLog({label:c.name+': '+(c.aimed?'Aimed':'Un-aimed'),total:null});}
 function doExtendMove(){const c=getCurrent();if(!c)return;c.minorUsed=true;adjComp(c.id,-1);addLog({label:c.name+': Extended Move (\u22121 COMP)',total:null});}
 
-function atkTargetChange(){const sel=document.getElementById('atk-target');_atkTargetId=sel.value;const t=combatants.find(c=>c.id===sel.value);if(t)document.getElementById('atk-def').value=t.defense||6;}
-function atkWeaponPillClick(mod,bonus,btn){document.getElementById('atk-wpn').value=String(mod);document.getElementById('atk-bonus').value=String(bonus);const c=getCurrent();if(c)document.getElementById('atk-body').value=c.body||0;document.querySelectorAll('.atk-wpn-pill').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
+function atkTargetChange(){
+  const sel=document.getElementById('atk-target');_atkTargetId=sel.value;
+  const t=combatants.find(c=>c.id===sel.value);
+  if(t){
+    const statuses=t.statuses||[];
+    const effDef=(t.defense||6)+(statuses.includes('exposed')?-1:0);
+    document.getElementById('atk-def').value=effDef;
+    const noteEl=document.getElementById('atk-def-note');
+    if(noteEl)noteEl.textContent=statuses.includes('exposed')?'(EXPOSED −1)':'';
+  }
+  updateRollPreview();
+}
+let _currentWeapon=null;
+function atkWeaponPillClick(mod,bonus,btn,weaponData){
+  document.getElementById('atk-wpn').value=String(mod);
+  document.getElementById('atk-bonus').value=String(bonus);
+  const c=getCurrent();if(c)document.getElementById('atk-body').value=c.body||0;
+  document.querySelectorAll('.atk-wpn-pill').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  _currentWeapon=weaponData||null;
+  updateRollPreview();
+}
+function updateRollPreview(){
+  const c=getCurrent();const preview=document.getElementById('roll-preview');if(!preview)return;
+  if(!c){preview.style.display='none';return;}
+  const bonus=parseInt(document.getElementById('atk-bonus').value)||0;
+  const wpnMod=parseInt(document.getElementById('atk-wpn').value)||0;
+  const body=parseInt(document.getElementById('atk-body').value)||0;
+  const wpnLabel=wpnMod===0?'Light':wpnMod===4?'Heavy':'Standard';
+  let attrPart='d10';
+  if(_currentWeapon&&_currentWeapon.attrIdx!==undefined){
+    const attrNames=['BOD','MND','TEC','AWR','RES'];
+    const av=c.attrVals||[c.body||0,c.mind||0,0,0,c.resolve||0];
+    const attrVal=av[_currentWeapon.attrIdx]||0;
+    const aname=attrNames[_currentWeapon.attrIdx]||'';
+    attrPart=`d10 + ${aname}(${attrVal})${bonus?' + skill('+bonus+')':''}`;
+  }else{
+    attrPart=`d10${bonus?' + bonus('+bonus+')':''}`;
+  }
+  // Show effective DEF for selected target
+  const targetId=document.getElementById('atk-target').value;
+  const target=combatants.find(x=>x.id===targetId);
+  let defNote='';
+  if(target){
+    const statuses=target.statuses||[];
+    const effDef=(target.defense||6)+(statuses.includes('exposed')?-1:0);
+    const defEl=document.getElementById('atk-def');if(defEl)defEl.value=effDef;
+    const noteEl=document.getElementById('atk-def-note');
+    if(noteEl)noteEl.textContent=statuses.includes('exposed')?'(EXPOSED −1)':'';
+    defNote=` vs DEF ${effDef}${target.armor?' (ARM:−'+target.armor+')':''}`;
+  }
+  preview.style.display='';
+  preview.innerHTML=`ROLL: <strong>${attrPart}</strong> · ${wpnLabel} dmg+${wpnMod}${body?' + BODY('+body+')':''}${defNote} · STATUS: ${(c.statuses||[]).map(s=>s.toUpperCase()).join(', ')||'none'}`;
+}
 function atkAutoRoll(){const bonus=parseInt(document.getElementById('atk-bonus').value)||0;document.getElementById('atk-roll').value=Math.ceil(Math.random()*10)+bonus;}
+// STATUS EFFECT DEFINITIONS
+const STATUS_EFFECTS={
+  suppressed:{label:'Suppressed',effect:'−1 to all attack rolls this turn',color:'#c8a040'},
+  concussed:{label:'Concussed',effect:'Disadvantage on MIND & AWARENESS checks',color:'#c06060'},
+  exposed:{label:'Exposed',effect:'Effective DEF reduced by 1',color:'#a060c0'},
+  shaken:{label:'Shaken',effect:'Disadvantage on SPIKE Saves this turn',color:'#5ab0e0'},
+};
+// Conditions that auto-trigger on raw damage threshold
+function statusForDamage(rawDmg,wpnMod){
+  // triggered by final raw damage ≥4 on the hit, weapon-flavoured
+  if(rawDmg<4)return null;
+  if(wpnMod===4)return'concussed';   // Heavy weapon → concussed
+  if(wpnMod===2)return'suppressed';  // Standard → suppressed
+  return'exposed';                    // Light big-margin → exposed
+}
+function toggleStatus(key){
+  const c=getCurrent();if(!c)return;
+  if(!c.statuses)c.statuses=[];
+  const idx=c.statuses.indexOf(key);
+  if(idx>=0)c.statuses.splice(idx,1);else c.statuses.push(key);
+  saveState();renderQueue();refreshStatusBar(c);
+  if(key==='exposed')updateRollPreview();
+}
+function clearAllStatuses(){
+  const c=getCurrent();if(!c)return;c.statuses=[];saveState();renderQueue();refreshStatusBar(c);
+}
+function refreshStatusBar(c){
+  ['suppressed','concussed','exposed','shaken'].forEach(s=>{
+    const el=document.getElementById('sc-'+s);if(!el)return;
+    el.classList.toggle('active',(c.statuses||[]).includes(s));
+  });
+}
 function resolveAttack(){
   const total=parseInt(document.getElementById('atk-roll').value),defVal=parseInt(document.getElementById('atk-def').value)||6;
   const bonus=parseInt(document.getElementById('atk-bonus').value)||0,wpnMod=parseInt(document.getElementById('atk-wpn').value)||0;
   const bodyMod=parseInt(document.getElementById('atk-body').value)||0;
   const dieRoll=total-bonus;
   if(isNaN(total)){setAtkR('<span class="r-miss">Enter a roll first.</span>');return;}
-  const isFault=dieRoll===1,isCrit=dieRoll===10,hit=total>=defVal&&!isFault;
-  const c=getCurrent();
-  if(!hit||isFault){_atkLastHit=false;setAtkR(`<span class="r-miss">${isFault?'\u2715 CRIT FAULT \u2014 complication':'\u2715 MISS'}</span> \u2014 Roll ${total} vs DEF ${defVal}`);document.getElementById('atk-apply-btn').style.display='none';addLog({label:`${c?.name||'?'} Attack (DEF ${defVal})`,total,tn:defVal,fail:true});return;}
-  let base=total-defVal;if(isCrit)base*=2;_atkLastDamage=base+wpnMod+bodyMod;_atkLastHit=true;
+  // Apply suppressed penalty to attacker
+  const attacker=getCurrent();
+  const attackerSuppressed=(attacker&&(attacker.statuses||[]).includes('suppressed'));
+  // Also check concussed target for awareness-based attacks — handled via note only
+  const effectiveTotal=attackerSuppressed?total-1:total;
+  const isFault=dieRoll===1,isCrit=dieRoll===10,hit=effectiveTotal>=defVal&&!isFault;
+  const suppressedNote=attackerSuppressed?' <span style="color:#c8a040">(SUPPRESSED −1)</span>':'';
+  if(!hit||isFault){_atkLastHit=false;setAtkR(`<span class="r-miss">${isFault?'\u2715 CRIT FAULT \u2014 complication':'\u2715 MISS'}</span> \u2014 Roll ${effectiveTotal}${suppressedNote}${modeNote} vs DEF ${defVal}`);document.getElementById('atk-apply-btn').style.display='none';addLog({label:`${attacker?.name||'?'} Attack (DEF ${defVal})`,total:effectiveTotal,tn:defVal,fail:true});return;}
+  let base=effectiveTotal-defVal;if(isCrit)base*=2;_atkLastDamage=base+wpnMod+bodyMod;_atkLastHit=true;
   const wl=wpnMod===0?'Light':wpnMod===4?'Heavy':'Standard';
   const bodyStr=bodyMod?` + BODY(+${bodyMod})`:'';
-  setAtkR(`<span class="r-hit">${isCrit?'\u2605 CRIT HIT':'\u2713 HIT'}</span> \u2014 ${total} vs DEF ${defVal} \u2192 margin ${total-defVal}${isCrit?' \u00d72':''} + ${wl}(+${wpnMod})${bodyStr} = <span class="r-dmg">${_atkLastDamage} raw dmg</span>`);
+  // Check status effect trigger
+  const pendingStatus=statusForDamage(_atkLastDamage,wpnMod);
+  _atkPendingStatus=pendingStatus;
+  const statusHint=pendingStatus?` <span style="color:${STATUS_EFFECTS[pendingStatus].color};font-size:8px">→ APPLY ${pendingStatus.toUpperCase()} on target?</span>`:'';
+  setAtkR(`<span class="r-hit">${isCrit?'\u2605 CRIT HIT':'\u2713 HIT'}</span>${suppressedNote}${modeNote} \u2014 ${effectiveTotal} vs DEF ${defVal} \u2192 margin ${effectiveTotal-defVal}${isCrit?' \u00d72':''} + ${wl}(+${wpnMod})${bodyStr} = <span class="r-dmg">${_atkLastDamage} raw dmg</span>${statusHint}`);
   document.getElementById('atk-apply-btn').style.display='';
-  addLog({label:`${c?.name||'?'} Attack (DEF ${defVal})`,total,tn:defVal});
+  addLog({label:`${attacker?.name||'?'} Attack (DEF ${defVal})`,total:effectiveTotal,tn:defVal});
 }
+let _atkPendingStatus=null;
 function applyDamage(){
   if(!_atkLastHit||!_atkTargetId)return;
   const useArmor=document.getElementById('atk-use-armor').checked;
   const target=combatants.find(c=>c.id===_atkTargetId);if(!target)return;
   const armor=useArmor?(target.armor||0):0,final=Math.max(0,_atkLastDamage-armor);
   target.hp=Math.max(0,target.hp-final);if(target.hp===0&&target.status==='alive')target.status='down';
+  // Apply status effect to target if threshold met
+  let statusNote='';
+  if(_atkPendingStatus&&final>=4){
+    if(!target.statuses)target.statuses=[];
+    if(!target.statuses.includes(_atkPendingStatus)){
+      target.statuses.push(_atkPendingStatus);
+      statusNote=` + <span style="color:${STATUS_EFFECTS[_atkPendingStatus].color}">${_atkPendingStatus.toUpperCase()} applied</span>`;
+    }
+  }
+  _atkPendingStatus=null;
   saveState();renderQueue();
-  setAtkR(`<span class="r-ok">\u2713 APPLIED</span> <span class="r-dmg">${final} dmg</span>${armor?' (\u2212'+armor+' armor)':''} \u2192 ${escHtml(target.name)} HP: ${target.hp}/${target.hpMax}`);
+  setAtkR(`<span class="r-ok">\u2713 APPLIED</span> <span class="r-dmg">${final} dmg</span>${armor?' (\u2212'+armor+' armor)':''} \u2192 ${escHtml(target.name)} HP: ${target.hp}/${target.hpMax}${statusNote}`);
   document.getElementById('atk-apply-btn').style.display='none';
-  addLog({label:`\ud83d\udca5 ${getCurrent()?.name||'?'} \u2192 ${target.name}`,total:final});
+  addLog({label:`\ud83d\udca5 ${getCurrent()?.name||'?'} \u2192 ${target.name}${_atkPendingStatus?' ['+_atkPendingStatus+']':''}`,total:final});
   broadcastSync(target);_atkLastHit=false;
+  // Refresh status bar if target is current combatant
+  if(getCurrent()&&getCurrent().id===target.id){refreshStatusBar(target);}
 }
 function setAtkR(html){document.getElementById('atk-result').innerHTML=html;}
 
 function rollD20(){return Math.ceil(Math.random()*20);}
 function rollBehavior(){const c=getCurrent(),roll=rollD20(),beh=BEHAVIORS[roll]||'\u2014';document.getElementById('dice-result').innerHTML=`d20 \u2192 <strong style="color:var(--red-bright);font-size:15px">${roll}</strong> // ${beh}`;addLog({label:`${c?.name||'?'} Behavior Table`,total:roll,tn:0});}
-function rollSpikeSave(){const c=getCurrent();if(!c)return;const resolve=c.resolve||0,tn=c.spike>=11?18:c.spike>=10?16:9,roll=rollD20(),total=roll+resolve,success=total>=tn;document.getElementById('dice-result').innerHTML=`d20(${roll}) + RES(${resolve}) = <strong style="font-size:15px">${total}</strong> vs TN ${tn} <span class="${success?'r-ok':'r-fail'}">${success?'\u2713 SAVE':'\u2715 FAIL'}</span>${roll===20?' \u2014 SPIKE \u22122':roll===1?' \u2014 SPIKE +1':''}`;addLog({label:`${c.name} Spike Save TN ${tn}`,total,tn,fail:!success});}
+function rollSpikeSave(){
+  const c=getCurrent();if(!c)return;
+  const resolve=c.resolve||0,tn=c.spike>=11?18:c.spike>=10?16:9;
+  const isShaken=(c.statuses||[]).includes('shaken');
+  let roll=rollD20();
+  if(isShaken){const r2=rollD20();const lower=Math.min(roll,r2);roll=lower;}
+  const total=roll+resolve,success=total>=tn;
+  const shakenNote=isShaken?' <span style="color:#5ab0e0">(SHAKEN — Disadv)</span>':'';
+  document.getElementById('dice-result').innerHTML=`d20(${roll})${shakenNote} + RES(${resolve}) = <strong style="font-size:15px">${total}</strong> vs TN ${tn} <span class="${success?'r-ok':'r-fail'}">${success?'\u2713 SAVE':'\u2715 FAIL'}</span>${roll===20?' \u2014 SPIKE \u22122':roll===1?' \u2014 SPIKE +1':''}`;
+  addLog({label:`${c.name} Spike Save TN ${tn}${isShaken?' [SHAKEN]':''} `,total,tn,fail:!success});
+}
 function rollStabilize(){const c=getCurrent();if(!c)return;const mind=c.mind||0,tn=13,roll=rollD20(),total=roll+mind,success=total>=tn;document.getElementById('dice-result').innerHTML=`d20(${roll}) + MIND(${mind}) = <strong style="font-size:15px">${total}</strong> vs TN ${tn} <span class="${success?'r-ok':'r-fail'}">${success?'\u2713 STABILIZED':'\u2715 FAIL'}</span>`;addLog({label:`${c.name} Stabilize TN 13`,total,tn,fail:!success});}
 function rollGround(){const c=getCurrent();if(!c)return;const mind=c.mind||0,tn=14,roll=rollD20(),total=roll+mind,success=total>=tn;document.getElementById('dice-result').innerHTML=`d20(${roll}) + MIND(${mind}) = <strong style="font-size:15px">${total}</strong> vs TN ${tn} <span class="${success?'r-ok':'r-fail'}">${success?'\u2713 GROUNDED':'\u2715 FAIL'}</span>`;addLog({label:`${c.name} Grounding TN 14`,total,tn,fail:!success});}
 
@@ -813,41 +1067,43 @@ function now(){return new Date().toLocaleTimeString('en-US',{hour12:false,hour:'
 function gatherAtkRows(id){const atks=[];document.querySelectorAll(`#${id} .atk-build-row`).forEach(row=>{const inp=row.querySelectorAll('input'),sel=row.querySelector('select'),name=inp[0]?.value.trim();if(name)atks.push({name,dice:sel?.value||'standard',bonus:inp[1]?.value||'0'});});return atks;}
 
 // HOSTILE ROSTER
-function saveHostile(){const name=document.getElementById('h-name').value.trim();if(!name){document.getElementById('h-name').focus();return;}hostileRoster.push({id:uid(),name,hp:parseInt(document.getElementById('h-hp').value)||10,comp:parseInt(document.getElementById('h-comp').value)||5,armor:parseInt(document.getElementById('h-armor').value)||0,defense:parseInt(document.getElementById('h-defense').value)||6,resolve:parseInt(document.getElementById('h-resolve').value)||1,mind:parseInt(document.getElementById('h-mind').value)||1,attacks:gatherAtkRows('attacks-builder'),notes:document.getElementById('h-notes').value.trim()});try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e){}clearHostileForm();renderHostileRoster();}
+function saveHostile(){const name=document.getElementById('h-name').value.trim();if(!name){document.getElementById('h-name').focus();return;}const hArmorClass=document.getElementById('h-armor-class').value||'none';
+  hostileRoster.push({id:uid(),name,hp:parseInt(document.getElementById('h-hp').value)||10,comp:parseInt(document.getElementById('h-comp').value)||5,armorClass:hArmorClass,armor:armorFromClass(hArmorClass),defense:parseInt(document.getElementById('h-defense').value)||6,resolve:parseInt(document.getElementById('h-resolve').value)||1,mind:parseInt(document.getElementById('h-mind').value)||1,attacks:gatherAtkRows('attacks-builder'),notes:document.getElementById('h-notes').value.trim()});try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e){}clearHostileForm();renderHostileRoster();}
 function clearHostileForm(){['h-name','h-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});['h-hp','h-comp','h-armor','h-defense','h-resolve','h-mind'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[10,5,0,6,1,1][i];});document.getElementById('attacks-builder').innerHTML=`<div class="atk-build-row"><div><label class="f-label">NAME</label><input class="f-input sm" placeholder="e.g. Service Pistol"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">\u00d7</button></div></div>`;}
 function addAtkRow(){const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeAtkRow(this)">\u00d7</button></div>`;document.getElementById('attacks-builder').appendChild(row);}
 function removeAtkRow(btn){const r=document.querySelectorAll('#attacks-builder .atk-build-row');if(r.length<=1)return;btn.closest('.atk-build-row').remove();}
-function deployOne(id){const h=hostileRoster.find(x=>x.id===id);if(!h)return;combatants.push({id:uid(),name:h.name,type:'hostile',hp:h.hp,hpMax:h.hp,comp:h.comp,compMax:h.comp,armor:h.armor||0,defense:h.defense||6,resolve:h.resolve||1,mind:h.mind||1,spike:0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,hostileRef:h.id,hostileAtks:h.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
+function deployOne(id){const h=hostileRoster.find(x=>x.id===id);if(!h)return;combatants.push({id:uid(),name:h.name,type:'hostile',hp:h.hp,hpMax:h.hp,comp:h.comp,compMax:h.comp,armorClass:h.armorClass||'none',armor:h.armor||0,defense:h.defense||6,resolve:h.resolve||1,mind:h.mind||1,spike:0,reactions:emptyReactions(),statuses:[],status:'alive',actionUsed:false,minorUsed:false,aimed:false,hostileRef:h.id,hostileAtks:h.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
 function deployAllHostiles(){if(!hostileRoster.length){alert('No hostiles in roster.');return;}hostileRoster.forEach(h=>deployOne(h.id));}
 function deleteHostile(id){hostileRoster=hostileRoster.filter(h=>h.id!==id);try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e){}renderHostileRoster();}
 function saveRosterToFile(){if(!hostileRoster.length){setRS('EMPTY',false);return;}const blob=new Blob([JSON.stringify({version:1,hostiles:hostileRoster},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SPIKE_Hostiles.json';a.click();URL.revokeObjectURL(a.href);setRS('EXPORTED',true);}
 function loadRosterFromFile(evt){const file=evt.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);const inc=data.hostiles||(Array.isArray(data)?data:null);if(!inc){setRS('INVALID FILE',false);return;}let added=0;inc.forEach(h=>{if(!hostileRoster.some(x=>x.name===h.name)){hostileRoster.push({...h,id:uid()});added++;}});try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e2){}renderHostileRoster();setRS(`LOADED ${added}`,true);}catch{setRS('INVALID FILE',false);}};reader.readAsText(file);evt.target.value='';}
 function clearRoster(){if(!hostileRoster.length)return;if(!confirm('Clear entire hostile roster?'))return;hostileRoster=[];try{localStorage.setItem(STORAGE_HOSTILE,'[]');}catch(e){}renderHostileRoster();setRS('CLEARED',false);}
 function setRS(msg,ok){const el=document.getElementById('rosterStatus');if(!el)return;el.textContent=msg;el.style.color=ok?'var(--green)':'var(--red-bright)';}
-function openEditHostile(id){const h=hostileRoster.find(x=>x.id===id);if(!h)return;document.getElementById('eh-id').value=id;document.getElementById('eh-name').value=h.name||'';document.getElementById('eh-hp').value=h.hp??10;document.getElementById('eh-comp').value=h.comp??5;document.getElementById('eh-armor').value=h.armor??0;document.getElementById('eh-defense').value=h.defense??6;document.getElementById('eh-resolve').value=h.resolve??1;document.getElementById('eh-mind').value=h.mind??1;document.getElementById('eh-notes').value=h.notes||'';const bld=document.getElementById('eh-atk-builder');bld.innerHTML='';const atks=(h.attacks&&h.attacks.length)?h.attacks:[{name:'',dice:'standard',bonus:'0'}];atks.forEach(a=>{const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" value="${escHtml(a.name||'')}"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light"${a.dice==='light'?' selected':''}>Light +0</option><option value="standard"${a.dice==='standard'||!['light','heavy'].includes(a.dice)?' selected':''}>Std +2</option><option value="heavy"${a.dice==='heavy'?' selected':''}>Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" value="${escHtml(a.bonus||'0')}"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">\u00d7</button></div>`;bld.appendChild(row);});openModal('modal-edit-hostile');}
+function openEditHostile(id){const h=hostileRoster.find(x=>x.id===id);if(!h)return;document.getElementById('eh-id').value=id;document.getElementById('eh-name').value=h.name||'';document.getElementById('eh-hp').value=h.hp??10;document.getElementById('eh-comp').value=h.comp??5;document.getElementById('eh-armor-class').value=h.armorClass||'none';document.getElementById('eh-armor').value=h.armor??0;document.getElementById('eh-defense').value=h.defense??6;document.getElementById('eh-resolve').value=h.resolve??1;document.getElementById('eh-mind').value=h.mind??1;document.getElementById('eh-notes').value=h.notes||'';const bld=document.getElementById('eh-atk-builder');bld.innerHTML='';const atks=(h.attacks&&h.attacks.length)?h.attacks:[{name:'',dice:'standard',bonus:'0'}];atks.forEach(a=>{const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" value="${escHtml(a.name||'')}"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light"${a.dice==='light'?' selected':''}>Light +0</option><option value="standard"${a.dice==='standard'||!['light','heavy'].includes(a.dice)?' selected':''}>Std +2</option><option value="heavy"${a.dice==='heavy'?' selected':''}>Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" value="${escHtml(a.bonus||'0')}"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">\u00d7</button></div>`;bld.appendChild(row);});openModal('modal-edit-hostile');}
 function addEhAtkRow(){const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeEhAtkRow(this)">\u00d7</button></div>`;document.getElementById('eh-atk-builder').appendChild(row);}
 function removeEhAtkRow(btn){const r=document.querySelectorAll('#eh-atk-builder .atk-build-row');if(r.length<=1)return;btn.closest('.atk-build-row').remove();}
-function confirmEditHostile(){const id=document.getElementById('eh-id').value;const h=hostileRoster.find(x=>x.id===id);if(!h){closeModal('modal-edit-hostile');return;}h.name=document.getElementById('eh-name').value.trim()||h.name;h.hp=parseInt(document.getElementById('eh-hp').value)||h.hp;h.comp=parseInt(document.getElementById('eh-comp').value)||h.comp;h.armor=parseInt(document.getElementById('eh-armor').value)||0;h.defense=parseInt(document.getElementById('eh-defense').value)||6;h.resolve=parseInt(document.getElementById('eh-resolve').value)||1;h.mind=parseInt(document.getElementById('eh-mind').value)||1;h.notes=document.getElementById('eh-notes').value.trim();h.attacks=gatherAtkRows('eh-atk-builder');try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e){}closeModal('modal-edit-hostile');renderHostileRoster();}
-function renderHostileRoster(){const grid=document.getElementById('hostile-grid'),count=document.getElementById('hostile-count');count.textContent=`// ${hostileRoster.length}`;if(!hostileRoster.length){grid.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:20px;border:1px dashed var(--border)">No hostiles saved.</div>';return;}grid.innerHTML=hostileRoster.map(h=>`<div class="hcard"><div class="hcard-header"><div class="hcard-name">${escHtml(h.name)}</div><div style="display:flex;gap:3px"><button class="btn sm green" onclick="deployOne('${h.id}')">&#9654;</button><button class="btn sm" onclick="openEditHostile('${h.id}')">&#9999;</button><button class="btn sm red" onclick="deleteHostile('${h.id}')">\u00d7</button></div></div><div class="hcard-body"><div class="h-stat-row"><div class="h-stat"><div class="h-stat-lbl">HP</div><div class="h-stat-val">${h.hp}</div></div><div class="h-stat"><div class="h-stat-lbl">COMP</div><div class="h-stat-val">${h.comp}</div></div><div class="h-stat"><div class="h-stat-lbl">ARM</div><div class="h-stat-val">${h.armor||0}</div></div><div class="h-stat" style="border-left:2px solid var(--amber-dim)"><div class="h-stat-lbl" style="color:var(--amber)">DEF</div><div class="h-stat-val" style="color:var(--amber)">${h.defense||6}</div></div><div class="h-stat"><div class="h-stat-lbl">RES</div><div class="h-stat-val">${h.resolve||1}</div></div></div>${h.attacks&&h.attacks.length?`<div class="h-attacks">${h.attacks.map(a=>`<div class="atk-entry"><span class="atk-name">${escHtml(a.name)}</span><span class="atk-dice">${a.dice==='light'?'Light +0':a.dice==='heavy'?'Heavy +4':'Std +2'}${parseInt(a.bonus)?` atk+${a.bonus}`:''}</span></div>`).join('')}</div>`:''} ${h.notes?`<div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);padding-top:5px;border-top:1px solid var(--border);margin-top:4px;line-height:1.5">${escHtml(h.notes.slice(0,120))}</div>`:''}<div class="h-io"><button class="btn sm amber" onclick="deployOne('${h.id}')">&#9711; DEPLOY</button></div></div></div>`).join('');}
+function confirmEditHostile(){const id=document.getElementById('eh-id').value;const h=hostileRoster.find(x=>x.id===id);if(!h){closeModal('modal-edit-hostile');return;}h.name=document.getElementById('eh-name').value.trim()||h.name;h.hp=parseInt(document.getElementById('eh-hp').value)||h.hp;h.comp=parseInt(document.getElementById('eh-comp').value)||h.comp;h.armorClass=document.getElementById('eh-armor-class').value||'none';h.armor=armorFromClass(h.armorClass);h.defense=parseInt(document.getElementById('eh-defense').value)||6;h.resolve=parseInt(document.getElementById('eh-resolve').value)||1;h.mind=parseInt(document.getElementById('eh-mind').value)||1;h.notes=document.getElementById('eh-notes').value.trim();h.attacks=gatherAtkRows('eh-atk-builder');try{localStorage.setItem(STORAGE_HOSTILE,JSON.stringify(hostileRoster));}catch(e){}closeModal('modal-edit-hostile');renderHostileRoster();}
+function renderHostileRoster(){const grid=document.getElementById('hostile-grid'),count=document.getElementById('hostile-count');count.textContent=`// ${hostileRoster.length}`;if(!hostileRoster.length){grid.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:20px;border:1px dashed var(--border)">No hostiles saved.</div>';return;}grid.innerHTML=hostileRoster.map(h=>`<div class="hcard"><div class="hcard-header"><div class="hcard-name">${escHtml(h.name)}</div><div style="display:flex;gap:3px"><button class="btn sm green" onclick="deployOne('${h.id}')">&#9654;</button><button class="btn sm" onclick="openEditHostile('${h.id}')">&#9999;</button><button class="btn sm red" onclick="deleteHostile('${h.id}')">\u00d7</button></div></div><div class="hcard-body"><div class="h-stat-row"><div class="h-stat"><div class="h-stat-lbl">HP</div><div class="h-stat-val">${h.hp}</div></div><div class="h-stat"><div class="h-stat-lbl">COMP</div><div class="h-stat-val">${h.comp}</div></div><div class="h-stat"><div class="h-stat-lbl">ARMOR</div><div class="h-stat-val" style="font-size:10px;letter-spacing:.06em">${(h.armorClass||'none').toUpperCase()}</div></div><div class="h-stat" style="border-left:2px solid var(--amber-dim)"><div class="h-stat-lbl" style="color:var(--amber)">DEF</div><div class="h-stat-val" style="color:var(--amber)">${h.defense||6}</div></div><div class="h-stat"><div class="h-stat-lbl">RES</div><div class="h-stat-val">${h.resolve||1}</div></div></div>${h.attacks&&h.attacks.length?`<div class="h-attacks">${h.attacks.map(a=>`<div class="atk-entry"><span class="atk-name">${escHtml(a.name)}</span><span class="atk-dice">${a.dice==='light'?'Light +0':a.dice==='heavy'?'Heavy +4':'Std +2'}${parseInt(a.bonus)?` atk+${a.bonus}`:''}</span></div>`).join('')}</div>`:''} ${h.notes?`<div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);padding-top:5px;border-top:1px solid var(--border);margin-top:4px;line-height:1.5">${escHtml(h.notes.slice(0,120))}</div>`:''}<div class="h-io"><button class="btn sm amber" onclick="deployOne('${h.id}')">&#9711; DEPLOY</button></div></div></div>`).join('');}
 
 // NPC ROSTER
 function addNpcAtkRow(){const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeNpcAtkRow(this)">\u00d7</button></div>`;document.getElementById('npc-attacks-builder').appendChild(row);}
 function removeNpcAtkRow(btn){const r=document.querySelectorAll('#npc-attacks-builder .atk-build-row');if(r.length<=1)return;btn.closest('.atk-build-row').remove();}
-function saveNpc(){const name=document.getElementById('n-name').value.trim();if(!name){document.getElementById('n-name').focus();return;}npcRoster.push({id:uid(),name,role:document.getElementById('n-role').value.trim(),hp:parseInt(document.getElementById('n-hp').value)||8,comp:parseInt(document.getElementById('n-comp').value)||5,armor:parseInt(document.getElementById('n-armor').value)||0,defense:parseInt(document.getElementById('n-defense').value)||6,resolve:parseInt(document.getElementById('n-resolve').value)||1,mind:parseInt(document.getElementById('n-mind').value)||1,spike:parseInt(document.getElementById('n-spike').value)||0,disposition:document.getElementById('n-disposition').value,notes:document.getElementById('n-notes').value.trim(),attacks:gatherAtkRows('npc-attacks-builder')});try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}clearNpcForm();renderNpcRoster();}
+function saveNpc(){const name=document.getElementById('n-name').value.trim();if(!name){document.getElementById('n-name').focus();return;}const nArmorClass=document.getElementById('n-armor-class').value||'none';
+  npcRoster.push({id:uid(),name,role:document.getElementById('n-role').value.trim(),hp:parseInt(document.getElementById('n-hp').value)||8,comp:parseInt(document.getElementById('n-comp').value)||5,armorClass:nArmorClass,armor:armorFromClass(nArmorClass),defense:parseInt(document.getElementById('n-defense').value)||6,resolve:parseInt(document.getElementById('n-resolve').value)||1,mind:parseInt(document.getElementById('n-mind').value)||1,spike:parseInt(document.getElementById('n-spike').value)||0,disposition:document.getElementById('n-disposition').value,notes:document.getElementById('n-notes').value.trim(),attacks:gatherAtkRows('npc-attacks-builder')});try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}clearNpcForm();renderNpcRoster();}
 function clearNpcForm(){['n-name','n-role','n-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});['n-hp','n-comp','n-armor','n-defense','n-resolve','n-mind','n-spike'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[8,5,0,6,1,1,0][i];});document.getElementById('n-disposition').value='neutral';document.getElementById('npc-attacks-builder').innerHTML=`<div class="atk-build-row"><div><label class="f-label">NAME</label><input class="f-input sm" placeholder="e.g. Baton"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeNpcAtkRow(this)">\u00d7</button></div></div>`;}
-function deployNpcOne(id){const n=npcRoster.find(x=>x.id===id);if(!n)return;combatants.push({id:uid(),name:n.name,type:'npc',hp:n.hp,hpMax:n.hp,comp:n.comp,compMax:n.comp,armor:n.armor||0,defense:n.defense||6,resolve:n.resolve||1,mind:n.mind||1,spike:n.spike||0,reactions:emptyReactions(),status:'alive',actionUsed:false,minorUsed:false,aimed:false,npcRef:n.id,npcRole:n.role||'',npcAtks:n.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
+function deployNpcOne(id){const n=npcRoster.find(x=>x.id===id);if(!n)return;combatants.push({id:uid(),name:n.name,type:'npc',hp:n.hp,hpMax:n.hp,comp:n.comp,compMax:n.comp,armorClass:n.armorClass||'none',armor:n.armor||0,defense:n.defense||6,resolve:n.resolve||1,mind:n.mind||1,spike:n.spike||0,reactions:emptyReactions(),statuses:[],status:'alive',actionUsed:false,minorUsed:false,aimed:false,npcRef:n.id,npcRole:n.role||'',npcAtks:n.attacks||[]});saveState();renderQueue();if(encounterActive)renderCommandCenter();switchPage('encounter');}
 function deployAllNpcs(){if(!npcRoster.length){alert('No NPCs in roster.');return;}npcRoster.forEach(n=>deployNpcOne(n.id));}
 function deleteNpc(id){npcRoster=npcRoster.filter(n=>n.id!==id);try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}renderNpcRoster();}
 function saveNpcRosterToFile(){if(!npcRoster.length){setNRS('EMPTY',false);return;}const blob=new Blob([JSON.stringify({version:1,npcs:npcRoster},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SPIKE_NPCs.json';a.click();URL.revokeObjectURL(a.href);setNRS('EXPORTED',true);}
 function loadNpcRosterFromFile(evt){const file=evt.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);const inc=data.npcs||(Array.isArray(data)?data:null);if(!inc){setNRS('INVALID FILE',false);return;}let added=0;inc.forEach(n=>{if(!npcRoster.some(x=>x.name===n.name)){npcRoster.push({...n,id:uid()});added++;}});try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e2){}renderNpcRoster();setNRS(`LOADED ${added}`,true);}catch{setNRS('INVALID FILE',false);}};reader.readAsText(file);evt.target.value='';}
 function clearNpcRoster(){if(!npcRoster.length)return;if(!confirm('Clear entire NPC roster?'))return;npcRoster=[];try{localStorage.setItem(STORAGE_NPC,'[]');}catch(e){}renderNpcRoster();setNRS('CLEARED',false);}
 function setNRS(msg,ok){const el=document.getElementById('npcRosterStatus');if(!el)return;el.textContent=msg;el.style.color=ok?'var(--green)':'var(--red-bright)';}
-function openEditNpc(id){const n=npcRoster.find(x=>x.id===id);if(!n)return;document.getElementById('en-id').value=id;document.getElementById('en-name').value=n.name||'';document.getElementById('en-role').value=n.role||'';document.getElementById('en-hp').value=n.hp??8;document.getElementById('en-comp').value=n.comp??5;document.getElementById('en-armor').value=n.armor??0;document.getElementById('en-defense').value=n.defense??6;document.getElementById('en-resolve').value=n.resolve??1;document.getElementById('en-mind').value=n.mind??1;document.getElementById('en-spike').value=n.spike??0;document.getElementById('en-disposition').value=n.disposition||'neutral';document.getElementById('en-notes').value=n.notes||'';const bld=document.getElementById('en-atk-builder');bld.innerHTML='';const atks=(n.attacks&&n.attacks.length)?n.attacks:[{name:'',dice:'standard',bonus:'0'}];atks.forEach(a=>{const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" value="${escHtml(a.name||'')}"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light"${a.dice==='light'?' selected':''}>Light +0</option><option value="standard"${a.dice==='standard'||!['light','heavy'].includes(a.dice)?' selected':''}>Std +2</option><option value="heavy"${a.dice==='heavy'?' selected':''}>Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" value="${escHtml(a.bonus||'0')}"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeEnAtkRow(this)">\u00d7</button></div>`;bld.appendChild(row);});openModal('modal-edit-npc');}
+function openEditNpc(id){const n=npcRoster.find(x=>x.id===id);if(!n)return;document.getElementById('en-id').value=id;document.getElementById('en-name').value=n.name||'';document.getElementById('en-role').value=n.role||'';document.getElementById('en-hp').value=n.hp??8;document.getElementById('en-comp').value=n.comp??5;document.getElementById('en-armor-class').value=n.armorClass||'none';document.getElementById('en-armor').value=n.armor??0;document.getElementById('en-defense').value=n.defense??6;document.getElementById('en-resolve').value=n.resolve??1;document.getElementById('en-mind').value=n.mind??1;document.getElementById('en-spike').value=n.spike??0;document.getElementById('en-disposition').value=n.disposition||'neutral';document.getElementById('en-notes').value=n.notes||'';const bld=document.getElementById('en-atk-builder');bld.innerHTML='';const atks=(n.attacks&&n.attacks.length)?n.attacks:[{name:'',dice:'standard',bonus:'0'}];atks.forEach(a=>{const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" value="${escHtml(a.name||'')}"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light"${a.dice==='light'?' selected':''}>Light +0</option><option value="standard"${a.dice==='standard'||!['light','heavy'].includes(a.dice)?' selected':''}>Std +2</option><option value="heavy"${a.dice==='heavy'?' selected':''}>Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" value="${escHtml(a.bonus||'0')}"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeEnAtkRow(this)">\u00d7</button></div>`;bld.appendChild(row);});openModal('modal-edit-npc');}
 function addEnAtkRow(){const row=document.createElement('div');row.className='atk-build-row';row.innerHTML=`<div><label class="f-label">NAME</label><input class="f-input sm" placeholder="Attack name"></div><div><label class="f-label">CLASS</label><select class="f-input sm mono"><option value="light">Light +0</option><option value="standard" selected>Std +2</option><option value="heavy">Heavy +4</option></select></div><div><label class="f-label">BONUS</label><input class="f-input sm mono" placeholder="0"></div><div style="align-self:flex-end"><button class="btn sm red" onclick="removeEnAtkRow(this)">\u00d7</button></div>`;document.getElementById('en-atk-builder').appendChild(row);}
 function removeEnAtkRow(btn){const r=document.querySelectorAll('#en-atk-builder .atk-build-row');if(r.length<=1)return;btn.closest('.atk-build-row').remove();}
-function confirmEditNpc(){const id=document.getElementById('en-id').value;const n=npcRoster.find(x=>x.id===id);if(!n){closeModal('modal-edit-npc');return;}n.name=document.getElementById('en-name').value.trim()||n.name;n.role=document.getElementById('en-role').value.trim();n.hp=parseInt(document.getElementById('en-hp').value)||n.hp;n.comp=parseInt(document.getElementById('en-comp').value)||n.comp;n.armor=parseInt(document.getElementById('en-armor').value)||0;n.defense=parseInt(document.getElementById('en-defense').value)||6;n.resolve=parseInt(document.getElementById('en-resolve').value)||1;n.mind=parseInt(document.getElementById('en-mind').value)||1;n.spike=parseInt(document.getElementById('en-spike').value)||0;n.disposition=document.getElementById('en-disposition').value;n.notes=document.getElementById('en-notes').value.trim();n.attacks=gatherAtkRows('en-atk-builder');try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}closeModal('modal-edit-npc');renderNpcRoster();}
+function confirmEditNpc(){const id=document.getElementById('en-id').value;const n=npcRoster.find(x=>x.id===id);if(!n){closeModal('modal-edit-npc');return;}n.name=document.getElementById('en-name').value.trim()||n.name;n.role=document.getElementById('en-role').value.trim();n.hp=parseInt(document.getElementById('en-hp').value)||n.hp;n.comp=parseInt(document.getElementById('en-comp').value)||n.comp;n.armorClass=document.getElementById('en-armor-class').value||'none';n.armor=armorFromClass(n.armorClass);n.defense=parseInt(document.getElementById('en-defense').value)||6;n.resolve=parseInt(document.getElementById('en-resolve').value)||1;n.mind=parseInt(document.getElementById('en-mind').value)||1;n.spike=parseInt(document.getElementById('en-spike').value)||0;n.disposition=document.getElementById('en-disposition').value;n.notes=document.getElementById('en-notes').value.trim();n.attacks=gatherAtkRows('en-atk-builder');try{localStorage.setItem(STORAGE_NPC,JSON.stringify(npcRoster));}catch(e){}closeModal('modal-edit-npc');renderNpcRoster();}
 const DISP_COLORS={friendly:'var(--green)',neutral:'var(--text-dim)',hostile:'var(--red-bright)',fearful:'var(--amber)',compliant:'#5ab0e0',unknown:'var(--border-hi)'};
-function renderNpcRoster(){const grid=document.getElementById('npc-grid'),count=document.getElementById('npc-count');count.textContent=`// ${npcRoster.length}`;if(!npcRoster.length){grid.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:20px;border:1px dashed var(--border)">No NPCs saved.</div>';return;}grid.innerHTML=npcRoster.map(n=>{const dc=DISP_COLORS[n.disposition]||'var(--text-dim)';const sc=spikeColor(n.spike||0);return `<div class="hcard npc"><div class="hcard-header"><div><div class="hcard-name">${escHtml(n.name)}</div>${n.role?`<div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim)">${escHtml(n.role)}</div>`:''}</div><div style="display:flex;gap:3px"><button class="btn sm blue" onclick="deployNpcOne('${n.id}')">&#9654;</button><button class="btn sm" onclick="openEditNpc('${n.id}')">&#9999;</button><button class="btn sm red" onclick="deleteNpc('${n.id}')">\u00d7</button></div></div><div class="hcard-body"><div class="h-stat-row"><div class="h-stat"><div class="h-stat-lbl">HP</div><div class="h-stat-val">${n.hp}</div></div><div class="h-stat"><div class="h-stat-lbl">COMP</div><div class="h-stat-val">${n.comp}</div></div><div class="h-stat"><div class="h-stat-lbl" style="color:${sc}">SPIKE</div><div class="h-stat-val" style="color:${sc}">${n.spike||0}</div></div><div class="h-stat" style="border-left:2px solid ${dc}"><div class="h-stat-lbl" style="color:${dc}">DISP</div><div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:${dc};letter-spacing:.1em">${(n.disposition||'neutral').toUpperCase()}</div></div></div>${n.attacks&&n.attacks.length?`<div class="h-attacks">${n.attacks.map(a=>`<div class="atk-entry"><span class="atk-name">${escHtml(a.name)}</span><span class="atk-dice">${a.dice==='light'?'Light +0':a.dice==='heavy'?'Heavy +4':'Std +2'}</span></div>`).join('')}</div>`:''} ${n.notes?`<div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);padding-top:5px;border-top:1px solid var(--border);margin-top:4px;line-height:1.5">${escHtml(n.notes.slice(0,120))}</div>`:''}<div class="h-io"><button class="btn sm blue" onclick="deployNpcOne('${n.id}')">&#9711; DEPLOY</button></div></div></div>`;}).join('');}
+function renderNpcRoster(){const grid=document.getElementById('npc-grid'),count=document.getElementById('npc-count');count.textContent=`// ${npcRoster.length}`;if(!npcRoster.length){grid.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--text-dim);padding:20px;border:1px dashed var(--border)">No NPCs saved.</div>';return;}grid.innerHTML=npcRoster.map(n=>{const dc=DISP_COLORS[n.disposition]||'var(--text-dim)';const sc=spikeColor(n.spike||0);return `<div class="hcard npc"><div class="hcard-header"><div><div class="hcard-name">${escHtml(n.name)}</div>${n.role?`<div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim)">${escHtml(n.role)}</div>`:''}</div><div style="display:flex;gap:3px"><button class="btn sm blue" onclick="deployNpcOne('${n.id}')">&#9654;</button><button class="btn sm" onclick="openEditNpc('${n.id}')">&#9999;</button><button class="btn sm red" onclick="deleteNpc('${n.id}')">\u00d7</button></div></div><div class="hcard-body"><div class="h-stat-row"><div class="h-stat"><div class="h-stat-lbl">HP</div><div class="h-stat-val">${n.hp}</div></div><div class="h-stat"><div class="h-stat-lbl">COMP</div><div class="h-stat-val">${n.comp}</div></div><div class="h-stat"><div class="h-stat-lbl">ARMOR</div><div class="h-stat-val" style="font-size:10px;letter-spacing:.06em">${(n.armorClass||'none').toUpperCase()}</div></div><div class="h-stat"><div class="h-stat-lbl" style="color:${sc}">SPIKE</div><div class="h-stat-val" style="color:${sc}">${n.spike||0}</div></div><div class="h-stat" style="border-left:2px solid ${dc}"><div class="h-stat-lbl" style="color:${dc}">DISP</div><div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:${dc};letter-spacing:.1em">${(n.disposition||'neutral').toUpperCase()}</div></div></div>${n.attacks&&n.attacks.length?`<div class="h-attacks">${n.attacks.map(a=>`<div class="atk-entry"><span class="atk-name">${escHtml(a.name)}</span><span class="atk-dice">${a.dice==='light'?'Light +0':a.dice==='heavy'?'Heavy +4':'Std +2'}</span></div>`).join('')}</div>`:''} ${n.notes?`<div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-dim);padding-top:5px;border-top:1px solid var(--border);margin-top:4px;line-height:1.5">${escHtml(n.notes.slice(0,120))}</div>`:''}<div class="h-io"><button class="btn sm blue" onclick="deployNpcOne('${n.id}')">&#9711; DEPLOY</button></div></div></div>`;}).join('');}
 
 // MODAL HELPERS
 function openModal(id){document.getElementById(id).classList.add('open');}
